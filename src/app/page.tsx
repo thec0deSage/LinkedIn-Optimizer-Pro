@@ -72,7 +72,7 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="pt-4 flex justify-center md:justify-start"
             >
-              <button className="w-full sm:w-auto bg-[#0070F3] hover:bg-[#0060DF] text-white px-10 py-3.5 rounded-md font-medium text-lg tracking-wide transition-colors">
+              <button className="w-full sm:w-auto bg-[#0070F3] hover:bg-[#0060DF] text-white px-14 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-colors">
                 Start for free
               </button>
             </motion.div>
