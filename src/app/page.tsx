@@ -27,7 +27,7 @@ export default function Home() {
             <a href="#features" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hidden md:block">Features</a>
             <a href="#how-it-works" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hidden md:block">How it Works</a>
             <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm shadow-blue-600/20 active:scale-95">
-              Start for free
+              Optimize your profile
             </button>
           </div>
         </div>
@@ -38,15 +38,7 @@ export default function Home() {
         <section className="max-w-7xl mx-auto px-6 pt-12 md:pt-20 pb-16 md:pb-32 text-center md:text-left flex flex-col md:flex-row items-center gap-12">
 
           <div className="md:w-1/2 space-y-8 relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-medium"
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>AI Content Engine for Professionals</span>
-            </motion.div>
+
 
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -77,15 +69,7 @@ export default function Home() {
               </button>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="pt-6 flex items-center justify-center md:justify-start gap-6 text-sm text-slate-500 font-medium"
-            >
-              <div className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> No credit card required</div>
-              <div className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> 14-day free trial</div>
-            </motion.div>
+
           </div>
 
           <motion.div
