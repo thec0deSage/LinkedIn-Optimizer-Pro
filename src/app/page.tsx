@@ -33,7 +33,7 @@ export default function Home() {
         </div>
       </nav>
 
-      <main className="flex-1 pt-16 pb-20">
+      <main className="flex-1 pt-20 pb-20">
         {/* Hero Section */}
         <section className="max-w-7xl mx-auto px-6 pt-12 md:pt-20 pb-16 md:pb-32 text-center md:text-left flex flex-col md:flex-row items-center gap-12">
 
