@@ -29,7 +29,7 @@ export default function Home() {
           <div className="flex items-center gap-6">
             <a href="#features" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hidden md:block">Features</a>
             <a href="#how-it-works" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hidden md:block">How it Works</a>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm shadow-blue-600/20 active:scale-95">
+            <button className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm shadow-blue-600/20 active:scale-95">
               Optimize your profile
             </button>
           </div>
@@ -67,7 +67,7 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="pt-4 flex justify-center md:justify-start"
             >
-              <button className="w-full sm:w-auto bg-[#0070F3] hover:bg-[#0060DF] text-white px-14 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-colors">
+              <button className="cursor-pointer w-full sm:w-auto bg-[#0070F3] hover:bg-[#0060DF] text-white px-14 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-colors">
                 Optimize your profile
               </button>
             </motion.div>
@@ -161,7 +161,7 @@ export default function Home() {
         <section className="py-24 max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold text-slate-900 mb-6 tracking-tight">Ready to post with confidence?</h2>
           <p className="text-xl text-slate-600 mb-10">Join thousands of founders and creators scaling their presence on LinkedIn.</p>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-md font-semibold text-xl transition-all shadow-lg shadow-blue-600/30 active:scale-95 inline-flex items-center gap-2">
+          <button className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-md font-semibold text-xl transition-all shadow-lg shadow-blue-600/30 active:scale-95 inline-flex items-center gap-2">
             Start your free 14-day trial
             <ArrowRight className="w-5 h-5" />
           </button>
