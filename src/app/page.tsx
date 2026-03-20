@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Open_Sans } from "next/font/google";
 import {
   Bot,
   Sparkles,
@@ -10,6 +11,8 @@ import {
   ArrowRight,
   PenTool
 } from "lucide-react";
+
+const openSans = Open_Sans({ subsets: ["latin"], weight: ["700"] });
 
 export default function Home() {
   return (
@@ -44,7 +47,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.1]"
+              className={`${openSans.className} text-5xl md:text-6xl font-[700] text-slate-900 tracking-tight leading-[1.1]`}
             >
               Optimize your<span className="text-blue-600"> LinkedIn </span> reach.
             </motion.h1>
@@ -53,9 +56,9 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-lg md:text-xl text-slate-600 font-medium leading-relaxed max-w-xl"
+              className="text-slate-600 max-w-xl"
             >
-              Create high-performing content in your authentic voice consistently and at scale.
+              Create high-performing content in your authentic voice consistently and at scale, designed to engage your audience, build trust, and drive measurable growth.
             </motion.p>
 
             <motion.div
@@ -65,7 +68,7 @@ export default function Home() {
               className="pt-4 flex justify-center md:justify-start"
             >
               <button className="w-full sm:w-auto bg-[#0070F3] hover:bg-[#0060DF] text-white px-14 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-colors">
-                Start for free
+                Optimize your profile
               </button>
             </motion.div>
 
