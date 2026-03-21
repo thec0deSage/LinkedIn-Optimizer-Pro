@@ -1,7 +1,7 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Open_Sans } from "next/font/google";
 import {
   Bot,
   Sparkles,
@@ -9,12 +9,14 @@ import {
   LayoutDashboard,
   CheckCircle2,
   ArrowRight,
-  PenTool
+  PenTool,
+  Menu,
+  X
 } from "lucide-react";
 
-const openSans = Open_Sans({ subsets: ["latin"], weight: ["700"] });
-
 export default function Home() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
       {/* Navigation */}
@@ -27,13 +29,13 @@ export default function Home() {
             <span className="font-bold text-xl text-slate-900 tracking-tight">LinkedIn Optimizer Pro</span>
           </div>
 
-          <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+          <div className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
             <a href="#features" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">Features</a>
             <a href="#how-it-works" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">How it Works</a>
             <a href="#pricing" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">Pricing</a>
           </div>
 
-          <div className="flex items-center gap-3 z-10">
+          <div className="hidden lg:flex items-center gap-3 z-10">
             <button className="cursor-pointer bg-transparent text-slate-700 hover:text-slate-900 hover:bg-slate-100 px-5 py-2.5 rounded-md font-semibold text-sm transition-all border border-transparent">
               Login
             </button>
@@ -41,7 +43,35 @@ export default function Home() {
               Sign Up
             </button>
           </div>
+
+          <div className="lg:hidden flex items-center z-10">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-slate-600 hover:text-slate-900 p-2 cursor-pointer"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden absolute top-20 inset-x-0 bg-white border-b border-slate-200 px-6 py-6 flex flex-col gap-6 shadow-xl w-full">
+            <div className="flex flex-col gap-4">
+              <a href="#features" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-600">Features</a>
+              <a href="#how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-600">How it Works</a>
+              <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-600">Pricing</a>
+            </div>
+            <div className="flex flex-col gap-3 pt-4 border-t border-slate-100">
+              <button className="cursor-pointer bg-transparent text-slate-600 hover:bg-slate-100 px-5 py-3 rounded-md font-semibold text-base transition-all border border-slate-200 w-full text-center">
+                Login
+              </button>
+              <button className="cursor-pointer bg-[#006edc] hover:bg-[#0060DF] text-white px-5 py-3 rounded-md font-semibold text-base transition-all shadow-sm active:scale-95 w-full text-center">
+                Sign Up
+              </button>
+            </div>
+          </div>
+        )}
       </nav>
 
       <main className="flex-1 pt-20 pb-20">
@@ -55,7 +85,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className={`${openSans.className} text-5xl md:text-6xl font-[700] text-slate-900 tracking-tight leading-[1.1]`}
+              className={`font-[family-name:var(--font-open-sans)] text-5xl md:text-6xl font-[700] text-slate-900 tracking-tight leading-[1.1]`}
             >
               Optimize your<span className="text-[#00366b]"> LinkedIn </span> reach.
             </motion.h1>
