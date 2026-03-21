@@ -32,6 +32,7 @@ export default function Home() {
           <div className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
             <a href="#features" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">Features</a>
             <a href="#how-it-works" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">How it Works</a>
+            <a href="#faqs" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">FAQs</a>
             <a href="#pricing" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">Pricing</a>
           </div>
 
@@ -60,6 +61,7 @@ export default function Home() {
             <div className="flex flex-col gap-4">
               <a href="#features" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-600">Features</a>
               <a href="#how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-600">How it Works</a>
+              <a href="#faqs" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-600">FAQs</a>
               <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-600">Pricing</a>
             </div>
             <div className="flex flex-col gap-3 pt-4 border-t border-slate-100">
