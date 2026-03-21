@@ -29,8 +29,12 @@ export default function Home() {
           <div className="flex items-center gap-6">
             <a href="#features" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hidden md:block">Features</a>
             <a href="#how-it-works" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hidden md:block">How it Works</a>
+            <a href="#pricing" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hidden md:block">Pricing</a>
             <button className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm shadow-blue-600/20 active:scale-95">
-              Optimize your profile
+              Login
+            </button>
+            <button className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm shadow-blue-600/20 active:scale-95">
+              Sign Up
             </button>
           </div>
         </div>
@@ -68,7 +72,7 @@ export default function Home() {
               className="pt-4 flex justify-center md:justify-start"
             >
               <button className="cursor-pointer w-full sm:w-auto bg-[#0070F3] hover:bg-[#0060DF] text-white px-14 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-colors">
-                Optimize your profile
+                Start for free
               </button>
             </motion.div>
 
