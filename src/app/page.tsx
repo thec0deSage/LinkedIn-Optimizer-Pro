@@ -11,11 +11,14 @@ import {
   ArrowRight,
   PenTool,
   Menu,
-  X
+  X,
+  Check,
+  ChevronDown
 } from "lucide-react";
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
@@ -193,6 +196,176 @@ export default function Home() {
                   From discovering trending ideas to rich-text editing and scheduled publishing, manage your entire content lifecycle in one centralized CMS workspace.
                 </p>
               </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works Section */}
+        <section id="how-it-works" className="py-24 bg-slate-50 border-y border-slate-200">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center max-w-2xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">How it works</h2>
+              <p className="text-slate-600 text-lg">Your personal brand on autopilot in three simple steps.</p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-12 relative max-w-5xl mx-auto">
+              {/* Connecting line for desktop */}
+              <div className="hidden md:block absolute top-[44px] left-[16.66%] right-[16.66%] h-0.5 bg-slate-200 -z-0"></div>
+
+              {/* Step 1 */}
+              <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="w-24 h-24 bg-white rounded-full border border-slate-200 flex items-center justify-center shadow-md shadow-slate-200/50 mb-6 font-bold text-2xl text-blue-600">
+                  1
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-3">Connect & Analyze</h3>
+                <p className="text-slate-600 leading-relaxed">Securely connect your profile. AI scans your past content to learn your unique voice, tone, and format.</p>
+              </div>
+
+              {/* Step 2 */}
+              <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="w-24 h-24 bg-white rounded-full border border-slate-200 flex items-center justify-center shadow-md shadow-slate-200/50 mb-6 font-bold text-2xl text-blue-600">
+                  2
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-3">Generate Content</h3>
+                <p className="text-slate-600 leading-relaxed">Input a topic or link. The AI drafts a flawless LinkedIn post that sounds perfectly like you, in seconds.</p>
+              </div>
+
+              {/* Step 3 */}
+              <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="w-24 h-24 bg-[#006edc] rounded-full border border-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30 mb-6 font-bold text-2xl text-white">
+                  3
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-3">Review & Publish</h3>
+                <p className="text-slate-600 leading-relaxed">Make final tweaks in our rich editor, preview across devices, and schedule for peak engagement times.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section id="faqs" className="py-24 bg-white border-b border-slate-200">
+          <div className="max-w-3xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">Frequently Asked Questions</h2>
+              <p className="text-slate-600 text-lg">Everything you need to know about the product and billing.</p>
+            </div>
+
+            <div className="space-y-4">
+              {[
+                {
+                  question: "Is this safe to use with my LinkedIn account?",
+                  answer: "Yes. We use the official LinkedIn API and comply strictly with their Terms of Service. We do not use automation or bots to post on your behalf in a way that risks your account."
+                },
+                {
+                  question: "How does the AI match my writing style?",
+                  answer: "Our advanced models analyze your past posts to map your vocabulary, sentence length, and structural formatting (like whether you use bullet points or short paragraphs). The more you write, the better it gets."
+                },
+                {
+                  question: "Can I cancel my subscription at any time?",
+                  answer: "Absolutely. You can cancel your subscription from your billing dashboard with just two clicks. You'll maintain access to Pro features until the end of your billing cycle."
+                },
+                {
+                  question: "Does it work for company pages?",
+                  answer: "Yes! You can connect both personal profiles and company pages, and maintain separate AI tone models for each."
+                }
+              ].map((faq, index) => (
+                <div key={index} className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50 transition-all hover:border-slate-300">
+                  <button
+                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                    className="w-full flex items-center justify-between p-6 text-left cursor-pointer"
+                  >
+                    <span className="font-semibold text-slate-900 text-[17px]">{faq.question}</span>
+                    <ChevronDown className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${openFaq === index ? 'rotate-180' : ''}`} />
+                  </button>
+                  <div
+                    className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${
+                      openFaq === index ? 'max-h-48 pb-6 opacity-100' : 'max-h-0 opacity-0'
+                    }`}
+                  >
+                    <p className="text-slate-600 leading-relaxed">{faq.answer}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Pricing Section */}
+        <section id="pricing" className="py-24 bg-slate-50">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center max-w-2xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">Simple, transparent pricing</h2>
+              <p className="text-slate-600 text-lg">Start for free. Upgrade when you're ready to scale your personal brand.</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {/* Free Tier */}
+              <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-10 shadow-sm flex flex-col">
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Starter</h3>
+                  <p className="text-slate-500">Perfect for trying out the platform.</p>
+                </div>
+                <div className="mb-8 flex items-baseline gap-1">
+                  <span className="text-5xl font-[800] text-slate-900 tracking-tight">$0</span>
+                  <span className="text-slate-500 font-medium">/month</span>
+                </div>
+                <div className="flex-1 space-y-4 mb-8">
+                  <div className="flex gap-3 items-start">
+                    <Check className="w-5 h-5 text-[#006edc] shrink-0 mt-0.5" />
+                    <span className="text-slate-600">5 AI-generated posts per month</span>
+                  </div>
+                  <div className="flex gap-3 items-start">
+                    <Check className="w-5 h-5 text-[#006edc] shrink-0 mt-0.5" />
+                    <span className="text-slate-600">Basic tone matching</span>
+                  </div>
+                  <div className="flex gap-3 items-start">
+                    <Check className="w-5 h-5 text-[#006edc] shrink-0 mt-0.5" />
+                    <span className="text-slate-600">1 connected LinkedIn profile</span>
+                  </div>
+                </div>
+                <button className="cursor-pointer w-full bg-slate-100 hover:bg-slate-200 text-slate-900 px-6 py-4 rounded-xl font-bold transition-colors">
+                  Get Started
+                </button>
+              </div>
+
+              {/* Pro Tier */}
+              <div className="bg-[#002B54] border border-[#00366b] rounded-3xl p-8 md:p-10 shadow-2xl shadow-blue-900/20 flex flex-col relative transform md:-translate-y-4">
+                <div className="absolute top-0 inset-x-0 h-1.5 bg-[#006edc] rounded-t-3xl"></div>
+                <div className="absolute -top-4 inset-x-0 flex justify-center">
+                  <span className="bg-[#006edc] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                    Most Popular
+                  </span>
+                </div>
+                <div className="mb-6 mt-2">
+                  <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
+                  <p className="text-blue-200/80">Everything you need to scale your reach.</p>
+                </div>
+                <div className="mb-8 flex items-baseline gap-1">
+                  <span className="text-5xl font-[800] text-white tracking-tight">$29</span>
+                  <span className="text-blue-200/80 font-medium">/month</span>
+                </div>
+                <div className="flex-1 space-y-4 mb-8">
+                  <div className="flex gap-3 items-start">
+                    <Check className="w-5 h-5 text-[#0A66C2] shrink-0 mt-0.5" />
+                    <span className="text-blue-50">Unlimited AI-generated posts</span>
+                  </div>
+                  <div className="flex gap-3 items-start">
+                    <Check className="w-5 h-5 text-[#0A66C2] shrink-0 mt-0.5" />
+                    <span className="text-blue-50">Advanced multi-tone engine mapping</span>
+                  </div>
+                  <div className="flex gap-3 items-start">
+                    <Check className="w-5 h-5 text-[#0A66C2] shrink-0 mt-0.5" />
+                    <span className="text-blue-50">Post scheduling & analytics</span>
+                  </div>
+                  <div className="flex gap-3 items-start">
+                    <Check className="w-5 h-5 text-[#0A66C2] shrink-0 mt-0.5" />
+                    <span className="text-blue-50">Priority email support</span>
+                  </div>
+                </div>
+                <button className="cursor-pointer w-full bg-[#006edc] hover:bg-[#0060DF] text-white px-6 py-4 rounded-xl font-bold transition-colors shadow-lg shadow-blue-500/25">
+                  Upgrade to Pro
+                </button>
+              </div>
             </div>
           </div>
         </section>
