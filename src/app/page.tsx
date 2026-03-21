@@ -19,21 +19,25 @@ export default function Home() {
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
       {/* Navigation */}
       <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between relative">
+          <div className="flex items-center gap-2 z-10">
             <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold pb-0.5">
               in
             </div>
             <span className="font-bold text-xl text-slate-900 tracking-tight">LinkedIn Optimizer Pro</span>
           </div>
-          <div className="flex items-center gap-6">
-            <a href="#features" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hidden md:block">Features</a>
-            <a href="#how-it-works" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hidden md:block">How it Works</a>
-            <a href="#pricing" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hidden md:block">Pricing</a>
-            <button className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm shadow-blue-600/20 active:scale-95">
+
+          <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+            <a href="#features" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">Features</a>
+            <a href="#how-it-works" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">How it Works</a>
+            <a href="#pricing" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">Pricing</a>
+          </div>
+
+          <div className="flex items-center gap-3 z-10">
+            <button className="cursor-pointer bg-transparent text-slate-700 hover:text-slate-900 hover:bg-slate-100 px-5 py-2.5 rounded-md font-semibold text-sm transition-all border border-transparent">
               Login
             </button>
-            <button className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm shadow-blue-600/20 active:scale-95">
+            <button className="cursor-pointer bg-[#0070F3] hover:bg-[#0060DF] text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm active:scale-95">
               Sign Up
             </button>
           </div>
@@ -53,7 +57,7 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className={`${openSans.className} text-5xl md:text-6xl font-[700] text-slate-900 tracking-tight leading-[1.1]`}
             >
-              Optimize your<span className="text-blue-600"> LinkedIn </span> reach.
+              Optimize your<span className="text-[#00366b]"> LinkedIn </span> reach.
             </motion.h1>
 
             <motion.p
