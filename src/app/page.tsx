@@ -37,7 +37,7 @@ export default function Home() {
             <button className="cursor-pointer bg-transparent text-slate-700 hover:text-slate-900 hover:bg-slate-100 px-5 py-2.5 rounded-md font-semibold text-sm transition-all border border-transparent">
               Login
             </button>
-            <button className="cursor-pointer bg-[#0070F3] hover:bg-[#0060DF] text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm active:scale-95">
+            <button className="cursor-pointer bg-[#006edc] hover:bg-[#0060DF] text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm active:scale-95">
               Sign Up
             </button>
           </div>
@@ -75,7 +75,7 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="pt-4 flex justify-center md:justify-start"
             >
-              <button className="cursor-pointer w-full sm:w-auto bg-[#0070F3] hover:bg-[#0060DF] text-white px-14 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-colors">
+              <button className="cursor-pointer w-full sm:w-auto bg-[#006edc] hover:bg-[#0060DF] text-white px-14 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-colors">
                 Start for free
               </button>
             </motion.div>
