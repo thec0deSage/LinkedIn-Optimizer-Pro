@@ -17,12 +17,12 @@ export default function SignUp() {
       <main className="flex-1 flex flex-col items-center justify-center px-4 z-10 w-full">
         <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 w-full max-w-[440px] p-8 md:p-10 flex flex-col">
           <div className="text-center mb-6 flex flex-col items-center">
-            <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+            <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-md bg-[#006edc] flex items-center justify-center text-white font-[800] pb-0.5">
                 in
               </div>
               <span className="font-bold text-xl text-[#00366b] tracking-tight">LinkedIn Optimizer Pro</span>
-            </Link>
+            </div>
             <h1 className="text-[25px] font-bold text-slate-900 tracking-tight leading-[1.0] mt-4">Grow your brand on autopilot</h1>
           </div>
 
@@ -59,7 +59,10 @@ export default function SignUp() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-slate-700 block">Password</label>
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-semibold text-slate-700">Password</label>
+                <span className="text-xs font-normal text-slate-400">(min 6 characters)</span>
+              </div>
               <div className="relative w-full">
                 <input
                   type={showPassword ? "text" : "password"}

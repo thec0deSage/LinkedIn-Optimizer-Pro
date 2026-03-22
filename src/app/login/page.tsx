@@ -16,13 +16,13 @@ export default function Login() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 z-10 w-full">
         <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 w-full max-w-[440px] p-8 md:p-10 flex flex-col">
-          <div className="text-center mb-8 flex flex-col items-center">
-            <Link href="/" className="flex items-center gap-2 mb-2 hover:opacity-90 transition-opacity">
+          <div className="text-center mb-6 flex flex-col items-center">
+            <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-md bg-[#006edc] flex items-center justify-center text-white font-[800] pb-0.5">
                 in
               </div>
               <span className="font-bold text-xl text-[#00366b] tracking-tight">LinkedIn Optimizer Pro</span>
-            </Link>
+            </div>
             <h1 className="text-[25px] font-bold text-slate-900 tracking-tight mt-4">Hey there, welcome back</h1>
           </div>
 
@@ -33,7 +33,7 @@ export default function Login() {
             Continue with LinkedIn
           </button>
 
-          <div className="flex items-center mb-6">
+          <div className="flex items-center mb-4">
             <div className="flex-1 h-px bg-slate-200"></div>
             <span className="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">or</span>
             <div className="flex-1 h-px bg-slate-200"></div>
@@ -78,7 +78,7 @@ export default function Login() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-8">
+          <p className="text-center text-sm text-slate-500 mt-4">
             Don't have an account? <Link href="/signup" className="font-bold text-[#006edc] hover:text-[#005bb8] hover:underline">Sign up</Link>
           </p>
         </div>
