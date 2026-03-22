@@ -59,9 +59,9 @@ export default function SignUp() {
             </div>
 
             <div className="space-y-1.5">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between">
                 <label className="text-sm font-semibold text-slate-700">Password</label>
-                <span className="text-xs font-normal text-slate-400">(min 6 characters)</span>
+                <span className="text-sm font-normal text-slate-400">Min 6 characters</span>
               </div>
               <div className="relative w-full">
                 <input
