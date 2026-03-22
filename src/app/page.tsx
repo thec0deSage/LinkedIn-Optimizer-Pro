@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   Bot,
@@ -40,12 +41,12 @@ export default function Home() {
           </div>
 
           <div className="hidden lg:flex items-center gap-3 z-10">
-            <button className="cursor-pointer bg-transparent text-slate-700 hover:text-slate-900 hover:bg-slate-100 px-5 py-2.5 rounded-md font-semibold text-sm transition-all border border-transparent">
+            <Link href="/login" className="cursor-pointer bg-transparent text-slate-700 hover:text-slate-900 hover:bg-slate-100 px-5 py-2.5 rounded-md font-semibold text-sm transition-all border border-transparent">
               Login
-            </button>
-            <button className="cursor-pointer bg-[#006edc] hover:bg-[#0060DF] text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm active:scale-95">
+            </Link>
+            <Link href="/signup" className="cursor-pointer bg-[#006edc] hover:bg-[#0060DF] text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm active:scale-95">
               Sign Up
-            </button>
+            </Link>
           </div>
 
           <div className="lg:hidden flex items-center z-10">
@@ -68,12 +69,12 @@ export default function Home() {
               <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-600">Pricing</a>
             </div>
             <div className="flex flex-col gap-3 pt-4 border-t border-slate-100">
-              <button className="cursor-pointer bg-transparent text-slate-600 hover:bg-slate-100 px-5 py-3 rounded-md font-semibold text-base transition-all border border-slate-200 w-full text-center">
+              <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="block cursor-pointer bg-transparent text-slate-600 hover:bg-slate-100 px-5 py-3 rounded-md font-semibold text-base transition-all border border-slate-200 w-full text-center">
                 Login
-              </button>
-              <button className="cursor-pointer bg-[#006edc] hover:bg-[#0060DF] text-white px-5 py-3 rounded-md font-semibold text-base transition-all shadow-sm active:scale-95 w-full text-center">
+              </Link>
+              <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)} className="block cursor-pointer bg-[#006edc] hover:bg-[#0060DF] text-white px-5 py-3 rounded-md font-semibold text-base transition-all shadow-sm active:scale-95 w-full text-center">
                 Sign Up
-              </button>
+              </Link>
             </div>
           </div>
         )}
@@ -110,9 +111,9 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="pt-4 flex justify-center md:justify-start"
             >
-              <button className="cursor-pointer w-full sm:w-auto bg-[#006edc] hover:bg-[#0060DF] text-white px-14 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-colors">
+              <Link href="/signup" className="cursor-pointer w-full sm:w-auto bg-[#006edc] hover:bg-[#0060DF] text-white px-14 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-colors text-center">
                 Start for free
-              </button>
+              </Link>
             </motion.div>
 
 
@@ -374,10 +375,10 @@ export default function Home() {
         <section className="py-24 max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold text-slate-900 mb-6 tracking-tight">Ready to post with confidence?</h2>
           <p className="text-xl text-slate-600 mb-10">Join thousands of founders and creators scaling their presence on LinkedIn.</p>
-          <button className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-md font-semibold text-xl transition-all shadow-lg shadow-blue-600/30 active:scale-95 inline-flex items-center gap-2">
+          <Link href="/signup" className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-md font-semibold text-xl transition-all shadow-lg shadow-blue-600/30 active:scale-95 inline-flex items-center justify-center gap-2">
             Start your free 14-day trial
             <ArrowRight className="w-5 h-5" />
-          </button>
+          </Link>
         </section>
 
       </main>
