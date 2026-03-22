@@ -399,7 +399,7 @@ export default function Home() {
               </p>
               <Link
                 href="/signup"
-                className="cursor-pointer inline-flex items-center gap-2 bg-[#006edc] hover:bg-[#0060DF] text-white px-8 py-3.5 rounded-lg font-semibold text-base transition-all active:scale-95 shadow-lg shadow-sky-500/30"
+                className="cursor-pointer inline-flex items-center gap-2 bg-[#006edc] hover:bg-[#0060DF] text-white px-8 py-3.5 rounded-lg font-semibold text-base transition-all active:scale-95 shadow-lg shadow-blue-500/25"
               >
                 Sign-up for free
               </Link>
