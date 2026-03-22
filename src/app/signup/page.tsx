@@ -16,25 +16,24 @@ export default function SignUp() {
       {/* Card */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 z-10 w-full">
         <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 w-full max-w-[440px] p-8 md:p-10 flex flex-col">
-          <div className="text-center mb-8 flex flex-col items-center">
-            <Link href="/" className="flex items-center gap-2 mb-2 hover:opacity-90 transition-opacity">
+          <div className="text-center mb-6 flex flex-col items-center">
+            <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
               <div className="w-8 h-8 rounded-md bg-[#006edc] flex items-center justify-center text-white font-[800] pb-0.5">
                 in
               </div>
               <span className="font-bold text-xl text-[#00366b] tracking-tight">LinkedIn Optimizer Pro</span>
             </Link>
-            <h1 className="text-[28px] font-bold text-slate-900 tracking-tight mt-4">Create your account</h1>
-            <p className="text-slate-500 text-sm mt-3">Join the elite circle of digital thought leaders.</p>
+            <h1 className="text-[25px] font-bold text-slate-900 tracking-tight leading-[1.0] mt-4">Grow your brand on autopilot</h1>
           </div>
 
           <button className="w-full bg-[#0A66C2] hover:bg-[#004182] text-white rounded-lg py-3 px-4 font-semibold text-sm flex items-center justify-center gap-2 transition-colors mb-6 shadow-sm cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
             </svg>
-            Create Account with LinkedIn
+            Continue with LinkedIn
           </button>
 
-          <div className="flex items-center mb-6">
+          <div className="flex items-center mb-4">
             <div className="flex-1 h-px bg-slate-200"></div>
             <span className="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">or</span>
             <div className="flex-1 h-px bg-slate-200"></div>
@@ -42,19 +41,19 @@ export default function SignUp() {
 
           <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-slate-700 block">Full Name</label>
+              <label className="text-sm font-semibold text-slate-700 block">Username</label>
               <input
                 type="text"
-                placeholder="John Doe"
+                placeholder="@username"
                 className="w-full border-b border-slate-200 focus:border-[#006edc] py-2 outline-none transition-colors bg-transparent text-slate-900 placeholder:text-slate-400"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-slate-700 block">Email or Phone</label>
+              <label className="text-sm font-semibold text-slate-700 block">Email Address</label>
               <input
                 type="text"
-                placeholder="name@company.com"
+                placeholder="you@example.com"
                 className="w-full border-b border-slate-200 focus:border-[#006edc] py-2 outline-none transition-colors bg-transparent text-slate-900 placeholder:text-slate-400"
               />
             </div>
@@ -98,14 +97,9 @@ export default function SignUp() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-8">
+          <p className="text-center text-sm text-slate-500 mt-4">
             Already have an account? <Link href="/login" className="font-bold text-[#006edc] hover:text-[#005bb8] hover:underline">Log in</Link>
           </p>
-        </div>
-
-        <div className="flex items-center gap-2 mt-8 text-indigo-600/80 font-bold text-xs tracking-wider">
-          <Sparkles className="w-4 h-4" />
-          <span>AI-OPTIMIZED ONBOARDING</span>
         </div>
       </main>
     </div>
