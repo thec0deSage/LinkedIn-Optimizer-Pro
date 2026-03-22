@@ -371,13 +371,40 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-24 max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-slate-900 mb-6 tracking-tight">Ready to post with confidence?</h2>
-          <p className="text-xl text-slate-600 mb-10">Join thousands of founders and creators scaling their presence on LinkedIn.</p>
-          <Link href="/signup" className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-md font-semibold text-xl transition-all shadow-lg shadow-blue-600/30 active:scale-95 inline-flex items-center justify-center gap-2">
-            Start your free 14-day trial
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+        <section className="py-16 px-6">
+          <div
+            className="relative max-w-4xl mx-auto rounded-2xl overflow-hidden text-center px-8 py-20"
+            style={{
+              backgroundColor: "#0d2137",
+              backgroundImage: `
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)
+              `,
+              backgroundSize: "40px 40px",
+            }}
+          >
+            {/* Subtle radial fade to darken edges */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: "radial-gradient(ellipse at center, transparent 40%, rgba(5,18,35,0.65) 100%)",
+              }}
+            />
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-5 leading-[1.1] tracking-tight">
+                Turn your expertise into<br />measurable influence.
+              </h2>
+              <p className="text-slate-400 text-lg md:text-xl mb-4 max-w-md mx-auto leading-relaxed font-medium">
+                Build your LinkedIn presence, together or independently
+              </p>
+              <Link
+                href="/signup"
+                className="cursor-pointer inline-flex items-center gap-2 bg-[#0ea5e9] text-white px-8 py-3.5 rounded-lg font-semibold text-base transition-all active:scale-95 shadow-lg shadow-sky-500/30"
+              >
+                Sign-up for free
+              </Link>
+            </div>
+          </div>
         </section>
 
       </main>
