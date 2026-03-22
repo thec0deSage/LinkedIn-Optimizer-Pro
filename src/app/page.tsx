@@ -30,7 +30,7 @@ export default function Home() {
             <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold pb-0.5">
               in
             </div>
-            <span className="font-bold text-xl text-slate-900 tracking-tight">LinkedIn Optimizer Pro</span>
+            <span className="font-bold text-xl text-[#00366b] tracking-tight">LinkedIn Optimizer Pro</span>
           </div>
 
           <div className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
@@ -208,7 +208,7 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">How it works</h2>
               <p className="text-slate-600 text-lg">Your personal brand on autopilot in three simple steps.</p>
             </div>
-            
+
             <div className="grid md:grid-cols-3 gap-12 relative max-w-5xl mx-auto">
               {/* Connecting line for desktop */}
               <div className="hidden md:block absolute top-[44px] left-[16.66%] right-[16.66%] h-0.5 bg-slate-200 -z-0"></div>
@@ -279,9 +279,8 @@ export default function Home() {
                     <ChevronDown className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${openFaq === index ? 'rotate-180' : ''}`} />
                   </button>
                   <div
-                    className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${
-                      openFaq === index ? 'max-h-48 pb-6 opacity-100' : 'max-h-0 opacity-0'
-                    }`}
+                    className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${openFaq === index ? 'max-h-48 pb-6 opacity-100' : 'max-h-0 opacity-0'
+                      }`}
                   >
                     <p className="text-slate-600 leading-relaxed">{faq.answer}</p>
                   </div>
