@@ -155,7 +155,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center max-w-2xl mx-auto mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-[#213856] mb-4 tracking-tight">Everything you need to grow your influence</h2>
-              <p className="text-slate-600 text-lg">Stop staring at a blank page. Scale your personal brand with powerful AI that genuinely understands how you write.</p>
+              <p className="text-slate-600 text-lg">Scale your personal brand with powerful AI that genuinely understands how you write.</p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
