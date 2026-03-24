@@ -30,7 +30,7 @@ export default function Home() {
             <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold pb-0.5">
               in
             </div>
-            <span className="font-bold text-xl text-[#00366b] tracking-tight">LinkedIn Optimizer Pro</span>
+            <span className="font-bold text-xl text-[#00366b] tracking-tight">Optimizer Pro</span>
           </div>
 
           <div className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
@@ -64,9 +64,9 @@ export default function Home() {
           <div className="lg:hidden absolute top-20 inset-x-0 bg-white border-b border-slate-200 px-6 py-6 flex flex-col gap-6 shadow-xl w-full">
             <div className="flex flex-col gap-4">
               <a href="#features" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-600">Features</a>
-              <a href="#how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-600">How it Works</a>
               <a href="#faqs" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-600">FAQs</a>
               <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-600">Pricing</a>
+              <a href="#blog" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-600">Blog</a>
             </div>
             <div className="flex flex-col gap-3 pt-4 border-t border-slate-100">
               <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="block cursor-pointer bg-transparent text-slate-600 hover:bg-slate-100 px-5 py-3 rounded-md font-semibold text-base transition-all border border-slate-200 w-full text-center">
@@ -109,11 +109,14 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="pt-4 flex justify-center md:justify-start"
+              className="pt-4 flex flex-wrap items-center gap-3 justify-center md:justify-start"
             >
               <Link href="/signup" className="cursor-pointer w-full sm:w-auto bg-[#006edc] hover:bg-[#0060DF] text-white px-14 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-colors text-center">
                 Start for free
               </Link>
+              <a href="#how-it-works" className="cursor-pointer w-full sm:w-auto border border-[#006edc] bg-transparent text-[#006edc] hover:shadow-[0_0_0_1px_#006edc] px-8 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-all text-center">
+                See how it works
+              </a>
             </motion.div>
 
 
