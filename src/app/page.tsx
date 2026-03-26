@@ -82,7 +82,7 @@ export default function Home() {
 
       <main className="flex-1 pt-20 pb-20">
         {/* Hero Section */}
-        <section className="max-w-7xl mx-auto px-6 pt-12 md:pt-20 pb-16 md:pb-32 text-center md:text-left flex flex-col md:flex-row items-center gap-12">
+        <section className="max-w-7xl mx-auto px-6 py-16 md:py-32 text-center md:text-left flex flex-col md:flex-row items-center gap-12">
 
           <div className="md:w-1/2 space-y-8 relative z-10">
 
@@ -151,54 +151,98 @@ export default function Home() {
         </section>
 
         {/* Feature Section */}
-        <section id="features" className="bg-white border-y border-slate-200 py-24">
+        <section id="features" className="bg-white py-24 md:py-32">
           <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#213856] mb-4 tracking-tight">Everything you need to grow your influence</h2>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center max-w-3xl mx-auto mb-20"
+            >
+              <h2 className="text-4xl md:text-5xl font-bold text-[#213856] mb-4 tracking-tight leading-tight">
+                Write Better. Grow Faster.
+              </h2>
               <p className="text-slate-600 text-lg">Scale your personal brand with powerful AI that genuinely understands how you write.</p>
-            </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {/* Feature 1 */}
+            </motion.div>
+
+            <div className="grid lg:grid-cols-3 gap-8">
+              {/* Feature 1: Content Creation */}
               <motion.div
-                whileHover={{ y: -5 }}
-                className="bg-slate-50/50 border border-slate-200 p-8 rounded-2xl hover:shadow-xl hover:shadow-slate-200/50 transition-all"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="group relative flex flex-col bg-[#F9FAFB] rounded-[30px] overflow-hidden border border-slate-100/50 shadow-sm hover:shadow-xl transition-all duration-500"
               >
-                <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-6">
-                  <PenTool className="w-6 h-6" />
+                <div className="p-8 pb-0">
+                  <div className="flex justify-between items-start mb-4">
+                    <span className="text-[12px] font-bold tracking-[0.1em] text-blue-600 uppercase">Content Creation</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-[#213856] mb-4 leading-tight">
+                    Authentic AI That Sounds Like You
+                  </h3>
                 </div>
-                <h3 className="text-xl font-bold text-[#213856] mb-3">Authentic AI That Sounds Like You</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  Our Tone Matching Engine analyzes your past posts to replicate your unique writing style, vocabulary, and sentence patterns. Keep your brand authentic.
-                </p>
+                <div className="mt-auto relative bg-[#3b82f6] p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
+                  <img
+                    src="/images/content-creation.png"
+                    alt="Content Creation Mockup"
+                    className="w-full h-full object-cover object-top rounded-xl shadow-2xl"
+                  />
+                </div>
               </motion.div>
 
-              {/* Feature 2 */}
+              {/* Feature 2: Analytics */}
               <motion.div
-                whileHover={{ y: -5 }}
-                className="bg-slate-50/50 border border-slate-200 p-8 rounded-2xl hover:shadow-xl hover:shadow-slate-200/50 transition-all"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="group relative flex flex-col bg-[#F9FAFB] rounded-[32px] overflow-hidden border border-slate-100/50 shadow-sm hover:shadow-xl transition-all duration-500"
               >
-                <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-6">
-                  <BarChart3 className="w-6 h-6" />
+                <div className="p-8 pb-0">
+                  <div className="flex justify-between items-start mb-4">
+                    <span className="text-[12px] font-bold tracking-[0.1em] text-orange-500 uppercase">Analytics</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-[#213856] mb-4 leading-tight">
+                    Content That Drives Real Engagement
+                  </h3>
                 </div>
-                <h3 className="text-xl font-bold text-[#213856] mb-3">Content That Drives Real Engagement</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  Generate dynamic hooks designed for LinkedIn's algorithm. With curiosity-driven to contrary angles, ensure your content gets the attention it deserves.
-                </p>
+                <div className="mt-auto relative bg-[#f97316] p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
+                  <img
+                    src="/images/analytics-v2.png"
+                    alt="Analytics Mockup"
+                    className="w-full h-full object-cover object-top rounded-xl shadow-2xl"
+                  />
+                </div>
               </motion.div>
 
-              {/* Feature 3 */}
+              {/* Feature 3: Teams */}
               <motion.div
-                whileHover={{ y: -5 }}
-                className="bg-slate-50/50 border border-slate-200 p-8 rounded-2xl hover:shadow-xl hover:shadow-slate-200/50 transition-all"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="group relative flex flex-col bg-[#F9FAFB] rounded-[32px] overflow-hidden border border-slate-100/50 shadow-sm hover:shadow-xl transition-all duration-500"
               >
-                <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-6">
-                  <LayoutDashboard className="w-6 h-6" />
+                <div className="p-8 pb-0">
+                  <div className="flex justify-between items-start mb-4">
+                    <span className="text-[12px] font-bold tracking-[0.1em] text-emerald-600 uppercase">Teams</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-[#213856] mb-4 leading-tight">
+                    End-to-End Content Workflow
+                  </h3>
                 </div>
-                <h3 className="text-xl font-bold text-[#213856] mb-3">End-to-End Content Workflow</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  From discovering trending ideas to rich-text editing and scheduled publishing, manage your entire content lifecycle in one centralized CMS workspace.
-                </p>
+                <div className="mt-auto relative bg-[#10b981] p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
+                  <img
+                    src="/images/teams-kanban.png"
+                    alt="Teams Mockup"
+                    className="w-full h-full object-cover object-top rounded-xl shadow-2xl"
+                  />
+                </div>
               </motion.div>
             </div>
           </div>
