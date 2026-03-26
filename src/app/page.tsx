@@ -14,7 +14,8 @@ import {
   Menu,
   X,
   Check,
-  ChevronDown
+  ChevronDown,
+  ArrowUpRight
 } from "lucide-react";
 
 export default function Home() {
@@ -153,31 +154,29 @@ export default function Home() {
         {/* Feature Section */}
         <section id="features" className="bg-white py-24 md:py-32">
           <div className="max-w-7xl mx-auto px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center max-w-3xl mx-auto mb-20"
+            <div
+              className="text-center max-w-3xl mx-auto mb-16"
             >
               <h2 className="text-4xl md:text-5xl font-bold text-[#213856] mb-4 tracking-tight leading-tight">
                 Write Better. Grow Faster.
               </h2>
               <p className="text-slate-600 text-lg">Scale your personal brand with powerful AI that genuinely understands how you write.</p>
 
-            </motion.div>
+            </div>
 
             <div className="grid lg:grid-cols-3 gap-8">
               {/* Feature 1: Content Creation */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="group relative flex flex-col bg-[#F9FAFB] rounded-[30px] overflow-hidden border border-slate-100/50 shadow-sm hover:shadow-xl transition-all duration-500"
+              <div
+                className="group relative flex flex-col bg-[#F9FAFB] rounded-[30px] overflow-hidden border border-slate-100/50 shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-500"
               >
                 <div className="p-8 pb-0">
                   <div className="flex justify-between items-start mb-4">
-                    <span className="text-[12px] font-bold tracking-[0.1em] text-blue-600 uppercase">Content Creation</span>
+                    <span className="px-3 py-1 rounded-full bg-slate-200/50 text-[11px] font-bold tracking-wider text-slate-600 uppercase">
+                      Content Creation
+                    </span>
+                    <div className="p-1.5 rounded-lg bg-white text-slate-400">
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </div>
                   </div>
                   <h3 className="text-2xl font-bold text-[#213856] mb-4 leading-tight">
                     Authentic AI That Sounds Like You
@@ -191,25 +190,26 @@ export default function Home() {
                     className="w-full h-full object-cover object-top rounded-xl shadow-2xl"
                   />
                 </div>
-              </motion.div>
+              </div>
 
               {/* Feature 2: Analytics */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="group relative flex flex-col bg-[#F9FAFB] rounded-[32px] overflow-hidden border border-slate-100/50 shadow-sm hover:shadow-xl transition-all duration-500"
+              <div
+                className="group relative flex flex-col bg-[#F9FAFB] rounded-[32px] overflow-hidden border border-slate-100/50 shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-500"
               >
                 <div className="p-8 pb-0">
                   <div className="flex justify-between items-start mb-4">
-                    <span className="text-[12px] font-bold tracking-[0.1em] text-orange-500 uppercase">Analytics</span>
+                    <span className="px-3 py-1 rounded-full bg-slate-200/50 text-[11px] font-bold tracking-wider text-slate-600 uppercase">
+                      Analytics
+                    </span>
+                    <div className="p-1.5 rounded-lg bg-white text-slate-400">
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </div>
                   </div>
                   <h3 className="text-2xl font-bold text-[#213856] mb-4 leading-tight">
                     Content That Drives Real Engagement
                   </h3>
                 </div>
-                <div className="mt-auto relative bg-[#f97316] p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                <div className="mt-auto relative bg-[#3b82f6] p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
                   <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
                   <img
                     src="/images/analytics-v2.png"
@@ -217,25 +217,26 @@ export default function Home() {
                     className="w-full h-full object-cover object-top rounded-xl shadow-2xl"
                   />
                 </div>
-              </motion.div>
+              </div>
 
               {/* Feature 3: Teams */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="group relative flex flex-col bg-[#F9FAFB] rounded-[32px] overflow-hidden border border-slate-100/50 shadow-sm hover:shadow-xl transition-all duration-500"
+              <div
+                className="group relative flex flex-col bg-[#F9FAFB] rounded-[32px] overflow-hidden border border-slate-100/50 shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-500"
               >
                 <div className="p-8 pb-0">
                   <div className="flex justify-between items-start mb-4">
-                    <span className="text-[12px] font-bold tracking-[0.1em] text-emerald-600 uppercase">Teams</span>
+                    <span className="px-3 py-1 rounded-full bg-slate-200/50 text-[11px] font-bold tracking-wider text-slate-600 uppercase">
+                      Teams
+                    </span>
+                    <div className="p-1.5 rounded-lg bg-white text-slate-400">
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </div>
                   </div>
                   <h3 className="text-2xl font-bold text-[#213856] mb-4 leading-tight">
                     End-to-End Content Workflow
                   </h3>
                 </div>
-                <div className="mt-auto relative bg-[#10b981] p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                <div className="mt-auto relative bg-[#3b82f6] p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
                   <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
                   <img
                     src="/images/teams-kanban.png"
@@ -243,7 +244,7 @@ export default function Home() {
                     className="w-full h-full object-cover object-top rounded-xl shadow-2xl"
                   />
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
