@@ -151,6 +151,81 @@ export default function Home() {
           </motion.div>
         </section>
 
+        {/* Problems Section - Sleek Dark Mode */}
+        <section id="problems" className="bg-[#0d2137] py-24 md:py-32 overflow-hidden border-t border-slate-200">
+          <div className="max-w-5xl mx-auto px-6">
+            <div
+              className="text-center max-w-3xl mx-auto mb-16"
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-[#fff] mb-4 tracking-tight">
+                Common LinkedIn problems we solve
+              </h2>
+              <p className="text-[#fff] text-lg">Struggling on LinkedIn? You’re not alone</p>
+
+            </div>
+
+            <div className="flex flex-col gap-5 max-w-4xl mx-auto">
+
+              {/* Problem 1 - Left */}
+              <div className="flex items-center gap-5">
+                <img
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=100&h=100"
+                  alt="The Founder"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover shrink-0 shadow-lg border border-slate-700/50"
+                />
+                <div className="flex flex-col w-full">
+                  <div className="bg-white/5 border border-white/10 backdrop-blur-sm text-white/95 p-5 px-7 md:px-8 rounded-[32px] font-medium text-[15px] leading-relaxed w-fit max-w-[85%] shadow-sm">
+                    I know LinkedIn matters. I just don't have a system that works.
+                  </div>
+                </div>
+              </div>
+
+              {/* Problem 2 - Right */}
+              <div className="flex items-center gap-5 justify-end">
+                <div className="flex flex-col w-full items-end">
+                  <div className="bg-white/5 border border-white/10 backdrop-blur-sm text-white/95 p-5 px-7 md:px-8 rounded-[32px] font-medium text-[15px] leading-relaxed w-fit max-w-[85%] shadow-sm">
+                    I struggle to come up with ideas that are relevant, consistent, and engaging.
+                  </div>
+                </div>
+                <img
+                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=100&h=100"
+                  alt="The Creator"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover shrink-0 shadow-lg border border-slate-700/50"
+                />
+              </div>
+
+              {/* Problem 3 - Left */}
+              <div className="flex items-center gap-5">
+                <img
+                  src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=100&h=100"
+                  alt="The Marketer"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover shrink-0 shadow-lg border border-slate-700/50"
+                />
+                <div className="flex flex-col w-full">
+                  <div className="bg-white/5 border border-white/10 backdrop-blur-sm text-white/95 p-5 px-7 md:px-8 rounded-[32px] font-medium text-[15px] leading-relaxed w-fit max-w-[85%] shadow-sm">
+                    My content doesn’t reach people or spark meaningful interaction.
+                  </div>
+                </div>
+              </div>
+
+              {/* Problem 4 - Right */}
+              <div className="flex items-center gap-5 justify-end">
+                <div className="flex flex-col w-full items-end">
+                  <div className="bg-white/5 border border-white/10 backdrop-blur-sm text-white/95 p-5 px-7 md:px-8 rounded-[32px] font-medium text-[15px] leading-relaxed w-fit max-w-[85%] shadow-sm">
+                    I want to stay consistent, but my workload gets in the way.
+                  </div>
+                </div>
+                <img
+                  src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=100&h=100"
+                  alt="The Professional"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover shrink-0 shadow-lg border border-slate-700/50"
+                />
+              </div>
+
+            </div>
+          </div>
+        </section>
+
         {/* Feature Section */}
         <section id="features" className="bg-white py-24 md:py-32">
           <div className="max-w-7xl mx-auto px-6">
@@ -160,7 +235,7 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-[#213856] mb-4 tracking-tight">
                 Write Better. Grow Faster.
               </h2>
-              <p className="text-slate-600 text-lg">Scale your personal brand with powerful AI that genuinely understands how you write.</p>
+              <p className="text-slate-600 text-lg">Fix What’s Slowing Your LinkedIn Growth</p>
 
             </div>
 
@@ -245,6 +320,14 @@ export default function Home() {
                   />
                 </div>
               </div>
+            </div>
+            <div className="mt-16 flex justify-center">
+              <Link
+                href="/signup"
+                className="cursor-pointer bg-[#00366b] hover:bg-[#1a5085] text-white px-12 py-3.5 rounded-md font-semibold text-lg transition-all active:scale-95 shadow-lg shadow-blue-900/10"
+              >
+                Start for free
+              </Link>
             </div>
           </div>
         </section>
@@ -431,7 +514,6 @@ export default function Home() {
               backgroundSize: "40px 40px",
             }}
           >
-            {/* Subtle radial fade to darken edges */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
@@ -449,7 +531,7 @@ export default function Home() {
                 href="/signup"
                 className="cursor-pointer inline-flex items-center gap-2 bg-[#006edc] hover:bg-[#0060DF] text-white px-8 py-3.5 rounded-lg font-semibold text-base transition-all active:scale-95 shadow-lg shadow-blue-500/25"
               >
-                Sign-up for free
+                Start for free
               </Link>
             </div>
           </div>
