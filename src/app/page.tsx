@@ -199,7 +199,7 @@ export default function Home() {
                 <div className="p-8 pb-0">
                   <div className="flex justify-between items-start mb-4">
                     <span className="px-3 py-1 rounded-full bg-slate-200/50 text-[11px] font-bold tracking-wider text-slate-600 uppercase">
-                      Analytics
+                      Growth Optimization
                     </span>
                     <div className="p-1.5 rounded-lg bg-white text-slate-400">
                       <ArrowUpRight className="w-3.5 h-3.5" />
@@ -226,14 +226,14 @@ export default function Home() {
                 <div className="p-8 pb-0">
                   <div className="flex justify-between items-start mb-4">
                     <span className="px-3 py-1 rounded-full bg-slate-200/50 text-[11px] font-bold tracking-wider text-slate-600 uppercase">
-                      Teams
+                      Workflow Automation
                     </span>
                     <div className="p-1.5 rounded-lg bg-white text-slate-400">
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </div>
                   </div>
                   <h3 className="text-2xl font-bold text-[#213856] mb-4 leading-tight">
-                    End-to-End Content Workflow
+                    Zero-Friction Content Pipeline
                   </h3>
                 </div>
                 <div className="mt-auto relative bg-[#3b82f6] p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
