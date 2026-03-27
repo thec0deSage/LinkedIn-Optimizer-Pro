@@ -157,7 +157,7 @@ export default function Home() {
             <div
               className="text-center max-w-3xl mx-auto mb-16"
             >
-              <h2 className="text-4xl md:text-5xl font-bold text-[#213856] mb-4 tracking-tight leading-tight">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#213856] mb-4 tracking-tight">
                 Write Better. Grow Faster.
               </h2>
               <p className="text-slate-600 text-lg">Scale your personal brand with powerful AI that genuinely understands how you write.</p>
@@ -182,7 +182,7 @@ export default function Home() {
                     Authentic AI That Sounds Like You
                   </h3>
                 </div>
-                <div className="mt-auto relative bg-[#3b82f6] p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                <div className="mt-auto relative bg-[#BAD8F7]/80 p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
                   <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
                   <img
                     src="/images/content-creation.png"
@@ -209,7 +209,7 @@ export default function Home() {
                     Content That Drives Real Engagement
                   </h3>
                 </div>
-                <div className="mt-auto relative bg-[#3b82f6] p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                <div className="mt-auto relative bg-[#BAD8F7]/80 p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
                   <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
                   <img
                     src="/images/analytics-v2.png"
@@ -236,7 +236,7 @@ export default function Home() {
                     Zero-Friction Content Pipeline
                   </h3>
                 </div>
-                <div className="mt-auto relative bg-[#3b82f6] p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                <div className="mt-auto relative bg-[#BAD8F7]/80 p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
                   <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
                   <img
                     src="/images/teams-kanban.png"
