@@ -112,7 +112,7 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="pt-4 flex flex-wrap items-center gap-3 justify-center md:justify-start"
             >
-              <Link href="/signup" className="cursor-pointer w-full sm:w-auto bg-[#00366b] hover:bg-[#1a5085] text-white px-14 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-colors text-center">
+              <Link href="/login" className="cursor-pointer w-full sm:w-auto bg-[#00366b] hover:bg-[#1a5085] text-white px-14 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-colors text-center">
                 Start for free
               </Link>
               <a href="#how-it-works" className="cursor-pointer w-full sm:w-auto shadow-[0_0_0_0.5px_#00366b] bg-transparent text-[#00366b] hover:shadow-[0_0_0_1.5px_#00366b] px-8 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-shadow duration-300 text-center">
@@ -348,7 +348,7 @@ export default function Home() {
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3 pt-4">
-                  <a href="/signup" className="cursor-pointer bg-[#00366b] hover:bg-[#1a5085] text-white px-8 py-2.5 rounded-md font-semibold text-base transition-all shadow-sm active:scale-95">
+                  <a href="/login" className="cursor-pointer bg-[#00366b] hover:bg-[#1a5085] text-white px-8 py-2.5 rounded-md font-semibold text-base transition-all shadow-sm active:scale-95">
                     Try Optimizer Pro
                   </a>
                   <a href="#faqs" className="cursor-pointer shadow-[0_0_0_0.5px_#00366b] bg-transparent text-[#00366b] hover:shadow-[0_0_0_1.5px_#00366b] px-8 py-2.5 rounded-md font-semibold text-base transition-shadow duration-300">
@@ -561,7 +561,7 @@ export default function Home() {
                 Build your LinkedIn presence, together or independently
               </p>
               <Link
-                href="/signup"
+                href="/login"
                 className="cursor-pointer inline-flex items-center gap-2 bg-[#006edc] hover:bg-[#0060DF] text-white px-8 py-3.5 rounded-lg font-semibold text-base transition-all active:scale-95 shadow-lg shadow-blue-500/25"
               >
                 Start for free
