@@ -169,7 +169,7 @@ export default function Home() {
               {/* Problem 1 - Left */}
               <div className="flex items-center gap-5">
                 <img
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=100&h=100"
+                  src="/images/image-2.jpg"
                   alt="The Founder"
                   className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover shrink-0 shadow-lg border border-slate-700/50"
                 />
@@ -188,7 +188,7 @@ export default function Home() {
                   </div>
                 </div>
                 <img
-                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=100&h=100"
+                  src="/images/image-3.jpg"
                   alt="The Creator"
                   className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover shrink-0 shadow-lg border border-slate-700/50"
                 />
@@ -197,7 +197,7 @@ export default function Home() {
               {/* Problem 3 - Left */}
               <div className="flex items-center gap-5">
                 <img
-                  src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=100&h=100"
+                  src="/images/image-1.jpg"
                   alt="The Marketer"
                   className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover shrink-0 shadow-lg border border-slate-700/50"
                 />
@@ -216,7 +216,7 @@ export default function Home() {
                   </div>
                 </div>
                 <img
-                  src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=100&h=100"
+                  src="/images/image-4.jpeg"
                   alt="The Professional"
                   className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover shrink-0 shadow-lg border border-slate-700/50"
                 />
