@@ -246,10 +246,10 @@ export default function Home() {
               >
                 <div className="p-8 pb-0">
                   <div className="flex justify-between items-start mb-4">
-                    <span className="px-3 py-1 rounded-full bg-slate-200/50 text-[11px] font-bold tracking-wider text-slate-600 uppercase">
+                    <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-slate-200 text-sm font-semibold tracking-wide text-slate-600 shadow-sm">
                       Content Creation
                     </span>
-                    <div className="p-1.5 rounded-lg bg-white text-slate-400">
+                    <div className="p-1.5 rounded-lg bg-white border border-slate-200 shadow-sm text-slate-400">
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </div>
                   </div>
@@ -273,10 +273,10 @@ export default function Home() {
               >
                 <div className="p-8 pb-0">
                   <div className="flex justify-between items-start mb-4">
-                    <span className="px-3 py-1 rounded-full bg-slate-200/50 text-[11px] font-bold tracking-wider text-slate-600 uppercase">
+                    <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-slate-200 text-sm font-semibold tracking-wide text-slate-600 shadow-sm">
                       Growth Optimization
                     </span>
-                    <div className="p-1.5 rounded-lg bg-white text-slate-400">
+                    <div className="p-1.5 rounded-lg bg-white border border-slate-200 shadow-sm text-slate-400">
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </div>
                   </div>
@@ -300,10 +300,10 @@ export default function Home() {
               >
                 <div className="p-8 pb-0">
                   <div className="flex justify-between items-start mb-4">
-                    <span className="px-3 py-1 rounded-full bg-slate-200/50 text-[11px] font-bold tracking-wider text-slate-600 uppercase">
+                    <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-slate-200 text-sm font-semibold tracking-wide text-slate-600 shadow-sm">
                       Workflow Automation
                     </span>
-                    <div className="p-1.5 rounded-lg bg-white text-slate-400">
+                    <div className="p-1.5 rounded-lg bg-white border border-slate-200 shadow-sm text-slate-400">
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </div>
                   </div>
@@ -321,84 +321,117 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="mt-16 flex justify-center">
-              <Link
-                href="/signup"
-                className="cursor-pointer bg-[#00366b] hover:bg-[#1a5085] text-white px-12 py-3.5 rounded-md font-semibold text-lg transition-all active:scale-95 shadow-lg shadow-blue-900/10"
-              >
-                Start for free
-              </Link>
-            </div>
           </div>
         </section>
 
         {/* How It Works Section */}
-        <section id="how-it-works" className="py-24 bg-slate-50 border-y border-slate-200">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#213856] mb-4 tracking-tight">How it works</h2>
-              <p className="text-slate-600 text-lg">Your personal brand on autopilot in three simple steps.</p>
-            </div>
+        <section id="how-it-works" className="py-24 bg-slate-50 border-y border-slate-200 flex items-center justify-center relative overflow-hidden">
+          {/* Decorative background blobs */}
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-100/40 rounded-full blur-[100px] -z-0"></div>
+          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-pink-100/40 rounded-full blur-[100px] -z-0"></div>
 
-            <div className="grid md:grid-cols-3 gap-12 relative max-w-5xl mx-auto">
-              {/* Connecting line for desktop */}
-              <div className="hidden md:block absolute top-[44px] left-[16.66%] right-[16.66%] h-0.5 bg-slate-200 -z-0"></div>
+          <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
+            <div className="bg-white rounded-[32px] border border-slate-200 shadow-xl shadow-slate-200/50 p-8 md:p-14 lg:p-16 flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
 
-              {/* Step 1 */}
-              <div className="relative z-10 flex flex-col items-center text-center">
-                <div className="w-24 h-24 bg-white rounded-full border border-slate-200 flex items-center justify-center shadow-md shadow-slate-200/50 mb-6 font-bold text-2xl text-blue-600">
-                  1
+              {/* Left Column */}
+              <div className="lg:w-5/12 w-full space-y-6 flex flex-col items-start relative">
+                <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-slate-50/80 border border-slate-200 text-sm font-semibold text-slate-600 backdrop-blur-sm shadow-sm">
+                  <span className="text-slate-400 mr-1.5">How</span> Optimizer Pro Works
                 </div>
-                <h3 className="text-xl font-bold text-[#213856] mb-3">Connect & Analyze</h3>
-                <p className="text-slate-600 leading-relaxed">Securely connect your profile. AI scans your past content to learn your unique voice, tone, and format.</p>
+
+                <h2 className="text-4xl md:text-5xl font-bold text-[#213856] mb-1 tracking-tight leading-tight">
+                  How it works
+                </h2>
+
+                <p className="text-slate-600 text-lg leading-relaxed">
+                  Your personal brand on autopilot in three simple steps.
+                </p>
+
+                <div className="flex flex-wrap items-center gap-3 pt-4">
+                  <a href="/signup" className="cursor-pointer bg-[#00366b] hover:bg-[#1a5085] text-white px-8 py-2.5 rounded-md font-semibold text-base transition-all shadow-sm active:scale-95">
+                    Try Optimizer Pro
+                  </a>
+                  <a href="#faqs" className="cursor-pointer shadow-[0_0_0_0.5px_#00366b] bg-transparent text-[#00366b] hover:shadow-[0_0_0_1.5px_#00366b] px-8 py-2.5 rounded-md font-semibold text-base transition-shadow duration-300">
+                    Learn more
+                  </a>
+                </div>
               </div>
 
-              {/* Step 2 */}
-              <div className="relative z-10 flex flex-col items-center text-center">
-                <div className="w-24 h-24 bg-white rounded-full border border-slate-200 flex items-center justify-center shadow-md shadow-slate-200/50 mb-6 font-bold text-2xl text-blue-600">
-                  2
+              {/* Right Column */}
+              <div className="lg:w-7/12 w-full flex flex-col gap-4">
+                {/* Step 1 */}
+                <div className="bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow p-6 rounded-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50/50 rounded-full blur-[30px] -z-0"></div>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-3 relative z-10">
+                    <span className="px-3 py-1 rounded-[7px] bg-slate-200/50 text-[11px] font-bold tracking-wider text-slate-600  shrink-0 inline-flex items-center justify-center">
+                      Step 1
+                    </span>
+                    <h3 className="text-xl font-bold text-[#213856]">Connect & Analyze</h3>
+                  </div>
+                  <p className="text-slate-600 leading-relaxed relative z-10 mt-2 sm:mt-0 text-[15px]">
+                    Securely connect your profile. AI scans your past content to learn your unique voice, tone, and format.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-[#213856] mb-3">Generate Content</h3>
-                <p className="text-slate-600 leading-relaxed">Input a topic or link. The AI drafts a flawless LinkedIn post that sounds perfectly like you, in seconds.</p>
+
+                {/* Step 2 */}
+                <div className="bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow p-6 rounded-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-purple-50/50 rounded-full blur-[30px] -z-0"></div>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-3 relative z-10">
+                    <span className="px-3 py-1 rounded-[7px] bg-slate-200/50 text-[11px] font-bold tracking-wider text-slate-600 shrink-0 inline-flex items-center justify-center">
+                      Step 2
+                    </span>
+                    <h3 className="text-xl font-bold text-[#213856]">Generate Content</h3>
+                  </div>
+                  <p className="text-slate-600 leading-relaxed relative z-10 mt-2 sm:mt-0 text-[15px]">
+                    Input a topic or link. The AI drafts a flawless LinkedIn post that sounds perfectly like you, in seconds.
+                  </p>
+                </div>
+
+                {/* Step 3 */}
+                <div className="bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow p-6 rounded-2xl relative overflow-hidden">
+                  <div className="absolute right-0 bottom-0 w-32 h-32 bg-pink-50/80 rounded-full blur-[40px] -z-0"></div>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-3 relative z-10">
+                    <span className="px-3 py-1 rounded-[7px] bg-slate-200/50 text-[11px] font-bold tracking-wider text-slate-600 shrink-0 inline-flex items-center justify-center">
+                      Step 3
+                    </span>
+                    <h3 className="text-xl font-bold text-[#213856]">Review & Publish</h3>
+                  </div>
+                  <p className="text-slate-600 leading-relaxed relative z-10 mt-2 sm:mt-0 text-[15px]">
+                    Make final tweaks in our rich editor, preview across devices, and schedule for peak engagement times.
+                  </p>
+                </div>
+
               </div>
 
-              {/* Step 3 */}
-              <div className="relative z-10 flex flex-col items-center text-center">
-                <div className="w-24 h-24 bg-[#006edc] rounded-full border border-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30 mb-6 font-bold text-2xl text-white">
-                  3
-                </div>
-                <h3 className="text-xl font-bold text-[#213856] mb-3">Review & Publish</h3>
-                <p className="text-slate-600 leading-relaxed">Make final tweaks in our rich editor, preview across devices, and schedule for peak engagement times.</p>
-              </div>
             </div>
           </div>
         </section>
 
         {/* FAQ Section */}
         <section id="faqs" className="py-24 bg-white border-b border-slate-200">
-          <div className="max-w-3xl mx-auto px-6">
+          <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-[#213856] mb-4 tracking-tight">Frequently Asked Questions</h2>
-              <p className="text-slate-600 text-lg">Everything you need to know about the product and billing.</p>
+              <p className="text-slate-600 text-lg">Everything you need to get started with Optimizer Pro and grow with intent.</p>
             </div>
 
             <div className="space-y-4">
               {[
                 {
-                  question: "Is this safe to use with my LinkedIn account?",
-                  answer: "Yes. We use the official LinkedIn API and comply strictly with their Terms of Service. We do not use automation or bots to post on your behalf in a way that risks your account."
+                  question: "Will the content truly sound like me?",
+                  answer: "Yes! Your writing isn’t approximated, it’s modeled. By analyzing your past LinkedIn posts, the system builds a living tone profile that captures how you think, structure ideas, and express nuance."
                 },
                 {
-                  question: "How does the AI match my writing style?",
-                  answer: "Our advanced models analyze your past posts to map your vocabulary, sentence length, and structural formatting (like whether you use bullet points or short paragraphs). The more you write, the better it gets."
+                  question: "How much time can I realistically expect to save?",
+                  answer: "What once required extended focus is reduced to a streamlined flow measured in minutes. You move from idea to publish with clarity, speed, and control, without sacrificing depth or quality."
                 },
                 {
-                  question: "Can I cancel my subscription at any time?",
-                  answer: "Absolutely. You can cancel your subscription from your billing dashboard with just two clicks. You'll maintain access to Pro features until the end of your billing cycle."
+                  question: "Will this meaningfully improve my engagement?",
+                  answer: "Every feature is engineered around one outcome: measurable engagement growth. From high-converting hooks to structurally optimized posts, the system helps you consistently produce content designed to capture attention and drive interaction."
                 },
                 {
-                  question: "Does it work for company pages?",
-                  answer: "Yes! You can connect both personal profiles and company pages, and maintain separate AI tone models for each."
+                  question: "Do I still need other tools to manage my content workflow?",
+                  answer: "No! This is not another tool it’s your content system. Creation, refinement, scheduling, and management exist within a single, cohesive environment, designed to replace fragmented workflows with quiet, focused execution."
                 }
               ].map((faq, index) => (
                 <div key={index} className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50 transition-all hover:border-slate-300">
