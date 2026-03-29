@@ -15,7 +15,11 @@ import {
   X,
   Check,
   ChevronDown,
-  ArrowUpRight
+  ArrowUpRight,
+  ShieldCheck,
+  Lock,
+  Calendar,
+  Plus
 } from "lucide-react";
 
 export default function Home() {
@@ -45,7 +49,7 @@ export default function Home() {
             <Link href="/login" className="cursor-pointer bg-transparent text-slate-700 hover:text-[#213856] hover:bg-slate-100 px-5 py-2.5 rounded-md font-semibold text-sm transition-all border border-transparent">
               Login
             </Link>
-            <Link href="/signup" className="cursor-pointer bg-[#00366b] hover:bg-[#1a5085] text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm active:scale-95">
+            <Link href="/signup" className="cursor-pointer bg-[#0d2137] hover:bg-[#153456] text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition-all shadow-sm active:scale-95">
               Sign Up
             </Link>
           </div>
@@ -112,7 +116,7 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="pt-4 flex flex-wrap items-center gap-3 justify-center md:justify-start"
             >
-              <Link href="/login" className="cursor-pointer w-full sm:w-auto bg-[#00366b] hover:bg-[#1a5085] text-white px-14 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-colors text-center">
+              <Link href="/login" className="cursor-pointer w-full sm:w-auto bg-[#0d2137] hover:bg-[#153456] text-white px-14 py-2.5 rounded-xl font-semibold text-[18px] tracking-wide transition-all text-center shadow-lg shadow-slate-900/10">
                 Start for free
               </Link>
               <a href="#how-it-works" className="cursor-pointer w-full sm:w-auto shadow-[0_0_0_0.5px_#00366b] bg-transparent text-[#00366b] hover:shadow-[0_0_0_1.5px_#00366b] px-8 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-shadow duration-300 text-center">
@@ -257,7 +261,7 @@ export default function Home() {
                     Authentic AI That Sounds Like You
                   </h3>
                 </div>
-                <div className="mt-auto relative bg-[#BAD8F7]/80 p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                <div className="mt-auto relative bg-slate-200/50 p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
                   <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
                   <img
                     src="/images/content-creation.png"
@@ -284,7 +288,7 @@ export default function Home() {
                     Content That Drives Real Engagement
                   </h3>
                 </div>
-                <div className="mt-auto relative bg-[#BAD8F7]/80 p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                <div className="mt-auto relative bg-slate-200/50 p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
                   <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
                   <img
                     src="/images/analytics-v2.png"
@@ -311,7 +315,7 @@ export default function Home() {
                     Zero-Friction Content Pipeline
                   </h3>
                 </div>
-                <div className="mt-auto relative bg-[#BAD8F7]/80 p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                <div className="mt-auto relative bg-slate-200/50 p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
                   <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
                   <img
                     src="/images/teams-kanban.png"
@@ -459,75 +463,131 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center max-w-2xl mx-auto mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-[#213856] mb-4 tracking-tight">Simple, transparent pricing</h2>
-              <p className="text-slate-600 text-lg">Start for free. Upgrade when you're ready to scale your personal brand.</p>
+              <p className="text-slate-600 text-lg">Choose a plan that scales with your content—simple, transparent, and built for consistency.</p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {/* Free Tier */}
-              <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-10 shadow-sm flex flex-col">
-                <div className="mb-6">
-                  <h3 className="text-2xl font-bold text-[#213856] mb-2">Starter</h3>
-                  <p className="text-slate-500">Perfect for trying out the platform.</p>
+            <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto items-stretch">
+              {/* Starter Tier */}
+              <div className="bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[32px] p-8 flex flex-col transition-transform hover:-translate-y-1 duration-300">
+                <div className="mb-2">
+                  <h3 className="text-2xl font-bold text-[#0d2137] mb-2">Starter</h3>
+                  <p className="text-slate-600 text-[15px] leading-relaxed">For individuals getting started with consistent content</p>
                 </div>
-                <div className="mb-8 flex items-baseline gap-1">
-                  <span className="text-5xl font-[800] text-[#213856] tracking-tight">$0</span>
-                  <span className="text-slate-500 font-medium">/month</span>
+                <div className="mb-8 mt-6 flex items-baseline gap-2">
+                  <span className="text-5xl font-[700] text-[#0d2137] tracking-tight">$5</span>
+                  <span className="text-slate-500 font-medium text-xl">/month</span>
                 </div>
-                <div className="flex-1 space-y-4 mb-8">
+                <div className="flex-1 space-y-4 mb-10">
                   <div className="flex gap-3 items-start">
-                    <Check className="w-5 h-5 text-[#006edc] shrink-0 mt-0.5" />
-                    <span className="text-slate-600">5 AI-generated posts per month</span>
+                    <CheckCircle2 className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" strokeWidth={1.5} />
+                    <span className="text-slate-700 text-[15px]">AI Post Generator (25 posts/month)</span>
                   </div>
                   <div className="flex gap-3 items-start">
-                    <Check className="w-5 h-5 text-[#006edc] shrink-0 mt-0.5" />
-                    <span className="text-slate-600">Basic tone matching</span>
+                    <CheckCircle2 className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" strokeWidth={1.5} />
+                    <span className="text-slate-700 text-[15px]">Basic Tone Matching</span>
                   </div>
                   <div className="flex gap-3 items-start">
-                    <Check className="w-5 h-5 text-[#006edc] shrink-0 mt-0.5" />
-                    <span className="text-slate-600">1 connected LinkedIn profile</span>
+                    <CheckCircle2 className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" strokeWidth={1.5} />
+                    <span className="text-slate-700 text-[15px]">Hook Generator (limited)</span>
+                  </div>
+                  <div className="flex gap-3 items-start">
+                    <CheckCircle2 className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" strokeWidth={1.5} />
+                    <span className="text-slate-700 text-[15px]">Access to Editor</span>
+                  </div>
+                  <div className="flex gap-3 items-start">
+                    <CheckCircle2 className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" strokeWidth={1.5} />
+                    <span className="text-slate-700 text-[15px]">Manual post export</span>
                   </div>
                 </div>
-                <button className="cursor-pointer w-full bg-slate-100 hover:bg-slate-200 text-[#213856] px-6 py-4 rounded-xl font-bold transition-colors">
+                <button className="cursor-pointer w-full bg-[#0d2137] hover:bg-[#153456] text-white px-6 py-3.5 rounded-full font-semibold transition-all duration-300 mt-auto">
                   Get Started
                 </button>
               </div>
 
               {/* Pro Tier */}
-              <div className="bg-[#0d2137] border border-[#00366b] rounded-3xl p-8 md:p-10 shadow-2xl shadow-blue-900/20 flex flex-col relative transform md:-translate-y-4">
-                <div className="absolute top-0 inset-x-0 h-1.5 bg-[#006edc] rounded-t-3xl"></div>
-                <div className="absolute -top-4 inset-x-0 flex justify-center">
-                  <span className="bg-[#006edc] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                    Most Popular
-                  </span>
+              <div className="bg-gradient-to-b from-[#006edc] to-[#1E88E5] rounded-[32px] flex flex-col relative transform lg:-translate-y-4 shadow-2xl shadow-indigo-500/20 transition-transform hover:-translate-y-5 duration-300">
+                <div className="py-3 text-center text-white text-[13px] font-bold tracking-widest uppercase">
+                  Most Popular
                 </div>
-                <div className="mb-6 mt-2">
-                  <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
-                  <p className="text-blue-200/80">Everything you need to scale your reach.</p>
+                <div className="bg-[#0d2137] rounded-[30px] p-8 m-[2px] mt-0 flex flex-col flex-1">
+                  <div className="mb-2">
+                    <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
+                    <p className="text-slate-400 text-[15px] leading-relaxed">For creators serious about growth and consistency</p>
+                  </div>
+                  <div className="mb-8 mt-6 flex items-baseline gap-2">
+                    <span className="text-5xl font-[700] text-white tracking-tight">$19</span>
+                    <span className="text-slate-400 font-medium text-xl">/month</span>
+                  </div>
+                  <div className="flex-1 space-y-4 mb-10">
+                    <div className="flex gap-3 items-start">
+                      <CheckCircle2 className="w-5 h-5 text-slate-300 shrink-0 mt-0.5" strokeWidth={1.5} />
+                      <span className="text-slate-200 text-[15px]">Increased AI generation credits</span>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                      <CheckCircle2 className="w-5 h-5 text-slate-300 shrink-0 mt-0.5" strokeWidth={1.5} />
+                      <span className="text-slate-200 text-[15px]">Advanced Tone Matching</span>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                      <CheckCircle2 className="w-5 h-5 text-slate-300 shrink-0 mt-0.5" strokeWidth={1.5} />
+                      <span className="text-slate-200 text-[15px]">Unlimited Hook Variations</span>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                      <CheckCircle2 className="w-5 h-5 text-slate-300 shrink-0 mt-0.5" strokeWidth={1.5} />
+                      <span className="text-slate-200 text-[15px]">Content Inspiration Engine</span>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                      <CheckCircle2 className="w-5 h-5 text-slate-300 shrink-0 mt-0.5" strokeWidth={1.5} />
+                      <span className="text-slate-200 text-[15px]">Post Scheduling + Calendar</span>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                      <CheckCircle2 className="w-5 h-5 text-slate-300 shrink-0 mt-0.5" strokeWidth={1.5} />
+                      <span className="text-slate-200 text-[15px]">Media Library access</span>
+                    </div>
+                  </div>
+                  <button className="cursor-pointer w-full bg-[#006edc] hover:bg-[#0D47A1] text-white px-10 py-3 rounded-full font-semibold text-lg transition-all active:scale-95 shadow-0.5xl">
+                    Upgrade to Pro
+                  </button>
                 </div>
-                <div className="mb-8 flex items-baseline gap-1">
-                  <span className="text-5xl font-[800] text-white tracking-tight">$29</span>
-                  <span className="text-blue-200/80 font-medium">/month</span>
+              </div>
+
+              {/* Elite Tier */}
+              <div className="bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[32px] p-8 flex flex-col transition-transform hover:-translate-y-1 duration-300">
+                <div className="mb-2">
+                  <h3 className="text-2xl font-bold text-[#0d2137] mb-2">Elite</h3>
+                  <p className="text-slate-600 text-[15px] leading-relaxed">For professionals building a high-leverage personal brand</p>
                 </div>
-                <div className="flex-1 space-y-4 mb-8">
+                <div className="mb-8 mt-6 flex items-baseline gap-2">
+                  <span className="text-5xl font-[700] text-[#0d2137] tracking-tight">$30</span>
+                  <span className="text-slate-500 font-medium text-xl">/month</span>
+                </div>
+                <div className="flex-1 space-y-4 mb-10">
                   <div className="flex gap-3 items-start">
-                    <Check className="w-5 h-5 text-[#0A66C2] shrink-0 mt-0.5" />
-                    <span className="text-blue-50">Unlimited AI-generated posts</span>
+                    <CheckCircle2 className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" strokeWidth={1.5} />
+                    <span className="text-slate-700 text-[15px]">Unlimited AI content generation</span>
                   </div>
                   <div className="flex gap-3 items-start">
-                    <Check className="w-5 h-5 text-[#0A66C2] shrink-0 mt-0.5" />
-                    <span className="text-blue-50">Advanced multi-tone engine mapping</span>
+                    <CheckCircle2 className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" strokeWidth={1.5} />
+                    <span className="text-slate-700 text-[15px]">Priority AI response speed</span>
                   </div>
                   <div className="flex gap-3 items-start">
-                    <Check className="w-5 h-5 text-[#0A66C2] shrink-0 mt-0.5" />
-                    <span className="text-blue-50">Post scheduling & analytics</span>
+                    <CheckCircle2 className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" strokeWidth={1.5} />
+                    <span className="text-slate-700 text-[15px]">Full Content System</span>
                   </div>
                   <div className="flex gap-3 items-start">
-                    <Check className="w-5 h-5 text-[#0A66C2] shrink-0 mt-0.5" />
-                    <span className="text-blue-50">Priority email support</span>
+                    <CheckCircle2 className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" strokeWidth={1.5} />
+                    <span className="text-slate-700 text-[15px]">Advanced content optimization</span>
+                  </div>
+                  <div className="flex gap-3 items-start">
+                    <CheckCircle2 className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" strokeWidth={1.5} />
+                    <span className="text-slate-700 text-[15px]">Scheduled post management controls</span>
+                  </div>
+                  <div className="flex gap-3 items-start">
+                    <CheckCircle2 className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" strokeWidth={1.5} />
+                    <span className="text-slate-700 text-[15px]">Early access to new features</span>
                   </div>
                 </div>
-                <button className="cursor-pointer w-full bg-[#006edc] hover:bg-[#0060DF] text-white px-6 py-4 rounded-xl font-bold transition-colors shadow-lg shadow-blue-500/25">
-                  Upgrade to Pro
+                <button className="cursor-pointer w-full bg-[#0d2137] hover:bg-[#153456] text-white px-6 py-3.5 rounded-full font-semibold transition-all duration-300 mt-auto">
+                  Go Elite
                 </button>
               </div>
             </div>
@@ -535,37 +595,75 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 px-6">
-          <div
-            className="relative max-w-4xl mx-auto rounded-2xl overflow-hidden text-center px-8 py-20"
-            style={{
-              backgroundColor: "#0d2137",
-              backgroundImage: `
-                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)
-              `,
-              backgroundSize: "40px 40px",
-            }}
-          >
+        <section className="py-24 px-6 bg-slate-50">
+          <div className="max-w-6xl mx-auto">
+            {/* Main CTA Card */}
             <div
-              className="absolute inset-0 pointer-events-none"
+              className="relative rounded-[48px] overflow-hidden p-8 md:p-16 mb-10 flex flex-col lg:flex-row items-center justify-between gap-12"
               style={{
-                background: "radial-gradient(ellipse at center, transparent 40%, rgba(5,18,35,0.65) 100%)",
+                backgroundColor: "#0d2137",
+                backgroundImage: `
+                  linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)
+                `,
+                backgroundSize: "60px 60px",
               }}
-            />
-            <div className="relative z-10">
-              <h2 className="text-3xl md:text-5xl font-bold text-white mb-5 leading-[1.1] tracking-tight">
-                Turn your expertise into<br />measurable influence.
-              </h2>
-              <p className="text-slate-400 text-lg md:text-xl mb-4 max-w-md mx-auto leading-relaxed font-medium">
-                Build your LinkedIn presence, together or independently
-              </p>
-              <Link
-                href="/login"
-                className="cursor-pointer inline-flex items-center gap-2 bg-[#006edc] hover:bg-[#0060DF] text-white px-8 py-3.5 rounded-lg font-semibold text-base transition-all active:scale-95 shadow-lg shadow-blue-500/25"
-              >
-                Start for free
-              </Link>
+            >
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: "radial-gradient(circle at 20% 50%, rgba(0,110,220,0.1) 0%, transparent 50%)",
+                }}
+              />
+
+              <div className="relative z-10 flex-1 text-left">
+                <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight tracking-tight max-w-xl">
+                  Turn your expertise into<br />measurable influence.
+                </h2>
+                <p className="text-slate-400 text-lg md:text-xl mb-8 max-w-2xl leading-relaxed font-medium">
+                  Build your LinkedIn presence, together or independently
+                </p>
+
+                <div className="flex flex-wrap gap-x-8 gap-y-4">
+                  <div className="flex items-center gap-2 text-white/90 font-medium">
+                    <Plus className="w-4 h-4 text-[#006edc]" />
+                    <span>AI Post Generator</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-white/90 font-medium">
+                    <Plus className="w-4 h-4 text-[#006edc]" />
+                    <span>Hook Generator</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-white/90 font-medium">
+                    <Plus className="w-4 h-4 text-[#006edc]" />
+                    <span>Scheduling</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative z-10 shrink-0">
+                <Link
+                  href="/login"
+                  className="cursor-pointer inline-flex items-center justify-center bg-[#006edc] hover:bg-[#0D47A1] text-white px-10 py-3 rounded-full font-semibold text-lg transition-all active:scale-95 shadow-0.5xl"
+                >
+                  Try Optimizer Pro
+                </Link>
+              </div>
+            </div>
+
+            {/* Trust Badges */}
+            <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 text-slate-500 font-medium">
+              <div className="flex items-center gap-2.5">
+                <ShieldCheck className="w-5 h-5 opacity-60" />
+                <span>No Automation Risks</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <Lock className="w-5 h-5 opacity-60" />
+                <span>Your Account Is Safe</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <Calendar className="w-5 h-5 opacity-60" />
+                <span>Cancel Anytime</span>
+              </div>
             </div>
           </div>
         </section>
