@@ -544,7 +544,7 @@ export default function Home() {
                       <span className="text-slate-200 text-[15px]">Media Library access</span>
                     </div>
                   </div>
-                  <button className="cursor-pointer w-full bg-[#006edc] hover:bg-[#0D47A1] text-white px-10 py-3 rounded-full font-semibold text-lg transition-all active:scale-95 shadow-0.5xl">
+                  <button className="cursor-pointer w-full bg-[#006edc] hover:bg-[#0D47A1] text-white px-9 py-3 rounded-full font-semibold text-base transition-all active:scale-95 shadow-md">
                     Upgrade to Pro
                   </button>
                 </div>
@@ -643,7 +643,7 @@ export default function Home() {
               <div className="relative z-10 shrink-0">
                 <Link
                   href="/login"
-                  className="cursor-pointer inline-flex items-center justify-center bg-[#006edc] hover:bg-[#0D47A1] text-white px-10 py-3 rounded-full font-semibold text-lg transition-all active:scale-95 shadow-0.5xl"
+                  className="cursor-pointer inline-flex items-center justify-center bg-[#006edc] hover:bg-[#0D47A1] text-white px-10 py-3 rounded-full font-semibold text-base transition-all active:scale-95 shadow-md"
                 >
                   Try Optimizer Pro
                 </Link>
