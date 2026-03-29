@@ -434,19 +434,19 @@ export default function Home() {
                   answer: "No! This is not another tool it’s your content system. Creation, refinement, scheduling, and management exist within a single, cohesive environment, designed to replace fragmented workflows with quiet, focused execution."
                 }
               ].map((faq, index) => (
-                <div key={index} className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50 transition-all hover:border-slate-300">
+                <div key={index} className="border border-transparent rounded-xl overflow-hidden bg-[#0d2137] hover:bg-[#153456] transition-all shadow-sm">
                   <button
                     onClick={() => setOpenFaq(openFaq === index ? null : index)}
                     className="w-full flex items-center justify-between p-6 text-left cursor-pointer"
                   >
-                    <span className="font-semibold text-[#213856] text-[17px]">{faq.question}</span>
-                    <ChevronDown className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${openFaq === index ? 'rotate-180' : ''}`} />
+                    <span className="font-semibold text-white text-[17px]">{faq.question}</span>
+                    <ChevronDown className={`w-5 h-5 text-white transition-transform duration-300 ${openFaq === index ? 'rotate-180' : ''}`} />
                   </button>
                   <div
                     className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${openFaq === index ? 'max-h-48 pb-6 opacity-100' : 'max-h-0 opacity-0'
                       }`}
                   >
-                    <p className="text-slate-600 leading-relaxed">{faq.answer}</p>
+                    <p className="text-slate-200 leading-relaxed">{faq.answer}</p>
                   </div>
                 </div>
               ))}
@@ -493,7 +493,7 @@ export default function Home() {
               </div>
 
               {/* Pro Tier */}
-              <div className="bg-[#002B54] border border-[#00366b] rounded-3xl p-8 md:p-10 shadow-2xl shadow-blue-900/20 flex flex-col relative transform md:-translate-y-4">
+              <div className="bg-[#0d2137] border border-[#00366b] rounded-3xl p-8 md:p-10 shadow-2xl shadow-blue-900/20 flex flex-col relative transform md:-translate-y-4">
                 <div className="absolute top-0 inset-x-0 h-1.5 bg-[#006edc] rounded-t-3xl"></div>
                 <div className="absolute -top-4 inset-x-0 flex justify-center">
                   <span className="bg-[#006edc] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
