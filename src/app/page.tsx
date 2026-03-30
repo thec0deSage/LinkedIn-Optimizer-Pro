@@ -29,11 +29,12 @@ export default function Home() {
       {/* Navigation */}
       <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between relative">
-          <div className="flex items-center gap-2 z-10">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold pb-0.5">
-              in
+          <div className="flex items-center gap-2.5 z-10">
+            <img src="/images/logo-01.svg" alt="LinkedIn Optimizer Pro Logo" className="h-11 w-auto object-contain" />
+            <div className="flex items-center">
+              <span className="font-bold text-xl text-[#0d2137] tracking-tighter">LinkedIn</span>
+              <span className="font-medium text-xl text-[#4a5568] tracking-tighter ml-1">Optimizer Pro</span>
             </div>
-            <span className="font-bold text-xl text-[#00366b] tracking-tight">Optimizer Pro</span>
           </div>
 
           <div className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
@@ -75,7 +76,7 @@ export default function Home() {
               <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="block cursor-pointer bg-transparent text-slate-600 hover:bg-slate-100 px-5 py-3 rounded-md font-semibold text-base transition-all border border-slate-200 w-full text-center">
                 Login
               </Link>
-              <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)} className="block cursor-pointer bg-[#00366b] hover:bg-[#1a5085] text-white px-5 py-3 rounded-md font-semibold text-base transition-all shadow-sm active:scale-95 w-full text-center">
+              <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)} className="block cursor-pointer bg-[#0d2137] hover:bg-[#153456] text-white px-5 py-3 rounded-md font-semibold text-base transition-all shadow-sm active:scale-95 w-full text-center">
                 Sign Up
               </Link>
             </div>
@@ -96,7 +97,7 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className={`font-[family-name:var(--font-open-sans)] text-5xl md:text-6xl font-[700] text-[#213856] tracking-tight leading-[1.1]`}
             >
-              Optimize your<span className="text-[#2c58b6]"> LinkedIn </span> reach
+              {`Optimize your `}<span className="text-[#0d2137]">LinkedIn</span>{` reach`}
             </motion.h1>
 
             <motion.p
@@ -114,10 +115,10 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="pt-4 flex flex-wrap items-center gap-3 justify-center md:justify-start"
             >
-              <Link href="/login" className="cursor-pointer w-full sm:w-auto bg-[#0d2137] hover:bg-[#153456] text-white px-14 py-2.5 rounded-xl font-semibold text-[18px] tracking-wide transition-all text-center shadow-lg shadow-slate-900/10">
+              <Link href="/login" className="cursor-pointer w-full sm:w-auto bg-[#0d2137] hover:bg-[#153456] text-white px-14 py-2.5 rounded-xl font-semibold text-[18px] tracking-wide transition-all duration-300 text-center shadow-lg shadow-slate-900/10 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]">
                 Start for free
               </Link>
-              <a href="#how-it-works" className="cursor-pointer w-full sm:w-auto shadow-[0_0_0_0.5px_#00366b] bg-transparent text-[#00366b] hover:shadow-[0_0_0_1.5px_#00366b] px-8 py-2.5 rounded-md font-semibold text-[18px] tracking-wide transition-shadow duration-300 text-center">
+              <a href="#how-it-works" className="cursor-pointer w-full sm:w-auto shadow-[0_0_0_1px_#0d2137] bg-transparent text-[#0d2137] hover:shadow-[0_0_0_2px_#0d2137] px-8 py-2.5 rounded-xl font-semibold text-[18px] tracking-wide transition-all duration-300 text-center hover:-translate-y-0.5 active:scale-[0.98]">
                 See how it works
               </a>
             </motion.div>
@@ -349,11 +350,11 @@ export default function Home() {
                   Your personal brand on autopilot in three simple steps.
                 </p>
 
-                <div className="flex flex-wrap items-center gap-3 pt-4">
-                  <a href="/login" className="cursor-pointer bg-[#00366b] hover:bg-[#1a5085] text-white px-8 py-2.5 rounded-md font-semibold text-base transition-all shadow-sm active:scale-95">
+                <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 pt-4">
+                  <a href="/login" className="cursor-pointer w-full sm:w-56 h-11 flex items-center justify-center bg-[#0d2137] hover:bg-[#153456] text-white rounded-xl font-semibold text-base transition-all duration-300 shadow-sm hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98]">
                     Try Optimizer Pro
                   </a>
-                  <a href="#faqs" className="cursor-pointer shadow-[0_0_0_0.5px_#00366b] bg-transparent text-[#00366b] hover:shadow-[0_0_0_1.5px_#00366b] px-8 py-2.5 rounded-md font-semibold text-base transition-shadow duration-300">
+                  <a href="#faqs" className="cursor-pointer w-full sm:w-56 h-11 flex items-center justify-center shadow-[0_0_0_1px_#0d2137] bg-transparent text-[#0d2137] hover:shadow-[0_0_0_2px_#0d2137] rounded-xl font-semibold text-base transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98]">
                     Learn more
                   </a>
                 </div>
@@ -503,7 +504,7 @@ export default function Home() {
               </div>
 
               {/* Pro Tier */}
-              <div className="bg-gradient-to-b from-[#006edc] to-[#1E88E5] rounded-[32px] flex flex-col relative transform lg:-translate-y-4 shadow-2xl shadow-indigo-500/20 transition-transform hover:-translate-y-5 duration-300">
+              <div className="bg-gradient-to-b from-[#3b82f6] to-[#153456] rounded-[32px] flex flex-col relative transform lg:-translate-y-4 shadow-2xl shadow-[#12243C]/20 transition-transform hover:-translate-y-5 duration-300">
                 <div className="py-3 text-center text-white text-[13px] font-bold tracking-widest uppercase">
                   Most Popular
                 </div>
@@ -542,7 +543,7 @@ export default function Home() {
                       <span className="text-slate-200 text-[15px]">Media Library access</span>
                     </div>
                   </div>
-                  <button className="cursor-pointer w-full bg-[#006edc] hover:bg-[#0D47A1] text-white px-9 py-3 rounded-full font-semibold text-base transition-all active:scale-95 shadow-md">
+                  <button className="cursor-pointer w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white px-9 py-3 rounded-full font-semibold text-base transition-all active:scale-95 shadow-[0_8px_20px_-4px_rgba(59,130,246,0.3)]">
                     Upgrade to Pro
                   </button>
                 </div>
@@ -624,15 +625,15 @@ export default function Home() {
 
                 <div className="flex flex-wrap gap-x-8 gap-y-4">
                   <div className="flex items-center gap-2 text-white/90 font-medium">
-                    <Plus className="w-4 h-4 text-[#006edc]" />
+                    <Plus className="w-4 h-4 text-[#3b82f6]" />
                     <span>AI Post Generator</span>
                   </div>
                   <div className="flex items-center gap-2 text-white/90 font-medium">
-                    <Plus className="w-4 h-4 text-[#006edc]" />
+                    <Plus className="w-4 h-4 text-[#3b82f6]" />
                     <span>Hook Generator</span>
                   </div>
                   <div className="flex items-center gap-2 text-white/90 font-medium">
-                    <Plus className="w-4 h-4 text-[#006edc]" />
+                    <Plus className="w-4 h-4 text-[#3b82f6]" />
                     <span>Scheduling</span>
                   </div>
                 </div>
@@ -641,7 +642,7 @@ export default function Home() {
               <div className="relative z-10 shrink-0">
                 <Link
                   href="/login"
-                  className="cursor-pointer inline-flex items-center justify-center bg-[#006edc] hover:bg-[#0D47A1] text-white px-10 py-3 rounded-full font-semibold text-base transition-all active:scale-95 shadow-md"
+                  className="cursor-pointer inline-flex items-center justify-center bg-[#3b82f6] hover:bg-[#2563eb] text-white px-10 py-3 rounded-full font-semibold text-base transition-all active:scale-95 shadow-[0_8px_20px_-4px_rgba(59,130,246,0.3)]"
                 >
                   Try Optimizer Pro
                 </Link>
@@ -663,11 +664,14 @@ export default function Home() {
             <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 relative z-10">
               {/* Left Column — Brand */}
               <div className="lg:max-w-sm space-y-5">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm pb-0.5">
-                    in
-                  </div>
-                  <span className="font-bold text-xl text-white tracking-tight">Optimizer Pro</span>
+                <div className="flex items-center whitespace-nowrap min-w-0">
+                  <img src="/images/logo-white.svg" alt="logo-white" className="h-11 w-auto object-contain" />
+                  <span className="font-bold text-base sm:text-lg md:text-xl text-white tracking-tight">
+                    LinkedIn
+                  </span>
+                  <span className="font-normal text-base sm:text-lg md:text-xl text-white/70 tracking-tight ml-1">
+                    Optimizer Pro
+                  </span>
                 </div>
                 <p className="text-slate-400 text-[15px] leading-relaxed">
                   Create high-performing LinkedIn content—without overthinking it.
@@ -693,8 +697,8 @@ export default function Home() {
                     <li><a href="/login" className="text-slate-400 hover:text-white transition-colors text-[15px]">Get Started</a></li>
                   </ul>
                 </div>
-                <div className="flex flex-col items-end">
-                  <div className="flex flex-col items-end gap-3">
+                <div className="flex flex-col items-start sm:items-end col-span-2 sm:col-span-1 mt-6 sm:mt-0">
+                  <div className="flex flex-row sm:flex-col items-center sm:items-end gap-3">
                     {/* LinkedIn */}
                     <a href="#" className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-300 group" aria-label="LinkedIn">
                       <span className="font-bold text-[19px] tracking-tighter pb-1 pr-0.5">in</span>
