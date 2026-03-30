@@ -16,9 +16,6 @@ import {
   Check,
   ChevronDown,
   ArrowUpRight,
-  ShieldCheck,
-  Lock,
-  Calendar,
   Plus
 } from "lucide-react";
 
@@ -98,7 +95,7 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className={`font-[family-name:var(--font-open-sans)] text-5xl md:text-6xl font-[700] text-[#213856] tracking-tight leading-[1.1]`}
             >
-              Optimize your<span className="text-[#2c58b6]"> LinkedIn </span> reach.
+              Optimize your<span className="text-[#2c58b6]"> LinkedIn </span> reach
             </motion.h1>
 
             <motion.p
@@ -329,7 +326,7 @@ export default function Home() {
         </section>
 
         {/* How It Works Section */}
-        <section id="how-it-works" className="py-24 bg-slate-50 border-y border-slate-200 flex items-center justify-center relative overflow-hidden">
+        <section id="how-it-works" className="py-24 md:py-32 bg-slate-50 border-y border-slate-200 flex items-center justify-center relative overflow-hidden">
           {/* Decorative background blobs */}
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-100/40 rounded-full blur-[100px] -z-0"></div>
           <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-pink-100/40 rounded-full blur-[100px] -z-0"></div>
@@ -412,7 +409,7 @@ export default function Home() {
         </section>
 
         {/* FAQ Section */}
-        <section id="faqs" className="py-24 bg-white border-b border-slate-200">
+        <section id="faqs" className="py-24 md:py-32 bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-[#213856] mb-4 tracking-tight">Frequently Asked Questions</h2>
@@ -459,7 +456,7 @@ export default function Home() {
         </section>
 
         {/* Pricing Section */}
-        <section id="pricing" className="py-24 bg-slate-50">
+        <section id="pricing" className="py-24 md:py-32 bg-slate-50">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center max-w-2xl mx-auto mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-[#213856] mb-4 tracking-tight">Simple, transparent pricing</h2>
@@ -595,7 +592,7 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-24 px-6 bg-slate-50">
+        <section className="py-24 md:py-32 px-6 bg-slate-50">
           <div className="max-w-6xl mx-auto">
             {/* Main CTA Card */}
             <div
@@ -647,22 +644,6 @@ export default function Home() {
                 >
                   Try Optimizer Pro
                 </Link>
-              </div>
-            </div>
-
-            {/* Trust Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 text-slate-500 font-medium">
-              <div className="flex items-center gap-2.5">
-                <ShieldCheck className="w-5 h-5 opacity-60" />
-                <span>No Automation Risks</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Lock className="w-5 h-5 opacity-60" />
-                <span>Your Account Is Safe</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Calendar className="w-5 h-5 opacity-60" />
-                <span>Cancel Anytime</span>
               </div>
             </div>
           </div>
