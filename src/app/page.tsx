@@ -593,7 +593,7 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-24 md:py-32 px-6 bg-slate-50">
+        <section className="py-12 md:py-16 px-6 bg-slate-50">
           <div className="max-w-6xl mx-auto">
             {/* Main CTA Card */}
             <div
