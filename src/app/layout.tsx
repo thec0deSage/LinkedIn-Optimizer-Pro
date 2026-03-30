@@ -16,6 +16,9 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   title: "LinkedIn Optimizer Pro",
   description: "Help professionals create high-performing LinkedIn content in their authentic voice consistently and at scale.",
+  icons: {
+    icon: "/images/lo-favicon.png",
+  },
 };
 
 export default function RootLayout({
