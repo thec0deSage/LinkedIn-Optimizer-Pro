@@ -95,16 +95,16 @@ export default function Home() {
 
       <main className="flex-1 pt-20 pb-20">
         {/* Hero Section */}
-        <section className="max-w-7xl mx-auto px-6 py-16 md:py-32 text-center md:text-left flex flex-col md:flex-row items-center gap-12">
+        <section className="mx-auto flex max-w-7xl flex-col items-center gap-10 px-6 py-14 text-center sm:py-16 lg:flex-row lg:items-center lg:gap-14 lg:py-24 lg:text-left xl:gap-16 xl:py-32">
 
-          <div className="md:w-1/2 space-y-8 relative z-10">
+          <div className="relative z-10 w-full max-w-2xl space-y-8 lg:w-[min(48%,34rem)] lg:max-w-none">
 
 
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className={`font-[family-name:var(--font-open-sans)] text-5xl md:text-6xl font-[700] text-[#213856] tracking-tight leading-[1.1]`}
+              className="font-[family-name:var(--font-open-sans)] text-4xl font-[700] leading-[1.05] tracking-tight text-[#213856] sm:text-5xl lg:text-6xl"
             >
               {`Optimize your `}<span className="text-[#0d2137]">LinkedIn</span>{` reach`}
             </motion.h1>
@@ -113,7 +113,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-slate-600 max-w-xl"
+              className="mx-auto max-w-xl text-base leading-8 text-slate-600 sm:text-lg lg:mx-0"
             >
               Create high-performing content in your authentic voice consistently and at scale, designed to engage your audience, build trust, and drive measurable growth.
             </motion.p>
@@ -122,12 +122,12 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="pt-4 flex flex-wrap items-center gap-3 justify-center md:justify-start"
+              className="flex flex-col items-stretch gap-3 pt-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center lg:justify-start"
             >
-              <Link href="/login" className="cursor-pointer w-full sm:w-auto bg-[#0d2137] hover:bg-[#153456] text-white px-14 py-2.5 rounded-xl font-semibold text-[18px] tracking-wide transition-all duration-300 text-center shadow-lg shadow-slate-900/10 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]">
+              <Link href="/login" className="cursor-pointer w-full rounded-xl bg-[#0d2137] px-10 py-3 text-center text-lg font-semibold tracking-wide text-white shadow-lg shadow-slate-900/10 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#153456] hover:shadow-xl active:scale-[0.98] sm:w-auto sm:min-w-56">
                 Start for free
               </Link>
-              <a href="#how-it-works" className="cursor-pointer w-full sm:w-auto shadow-[0_0_0_1px_#0d2137] bg-transparent text-[#0d2137] hover:shadow-[0_0_0_2px_#0d2137] px-8 py-2.5 rounded-xl font-semibold text-[18px] tracking-wide transition-all duration-300 text-center hover:-translate-y-0.5 active:scale-[0.98]">
+              <a href="#how-it-works" className="cursor-pointer w-full rounded-xl bg-transparent px-8 py-3 text-center text-lg font-semibold tracking-wide text-[#0d2137] shadow-[0_0_0_1px_#0d2137] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_0_2px_#0d2137] active:scale-[0.98] sm:w-auto sm:min-w-56">
                 See how it works
               </a>
             </motion.div>
@@ -139,7 +139,7 @@ export default function Home() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="md:w-1/2 relative perspective-1000"
+            className="relative w-full max-w-2xl perspective-1000 lg:w-[min(52%,38rem)] lg:max-w-none"
           >
             {/* Cinematic Mockup UI */}
             <div className="relative z-10 bg-white rounded-xl shadow-2xl border border-slate-200/60 overflow-hidden transform -rotate-1 hover:rotate-0 transition-transform duration-500">
