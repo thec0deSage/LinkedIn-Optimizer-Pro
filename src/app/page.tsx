@@ -281,13 +281,17 @@ export default function Home() {
                     Authentic AI That Sounds Like You
                   </h3>
                 </div>
-                <div className="mt-auto relative bg-slate-200/50 p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                <div className="relative mx-0 mt-auto overflow-hidden rounded-t-[24px] bg-slate-200/50 p-4 pt-6 sm:p-5 sm:pt-8">
                   <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
-                  <img
-                    src="/images/content-creation.png"
-                    alt="Content Creation Mockup"
-                    className="w-full h-full object-cover object-top rounded-xl shadow-2xl"
-                  />
+                  <div className="relative aspect-[3/2] overflow-hidden rounded-xl border border-white/70 bg-white/60 shadow-2xl md:aspect-[4/3]">
+                    <Image
+                      src="/images/content-creation.png"
+                      alt="Content Creation Mockup"
+                      fill
+                      sizes="(min-width: 1024px) 29vw, (min-width: 640px) 80vw, 92vw"
+                      className="object-cover object-top"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -308,13 +312,17 @@ export default function Home() {
                     Content That Drives Real Engagement
                   </h3>
                 </div>
-                <div className="mt-auto relative bg-slate-200/50 p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                <div className="relative mx-0 mt-auto overflow-hidden rounded-t-[24px] bg-slate-200/50 p-4 pt-6 sm:p-5 sm:pt-8">
                   <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
-                  <img
-                    src="/images/analytics-v2.png"
-                    alt="Analytics Mockup"
-                    className="w-full h-full object-cover object-top rounded-xl shadow-2xl"
-                  />
+                  <div className="relative aspect-[3/2] overflow-hidden rounded-xl border border-white/70 bg-white/60 shadow-2xl md:aspect-[4/3]">
+                    <Image
+                      src="/images/analytics-v2.png"
+                      alt="Analytics Mockup"
+                      fill
+                      sizes="(min-width: 1024px) 29vw, (min-width: 640px) 80vw, 92vw"
+                      className="object-cover object-top"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -335,13 +343,17 @@ export default function Home() {
                     Zero-Friction Content Pipeline
                   </h3>
                 </div>
-                <div className="mt-auto relative bg-slate-200/50 p-6 pt-10 rounded-t-[24px] mx-0 overflow-hidden h-64">
+                <div className="relative mx-0 mt-auto overflow-hidden rounded-t-[24px] bg-slate-200/50 p-4 pt-6 sm:p-5 sm:pt-8">
                   <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"></div>
-                  <img
-                    src="/images/teams-kanban.png"
-                    alt="Teams Mockup"
-                    className="w-full h-full object-cover object-top rounded-xl shadow-2xl"
-                  />
+                  <div className="relative aspect-[3/2] overflow-hidden rounded-xl border border-white/70 bg-white/60 shadow-2xl md:aspect-[4/3]">
+                    <Image
+                      src="/images/teams-kanban.png"
+                      alt="Teams Mockup"
+                      fill
+                      sizes="(min-width: 1024px) 29vw, (min-width: 640px) 80vw, 92vw"
+                      className="object-cover object-top"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
