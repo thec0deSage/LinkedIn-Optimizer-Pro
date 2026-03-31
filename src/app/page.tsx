@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   Bot,
@@ -30,7 +31,15 @@ export default function Home() {
       <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between relative">
           <div className="flex items-center gap-2.5 z-10">
-            <img src="/images/logo-01.svg" alt="LinkedIn Optimizer Pro Logo" className="h-11 w-auto object-contain" />
+            <Image
+              src="/images/logo-01.svg"
+              alt="LinkedIn Optimizer Pro Logo"
+              width={176}
+              height={44}
+              sizes="176px"
+              className="h-11 w-auto object-contain"
+              priority
+            />
             <div className="flex items-center">
               <span className="font-bold text-xl text-[#0d2137] tracking-tighter">LinkedIn</span>
               <span className="font-medium text-xl text-[#4a5568] tracking-tighter ml-1">Optimizer Pro</span>
@@ -163,7 +172,7 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-[#fff] mb-4 tracking-tight">
                 Common LinkedIn problems we solve
               </h2>
-              <p className="text-[#fff] text-lg">Struggling on LinkedIn? You’re not alone</p>
+              <p className="text-[#fff] text-lg">Struggling on LinkedIn? You&apos;re not alone</p>
 
             </div>
 
@@ -171,9 +180,12 @@ export default function Home() {
 
               {/* Problem 1 - Left */}
               <div className="flex items-center gap-5">
-                <img
+                <Image
                   src="/images/image-2.jpg"
                   alt="The Founder"
+                  width={56}
+                  height={56}
+                  sizes="(min-width: 768px) 56px, 48px"
                   className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover shrink-0 shadow-lg border border-slate-700/50"
                 />
                 <div className="flex flex-col w-full">
@@ -190,18 +202,24 @@ export default function Home() {
                     I struggle to come up with ideas that are relevant, consistent, and engaging.
                   </div>
                 </div>
-                <img
+                <Image
                   src="/images/image-3.jpg"
                   alt="The Creator"
+                  width={56}
+                  height={56}
+                  sizes="(min-width: 768px) 56px, 48px"
                   className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover shrink-0 shadow-lg border border-slate-700/50"
                 />
               </div>
 
               {/* Problem 3 - Left */}
               <div className="flex items-center gap-5">
-                <img
+                <Image
                   src="/images/image-1.jpg"
                   alt="The Marketer"
+                  width={56}
+                  height={56}
+                  sizes="(min-width: 768px) 56px, 48px"
                   className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover shrink-0 shadow-lg border border-slate-700/50"
                 />
                 <div className="flex flex-col w-full">
@@ -218,9 +236,12 @@ export default function Home() {
                     I want to stay consistent, but my workload gets in the way.
                   </div>
                 </div>
-                <img
+                <Image
                   src="/images/image-4.jpeg"
                   alt="The Professional"
+                  width={56}
+                  height={56}
+                  sizes="(min-width: 768px) 56px, 48px"
                   className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover shrink-0 shadow-lg border border-slate-700/50"
                 />
               </div>
@@ -328,40 +349,40 @@ export default function Home() {
         </section>
 
         {/* How It Works Section */}
-        <section id="how-it-works" className="py-24 md:py-32 bg-slate-50 border-y border-slate-200 flex items-center justify-center relative overflow-hidden">
+        <section id="how-it-works" className="relative flex items-center justify-center overflow-hidden border-y border-slate-200 bg-slate-50 py-20 md:py-28 xl:py-32">
           {/* Decorative background blobs */}
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-100/40 rounded-full blur-[100px] -z-0"></div>
           <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-pink-100/40 rounded-full blur-[100px] -z-0"></div>
 
-          <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
-            <div className="bg-white rounded-[32px] border border-slate-200 shadow-xl shadow-slate-200/50 p-8 md:p-14 lg:p-16 flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
+          <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6">
+            <div className="grid gap-10 rounded-[32px] border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50 sm:p-8 md:gap-12 md:p-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-12 xl:gap-16 xl:p-16">
 
               {/* Left Column */}
-              <div className="lg:w-5/12 w-full space-y-6 flex flex-col items-start relative">
+              <div className="relative flex w-full max-w-xl flex-col items-start space-y-6 lg:max-w-none">
                 <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-slate-50/80 border border-slate-200 text-sm font-semibold text-slate-600 backdrop-blur-sm shadow-sm">
                   <span className="text-slate-400 mr-1.5">How</span> Optimizer Pro Works
                 </div>
 
-                <h2 className="text-4xl md:text-5xl font-bold text-[#213856] mb-1 tracking-tight leading-tight">
+                <h2 className="mb-1 text-4xl font-bold leading-tight tracking-tight text-[#213856] md:text-5xl">
                   How it works
                 </h2>
 
-                <p className="text-slate-600 text-lg leading-relaxed">
+                <p className="max-w-xl text-lg leading-relaxed text-slate-600">
                   Your personal brand on autopilot in three simple steps.
                 </p>
 
-                <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 pt-4">
-                  <a href="/login" className="cursor-pointer w-full sm:w-56 h-11 flex items-center justify-center bg-[#0d2137] hover:bg-[#153456] text-white rounded-xl font-semibold text-base transition-all duration-300 shadow-sm hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98]">
+                <div className="flex w-full flex-col gap-3 pt-4 sm:flex-row sm:flex-wrap lg:max-w-md">
+                  <a href="/login" className="cursor-pointer flex h-11 w-full items-center justify-center rounded-xl bg-[#0d2137] text-base font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#153456] hover:shadow-md active:scale-[0.98] sm:w-auto sm:min-w-52 sm:flex-1">
                     Try Optimizer Pro
                   </a>
-                  <a href="#faqs" className="cursor-pointer w-full sm:w-56 h-11 flex items-center justify-center shadow-[0_0_0_1px_#0d2137] bg-transparent text-[#0d2137] hover:shadow-[0_0_0_2px_#0d2137] rounded-xl font-semibold text-base transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98]">
+                  <a href="#faqs" className="cursor-pointer flex h-11 w-full items-center justify-center rounded-xl bg-transparent text-base font-semibold text-[#0d2137] shadow-[0_0_0_1px_#0d2137] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_0_2px_#0d2137] active:scale-[0.98] sm:w-auto sm:min-w-52 sm:flex-1">
                     Learn more
                   </a>
                 </div>
               </div>
 
               {/* Right Column */}
-              <div className="lg:w-7/12 w-full flex flex-col gap-4">
+              <div className="flex w-full flex-col gap-4">
                 {/* Step 1 */}
                 <div className="bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow p-6 rounded-2xl relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50/50 rounded-full blur-[30px] -z-0"></div>
@@ -734,5 +755,3 @@ export default function Home() {
     </div>
   );
 }
-
-
