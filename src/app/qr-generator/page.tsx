@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
+import { MarketingNav } from "@/components/marketing-nav";
+import { SiteFooter } from "@/components/site-footer";
 import {
   CheckCircle2,
   ChevronDown,
@@ -10,9 +11,7 @@ import {
   Eye,
   Link2,
   LoaderCircle,
-  Menu,
   QrCode,
-  X,
 } from "lucide-react";
 
 type QrFormat = "png" | "svg";
@@ -79,8 +78,13 @@ const COLOR_PRESETS: ColorPreset[] = [
 
 const DEFAULT_PRESET = COLOR_PRESETS[1];
 
+const TOOL_PAGE_LINKS = [
+  { label: "Features", href: "/#features" },
+  { label: "How it Works", href: "/#how-it-works" },
+  { label: "Pricing", href: "/#pricing" },
+];
+
 export default function QrGeneratorPage() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [profileUrl, setProfileUrl] = useState("");
   const [sizeId, setSizeId] = useState("medium");
   const [selectedPresetId, setSelectedPresetId] = useState(DEFAULT_PRESET.id);
@@ -268,123 +272,7 @@ export default function QrGeneratorPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-      <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between relative">
-          <Link href="/" className="flex items-center gap-2.5 z-10">
-            <Image
-              src="/images/logo-01.svg"
-              alt="LinkedIn Optimizer Pro Logo"
-              width={176}
-              height={44}
-              sizes="176px"
-              className="h-11 w-auto object-contain"
-              priority
-            />
-            <div className="flex items-center">
-              <span className="font-bold text-xl text-[#0d2137] tracking-tighter">
-                LinkedIn
-              </span>
-              <span className="font-medium text-xl text-[#4a5568] tracking-tighter ml-1">
-                Optimizer Pro
-              </span>
-            </div>
-          </Link>
-
-          <div className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
-            <Link
-              href="/#features"
-              className="text-sm font-semibold text-slate-600 hover:text-[#213856] transition-colors"
-            >
-              Features
-            </Link>
-            <Link
-              href="/#how-it-works"
-              className="text-sm font-semibold text-slate-600 hover:text-[#213856] transition-colors"
-            >
-              How it Works
-            </Link>
-            <Link
-              href="/#pricing"
-              className="text-sm font-semibold text-slate-600 hover:text-[#213856] transition-colors"
-            >
-              Pricing
-            </Link>
-          </div>
-
-          <div className="hidden lg:flex items-center gap-3 z-10">
-            <Link
-              href="/login"
-              className="cursor-pointer bg-transparent text-slate-700 hover:text-[#213856] hover:bg-slate-100 px-5 py-2.5 rounded-md font-semibold text-sm transition-all border border-transparent"
-            >
-              Login
-            </Link>
-            <Link
-              href="/signup"
-              className="cursor-pointer bg-[#0d2137] hover:bg-[#153456] text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition-all shadow-sm active:scale-95"
-            >
-              Sign Up
-            </Link>
-          </div>
-
-          <div className="lg:hidden flex items-center z-10">
-            <button
-              onClick={() => setIsMobileMenuOpen((open) => !open)}
-              className="text-slate-600 hover:text-[#213856] p-2 cursor-pointer"
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {isMobileMenuOpen && (
-          <div className="lg:hidden absolute top-20 inset-x-0 bg-white border-b border-slate-200 px-6 py-6 flex flex-col gap-6 shadow-xl w-full">
-            <div className="flex flex-col gap-4">
-              <Link
-                href="/#features"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-base font-semibold text-slate-600"
-              >
-                Features
-              </Link>
-              <Link
-                href="/#how-it-works"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-base font-semibold text-slate-600"
-              >
-                How it Works
-              </Link>
-              <Link
-                href="/#pricing"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-base font-semibold text-slate-600"
-              >
-                Pricing
-              </Link>
-            </div>
-            <div className="flex flex-col gap-3 pt-4 border-t border-slate-100">
-              <Link
-                href="/login"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block cursor-pointer bg-transparent text-slate-600 hover:bg-slate-100 px-5 py-3 rounded-md font-semibold text-base transition-all border border-slate-200 w-full text-center"
-              >
-                Login
-              </Link>
-              <Link
-                href="/signup"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block cursor-pointer bg-[#0d2137] hover:bg-[#153456] text-white px-5 py-3 rounded-md font-semibold text-base transition-all shadow-sm active:scale-95 w-full text-center"
-              >
-                Sign Up
-              </Link>
-            </div>
-          </div>
-        )}
-      </nav>
+      <MarketingNav desktopLinks={TOOL_PAGE_LINKS} />
 
       <main className="flex-1 pt-20">
         <section
@@ -398,10 +286,41 @@ export default function QrGeneratorPage() {
           <div className="absolute top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-blue-200/20 blur-[100px] pointer-events-none" />
           <div className="max-w-7xl mx-auto px-6">
             <div className="max-w-3xl mx-auto text-center mb-10 md:mb-14">
-              <h1 className="text-3xl md:text-5xl font-bold text-[#213856] tracking-tight leading-tight">
-                LinkedIn QR Code Generator
-              </h1>
-              <p className="text-slate-600 text-base md:text-lg leading-relaxed max-w-2xl mx-auto mt-4">
+              <div className="flex flex-col items-center mb-4">
+                <div className="relative inline-flex items-center gap-3 px-6 py-3 bg-[#eef4ff] border border-[#dce6f2] rounded-[22px] shadow-sm mb-6">
+                  {/* Peeking Mascot Container */}
+                  <div className="absolute -top-11 -right-8 w-20 h-20 pointer-events-none overflow-visible">
+                    {/* 
+                      Note: You can place your mascot-peek.png in /public/images/
+                      Or use this placeholder for the character seen in your reference image.
+                    */}
+                    <div className="relative w-full h-full">
+                      <div className="absolute bottom-0 right-0 w-12 h-12 bg-blue-400 rounded-full blur-xl opacity-20 animate-pulse" />
+                      {/* Character placeholder - Replace src with your mascot path */}
+                      <div className="w-full h-full flex items-center justify-center transform translate-y-2 translate-x-1">
+                        <span className="text-4xl filter drop-shadow-md">🤖</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* LinkedIn Icon */}
+                  <div className="bg-[#0A66C2] p-1.5 rounded-lg shadow-sm">
+                    <svg className="w-7 h-7 text-white fill-current" viewBox="0 0 24 24">
+                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                    </svg>
+                  </div>
+
+                  {/* LinkedIn Brand Text */}
+                  <span className="text-4xl md:text-5xl font-bold text-[#0A66C2] tracking-tighter sm:mr-2">
+                    LinkedIn
+                  </span>
+                </div>
+
+                <h1 className="text-3xl md:text-4xl font-extrabold text-[#213856] tracking-tight leading-tight">
+                  QR Code Generator
+                </h1>
+              </div>
+              <p className="text-slate-600 text-base md:text-lg leading-relaxed max-w-2xl mx-auto mt-4 mb-10">
                 Create a custom QR code for your LinkedIn profile. Perfect for
                 business cards, resumes, networking events, and professional
                 presentations.
@@ -429,11 +348,10 @@ export default function QrGeneratorPage() {
                         setProfileUrl(event.target.value);
                         if (fieldError) setFieldError("");
                       }}
-                      className={`w-full rounded-xl border bg-slate-50/70 px-4 py-3.5 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 ${
-                        fieldError
+                      className={`w-full rounded-xl border bg-slate-50/70 px-4 py-3.5 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 ${fieldError
                           ? "border-red-300 focus:border-red-500"
                           : "border-slate-200 focus:border-[#006edc]"
-                      }`}
+                        }`}
                       aria-invalid={fieldError ? "true" : "false"}
                     />
                   </div>
@@ -474,11 +392,10 @@ export default function QrGeneratorPage() {
                             key={preset.id}
                             type="button"
                             onClick={() => handlePresetSelect(preset.id)}
-                            className={`cursor-pointer rounded-xl border px-4 py-3 text-left transition-all ${
-                              isSelected
+                            className={`cursor-pointer rounded-xl border px-4 py-3 text-left transition-all ${isSelected
                                 ? "border-[#3b82f6] bg-blue-50 text-[#0d2137] shadow-[0_0_0_1px_rgba(59,130,246,0.2)]"
                                 : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
-                            }`}
+                              }`}
                           >
                             <span className="flex items-center gap-3">
                               <span
@@ -647,9 +564,8 @@ export default function QrGeneratorPage() {
                             sizes="(min-width: 640px) 256px, 208px"
                             onLoad={handlePreviewLoad}
                             onError={handlePreviewError}
-                            className={`h-52 w-52 rounded-[24px] border border-slate-100 bg-white p-4 shadow-sm transition-opacity duration-300 sm:h-64 sm:w-64 ${
-                              previewState === "success" ? "opacity-100" : "opacity-0"
-                            }`}
+                            className={`h-52 w-52 rounded-[24px] border border-slate-100 bg-white p-4 shadow-sm transition-opacity duration-300 sm:h-64 sm:w-64 ${previewState === "success" ? "opacity-100" : "opacity-0"
+                              }`}
                           />
                           {previewState === "loading" ? (
                             <div className="absolute inset-0 flex items-center justify-center rounded-[24px] bg-white/85 backdrop-blur-sm">
@@ -696,153 +612,7 @@ export default function QrGeneratorPage() {
         </section>
       </main>
 
-      <footer className="bg-[#0d2137] pt-16 pb-8">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="bg-white/[0.03] backdrop-blur-3xl rounded-[32px] border border-white/[0.08] p-10 md:p-14 relative overflow-hidden">
-            <div className="absolute -top-24 -left-24 w-48 h-48 bg-blue-500/10 blur-[80px] rounded-full pointer-events-none" />
-
-            <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 relative z-10">
-              <div className="lg:max-w-sm space-y-5">
-                <div className="flex items-center whitespace-nowrap min-w-0">
-                  <Image
-                    src="/images/logo-white.svg"
-                    alt="logo-white"
-                    width={176}
-                    height={44}
-                    className="h-11 w-auto object-contain"
-                  />
-                  <span className="font-bold text-base sm:text-lg md:text-xl text-white tracking-tight">
-                    LinkedIn
-                  </span>
-                  <span className="font-normal text-base sm:text-lg md:text-xl text-white/70 tracking-tight ml-1">
-                    Optimizer Pro
-                  </span>
-                </div>
-                <p className="text-slate-400 text-[15px] leading-relaxed">
-                  Create high-performing LinkedIn content without overthinking it.
-                  Show up consistently with clarity and confidence.
-                </p>
-              </div>
-
-              <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 gap-8 lg:gap-12 lg:justify-items-end">
-                <div>
-                  <h4 className="font-semibold text-white mb-5 text-[15px]">
-                    Product
-                  </h4>
-                  <ul className="space-y-3">
-                    <li>
-                      <Link
-                        href="/login"
-                        className="text-slate-400 hover:text-white transition-colors text-[15px]"
-                      >
-                        Post Generator
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/qr-generator"
-                        className="text-slate-400 hover:text-white transition-colors text-[15px]"
-                      >
-                        QR Generator
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-white mb-5 text-[15px]">
-                    Explore
-                  </h4>
-                  <ul className="space-y-3">
-                    <li>
-                      <Link
-                        href="/#pricing"
-                        className="text-slate-400 hover:text-white transition-colors text-[15px]"
-                      >
-                        Pricing
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/#blog"
-                        className="text-slate-400 hover:text-white transition-colors text-[15px]"
-                      >
-                        Blog
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/login"
-                        className="text-slate-400 hover:text-white transition-colors text-[15px]"
-                      >
-                        Get Started
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                <div className="flex flex-col items-start sm:items-end col-span-2 sm:col-span-1 mt-6 sm:mt-0">
-                  <div className="flex flex-row sm:flex-col items-center sm:items-end gap-3">
-                    <a
-                      href="#"
-                      className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-300 group"
-                      aria-label="LinkedIn"
-                    >
-                      <span className="font-bold text-[19px] tracking-tighter pb-1 pr-0.5">
-                        in
-                      </span>
-                    </a>
-                    <a
-                      href="#"
-                      className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-300 group"
-                      aria-label="X"
-                    >
-                      <svg
-                        className="w-[17px] h-[17px]"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                      >
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                      </svg>
-                    </a>
-                    <a
-                      href="mailto:contact@optimizerpro.com"
-                      className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-300 group"
-                      aria-label="Email"
-                    >
-                      <svg
-                        className="w-[18px] h-[18px]"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                      >
-                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="py-6 mt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span className="text-white/40 text-sm font-normal font-sans">
-              (c) 2026 LinkedIn Optimizer Pro. All rights reserved.
-            </span>
-            <div className="flex items-center gap-6">
-              <a
-                href="#"
-                className="text-white/40 hover:text-white transition-colors text-sm font-normal font-sans"
-              >
-                Privacy Policy
-              </a>
-              <a
-                href="#"
-                className="text-white/40 hover:text-white transition-colors text-sm font-normal font-sans"
-              >
-                Terms of Service
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter anchorPrefix="/" />
     </div>
   );
 }
@@ -962,3 +732,5 @@ function findMatchingPresetId(foreground: string, background: string) {
 
   return match?.id ?? "";
 }
+
+
