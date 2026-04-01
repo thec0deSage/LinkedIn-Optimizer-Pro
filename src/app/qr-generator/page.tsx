@@ -746,14 +746,6 @@ export default function QrGeneratorPage() {
                         QR Generator
                       </Link>
                     </li>
-                    <li>
-                      <Link
-                        href="/headline-generator"
-                        className="text-slate-400 hover:text-white transition-colors text-[15px]"
-                      >
-                        Headline Generator
-                      </Link>
-                    </li>
                   </ul>
                 </div>
                 <div>

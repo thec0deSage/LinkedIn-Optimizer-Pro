@@ -719,8 +719,6 @@ export default function Home() {
                   <ul className="space-y-3">
                     <li><a href="/login" className="text-slate-400 hover:text-white transition-colors text-[15px]">Post Generator</a></li>
                     <li><a href="/qr-generator" className="text-slate-400 hover:text-white transition-colors text-[15px]">QR Generator</a></li>
-                    <li><a href="/headline-generator" className="text-slate-400 hover:text-white transition-colors text-[15px]">Headline Generator</a></li>
-                    
                   </ul>
                 </div>
                 <div>
