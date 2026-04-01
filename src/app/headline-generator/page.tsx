@@ -174,12 +174,6 @@ export default function HeadlineGeneratorPage() {
               How it Works
             </Link>
             <Link
-              href="/headline-generator"
-              className="text-sm font-semibold text-[#213856]"
-            >
-              Headline Generator
-            </Link>
-            <Link
               href="/#pricing"
               className="text-sm font-semibold text-slate-600 hover:text-[#213856] transition-colors"
             >
@@ -233,13 +227,6 @@ export default function HeadlineGeneratorPage() {
                 className="text-base font-semibold text-slate-600"
               >
                 How it Works
-              </Link>
-              <Link
-                href="/headline-generator"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-base font-semibold text-[#213856]"
-              >
-                Headline Generator
               </Link>
               <Link
                 href="/#pricing"
@@ -500,18 +487,18 @@ export default function HeadlineGeneratorPage() {
                     </li>
                     <li>
                       <Link
-                        href="/headline-generator"
+                        href="/qr-generator"
                         className="text-slate-400 hover:text-white transition-colors text-[15px]"
                       >
-                        Headline Generator
+                        QR Generator
                       </Link>
                     </li>
                     <li>
                       <Link
-                        href="/#qrgenerator"
+                        href="/headline-generator"
                         className="text-slate-400 hover:text-white transition-colors text-[15px]"
                       >
-                        QR Generator
+                        Headline Generator
                       </Link>
                     </li>
                   </ul>

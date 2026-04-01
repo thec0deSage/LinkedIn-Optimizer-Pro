@@ -190,7 +190,7 @@ export default function Home() {
                 />
                 <div className="flex flex-col w-full">
                   <div className="bg-white/5 border border-white/10 backdrop-blur-sm text-white/95 p-5 px-7 md:px-8 rounded-[32px] font-medium text-[15px] leading-relaxed w-fit max-w-[85%] shadow-sm">
-                    I know LinkedIn matters. I just don't have a system that works.
+                    I know LinkedIn matters. I just don&apos;t have a system that works.
                   </div>
                 </div>
               </div>
@@ -718,8 +718,9 @@ export default function Home() {
                   <h4 className="font-semibold text-white mb-5 text-[15px]">Product</h4>
                   <ul className="space-y-3">
                     <li><a href="/login" className="text-slate-400 hover:text-white transition-colors text-[15px]">Post Generator</a></li>
+                    <li><a href="/qr-generator" className="text-slate-400 hover:text-white transition-colors text-[15px]">QR Generator</a></li>
                     <li><a href="/headline-generator" className="text-slate-400 hover:text-white transition-colors text-[15px]">Headline Generator</a></li>
-                    <li><a href="#qrgenerator" className="text-slate-400 hover:text-white transition-colors text-[15px]">QR Generator</a></li>
+                    
                   </ul>
                 </div>
                 <div>

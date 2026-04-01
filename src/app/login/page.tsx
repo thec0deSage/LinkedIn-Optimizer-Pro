@@ -80,7 +80,13 @@ export default function Login() {
           </form>
 
           <p className="text-center text-sm text-slate-500 mt-4">
-            Don't have an account? <Link href="/signup" className="font-bold text-[#006edc] hover:text-[#005bb8] hover:underline">Sign up</Link>
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/signup"
+              className="font-bold text-[#006edc] hover:text-[#005bb8] hover:underline"
+            >
+              Sign up
+            </Link>
           </p>
         </div>
 
