@@ -288,21 +288,6 @@ export default function QrGeneratorPage() {
             <div className="max-w-3xl mx-auto text-center mb-10 md:mb-14">
               <div className="flex flex-col items-center mb-4">
                 <div className="relative inline-flex items-center gap-3 px-6 py-3 bg-[#eef4ff] border border-[#dce6f2] rounded-[22px] shadow-sm mb-6">
-                  {/* Peeking Mascot Container */}
-                  <div className="absolute -top-11 -right-8 w-20 h-20 pointer-events-none overflow-visible">
-                    {/* 
-                      Note: You can place your mascot-peek.png in /public/images/
-                      Or use this placeholder for the character seen in your reference image.
-                    */}
-                    <div className="relative w-full h-full">
-                      <div className="absolute bottom-0 right-0 w-12 h-12 bg-blue-400 rounded-full blur-xl opacity-20 animate-pulse" />
-                      {/* Character placeholder - Replace src with your mascot path */}
-                      <div className="w-full h-full flex items-center justify-center transform translate-y-2 translate-x-1">
-                        <span className="text-4xl filter drop-shadow-md">🤖</span>
-                      </div>
-                    </div>
-                  </div>
-
                   {/* LinkedIn Icon */}
                   <div className="bg-[#0A66C2] p-1.5 rounded-lg shadow-sm">
                     <svg className="w-7 h-7 text-white fill-current" viewBox="0 0 24 24">

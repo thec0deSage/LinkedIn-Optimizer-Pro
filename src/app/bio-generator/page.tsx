@@ -5,15 +5,12 @@ import {
   Check,
   Copy,
   LoaderCircle,
-  PenSquare,
   RefreshCcw,
   Sparkles,
-  UserRound,
 } from "lucide-react";
 import { MarketingNav } from "@/components/marketing-nav";
 import { SiteFooter } from "@/components/site-footer";
 import {
-  formatBioForClipboard,
   type BioDraft,
   type BioTone,
 } from "@/lib/bio-generator";
@@ -29,29 +26,6 @@ const TONE_OPTIONS: BioTone[] = [
   "Friendly",
   "Bold",
   "Thought Leader",
-];
-
-const QUICK_TIPS = [
-  {
-    title: "Lead with value",
-    description:
-      "Open with the outcomes you create so readers understand your relevance quickly.",
-  },
-  {
-    title: "Show personality",
-    description:
-      "A human tone builds trust faster than generic, overly formal positioning.",
-  },
-  {
-    title: "Include keywords",
-    description:
-      "Use the language your audience and recruiters already search for.",
-  },
-  {
-    title: "Use formatting",
-    description:
-      "Short paragraphs make your About section easier to scan and easier to remember.",
-  },
 ];
 
 export default function BioGeneratorPage() {
@@ -144,7 +118,8 @@ export default function BioGeneratorPage() {
     if (!draft) return;
 
     try {
-      await navigator.clipboard.writeText(formatBioForClipboard(draft));
+      const bioContent = `${draft.paragraphs[0]} ${draft.callToAction}`;
+      await navigator.clipboard.writeText(bioContent);
       setCopied(true);
     } catch {
       setApiError("We could not copy the bio right now. Please copy it manually.");
@@ -158,29 +133,11 @@ export default function BioGeneratorPage() {
       <MarketingNav desktopLinks={TOOL_PAGE_LINKS} />
 
       <main className="flex-1 pt-20">
-        <section
-          className="relative overflow-hidden py-14 md:py-20"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 1px 1px, rgba(148,163,184,0.18) 1px, transparent 0)",
-            backgroundSize: "22px 22px",
-          }}
-        >
+        <section className="relative overflow-hidden py-14 md:py-20 bg-dot-grid">
           <div className="absolute top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-200/20 blur-[100px] pointer-events-none" />
           <div className="max-w-7xl mx-auto px-6">
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-8 md:mb-10">
+            <div className="flex flex-col items-center justify-center gap-4 md:gap-6 mb-8 md:mb-10">
               <div className="relative inline-flex items-center gap-3 px-6 py-3 bg-[#eef4ff] border border-[#dce6f2] rounded-[22px] shadow-sm">
-                {/* Peeking Mascot Container */}
-                <div className="absolute -top-11 -right-8 w-20 h-20 pointer-events-none overflow-visible">
-                  {/* Character placeholder - Matches QR Generator UI */}
-                  <div className="relative w-full h-full">
-                    <div className="absolute bottom-0 right-0 w-12 h-12 bg-blue-400 rounded-full blur-xl opacity-20 animate-pulse" />
-                    <div className="w-full h-full flex items-center justify-center transform translate-y-2 translate-x-1">
-                      <span className="text-4xl filter drop-shadow-md">🤖</span>
-                    </div>
-                  </div>
-                </div>
-
                 {/* LinkedIn Icon */}
                 <div className="bg-[#0A66C2] p-1.5 rounded-lg shadow-sm">
                   <svg className="w-7 h-7 text-white fill-current" viewBox="0 0 24 24">
@@ -195,7 +152,7 @@ export default function BioGeneratorPage() {
               </div>
 
               <h1 className="text-3xl md:text-4xl font-extrabold text-[#213856] tracking-tight leading-tight text-center">
-                Bio Generator
+                Professional Bio Generator
               </h1>
             </div>
             
@@ -205,7 +162,7 @@ export default function BioGeneratorPage() {
               expertise, and voice.
             </p>
 
-            <div className="grid gap-6 items-start lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.3fr)]">
+            <div className="grid gap-6 items-start lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
               <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/40 sm:p-8">
                 <form onSubmit={handleGenerate} className="space-y-6">
                   <div className="space-y-2">
@@ -268,9 +225,9 @@ export default function BioGeneratorPage() {
                             key={option}
                             type="button"
                             onClick={() => setTone(option)}
-                            className={`cursor-pointer rounded-xl border px-4 py-3 text-left text-sm font-semibold transition-all ${
+                            className={`cursor-pointer rounded-xl border px-4 py-3 text-left text-sm font-semibold transition-all active:scale-[0.99] ${
                               isSelected
-                                ? "border-[#0d2137] bg-[#0d2137] text-white shadow-sm"
+                                ? "border-[#0A66C2] bg-slate-50/70 text-[#0A66C2] hover:border-[#005bb8] hover:text-[#005bb8]"
                                 : "border-slate-200 bg-slate-50/70 text-slate-600 hover:border-slate-300 hover:bg-white"
                             }`}
                           >
@@ -298,7 +255,7 @@ export default function BioGeneratorPage() {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="cursor-pointer inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0d2137] px-6 py-4 text-base font-semibold text-white shadow-lg shadow-slate-900/10 transition-all hover:bg-[#153456] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
+                    className="cursor-pointer inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0A66C2] px-6 py-4 text-base font-semibold text-white shadow-lg shadow-blue-900/10 transition-all hover:bg-[#005bb8] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
                   >
                     {isLoading ? (
                       <>
@@ -326,119 +283,115 @@ export default function BioGeneratorPage() {
                 </form>
               </div>
 
-              <div className="space-y-5">
-                <div className="rounded-[28px] border border-slate-200 bg-white shadow-xl shadow-slate-200/30 overflow-hidden">
-                  <div className="h-18 bg-slate-600 sm:h-20" />
-
-                  <div className="px-6 pb-6 pt-0 sm:px-8">
-                    <div className="-mt-7 flex h-16 w-16 items-center justify-center rounded-full border-4 border-white bg-[#0d2137] text-lg font-bold text-white shadow-lg shadow-slate-900/10 sm:h-18 sm:w-18 sm:text-xl">
-                      {previewInitials || <UserRound className="h-7 w-7" />}
-                    </div>
-
-                    <div className="mt-4 border-b border-slate-100 pb-5">
-                      <h2 className="text-2xl font-bold text-[#213856] tracking-tight">
-                        {draft?.primaryTitle ?? "Your LinkedIn Bio Preview"}
-                      </h2>
-                      <p className="mt-2 text-sm font-medium text-slate-600">
-                        {draft?.headline ??
-                          "Your strongest positioning, expertise, and voice will appear here."}
-                      </p>
-                      <p className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                        {draft?.metaLine ?? "Recruiter-ready about section"}
-                      </p>
-                    </div>
-
-                    <div className="py-5">
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm font-semibold text-slate-800">
-                          About
-                        </p>
-                        <PenSquare className="h-4 w-4 text-slate-400" />
-                      </div>
-
-                      {isLoading ? (
-                        <div className="mt-4 space-y-3 animate-pulse">
-                          <div className="h-4 rounded bg-slate-200" />
-                          <div className="h-4 rounded bg-slate-200" />
-                          <div className="h-4 w-5/6 rounded bg-slate-200" />
-                          <div className="h-4 rounded bg-slate-200" />
-                          <div className="h-4 w-2/3 rounded bg-slate-200" />
-                        </div>
-                      ) : draft ? (
-                        <div className="mt-4 space-y-4 text-[15px] leading-7 text-slate-600">
-                          {draft.paragraphs.map((paragraph) => (
-                            <p key={paragraph}>{paragraph}</p>
-                          ))}
-                          <p className="font-medium text-slate-700">
-                            {draft.callToAction}
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="mt-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 p-5">
-                          <p className="text-[15px] leading-7 text-slate-500">
-                            Add your roles, expertise, and preferred tone to
-                            generate a polished About section you can paste into
-                            LinkedIn right away.
-                          </p>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
-                      <button
-                        type="button"
-                        onClick={handleCopy}
-                        disabled={!draft || isLoading}
-                        className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-xl bg-[#0d2137] px-5 py-3 text-sm font-semibold text-white transition-all hover:bg-[#153456] disabled:cursor-not-allowed disabled:opacity-60"
-                      >
-                        {copied ? (
-                          <>
-                            <Check className="h-4 w-4" />
-                            Copied
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="h-4 w-4" />
-                            Copy to clipboard
-                          </>
-                        )}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleRegenerate}
-                        disabled={isLoading || !jobTitles.trim() || !expertise.trim()}
-                        className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-[#213856] transition-all hover:border-slate-300 hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
-                      >
-                        {isLoading ? (
-                          <LoaderCircle className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <RefreshCcw className="h-4 w-4" />
-                        )}
-                        Regenerate
-                      </button>
+              <div className="flex flex-col h-full">
+                <div className="rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-200/30 overflow-hidden flex flex-col h-full">
+                  {/* Header Bar */}
+                  <div className="bg-[#2c3e50] px-6 py-4 flex items-center justify-between">
+                    <span className="text-xs font-semibold tracking-widest text-slate-300">
+                      LIVE PREVIEW
+                    </span>
+                    <div className="flex gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
                     </div>
                   </div>
-                </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {QUICK_TIPS.map((tip) => (
-                    <article
-                      key={tip.title}
-                      className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-[#0A66C2]">
-                          <Sparkles className="h-4 w-4" />
-                        </span>
-                        <h3 className="text-sm font-semibold text-[#213856]">
-                          {tip.title}
-                        </h3>
+                  {/* Inner Container - LinkedIn Profile Style */}
+                  <div className="flex-1 flex flex-col overflow-hidden bg-white mx-6 my-4 rounded-xl border border-slate-100">
+                    {/* Header Graphics */}
+                    <div className="bg-gradient-to-r from-blue-500 to-blue-600 h-20 relative">
+                      <div className="absolute -bottom-8 left-6">
+                        <div className="h-20 w-20 rounded-full border-4 border-white bg-slate-400 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
+                          {previewInitials || "U"}
+                        </div>
                       </div>
-                      <p className="mt-3 text-sm leading-6 text-slate-500">
-                        {tip.description}
-                      </p>
-                    </article>
-                  ))}
+                    </div>
+
+                    <div className="flex-1 flex flex-col overflow-y-auto">
+                      <div className="px-6 pt-12 pb-6 space-y-4">
+                        {/* Profile Info */}
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-xl font-bold text-[#213856]">
+                              Your Name
+                            </h3>
+                            <svg className="h-5 w-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M12 1L3 5V11C3 17 12 23 12 23S21 17 21 11V5L12 1Z" stroke="#9CA3AF" strokeWidth="2" strokeLinejoin="round"/>
+                              <path d="M8 12L11 15L16 9" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </div>
+                          <p className="text-sm text-slate-700 mt-1">
+                            {draft?.headline ?? "Your headline will appear here"}
+                          </p>
+                          <p className="text-xs text-slate-500 mt-1">
+                            Harare, Zimbabwe • 500+ connections
+                          </p>
+                        </div>
+
+                        {/* About Section */}
+                        <div>
+                          <h4 className="text-sm font-bold text-[#213856] mb-2">
+                            About
+                          </h4>
+                          {isLoading ? (
+                            <div className="space-y-2 animate-pulse">
+                              <div className="h-3 rounded bg-slate-200" />
+                              <div className="h-3 rounded bg-slate-200" />
+                              <div className="h-3 rounded bg-slate-200 w-5/6" />
+                            </div>
+                          ) : draft ? (
+                            <p className="text-sm leading-relaxed text-slate-700">
+                              {draft.paragraphs[0]} {draft.callToAction}
+                            </p>
+                          ) : (
+                            <p className="text-sm text-slate-400">
+                              Your bio will appear here
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons Footer */}
+                  <div className="border-t border-slate-100 bg-slate-50/50 px-6 py-4 grid gap-3 grid-cols-2 sm:grid-cols-[minmax(0,1fr)_auto]">
+                    <button
+                      type="button"
+                      onClick={handleCopy}
+                      disabled={!draft || isLoading}
+                      className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-lg bg-[#2c3e50] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#34495e] disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {copied ? (
+                        <>
+                          <Check className="h-4 w-4" />
+                          <span className="hidden sm:inline">Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-4 w-4" />
+                          <span className="hidden sm:inline">Copy Bio</span>
+                          <span className="sm:hidden">Copy</span>
+                        </>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleRegenerate}
+                      disabled={isLoading || !jobTitles.trim() || !expertise.trim()}
+                      className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-blue-100 px-5 py-2.5 text-sm font-semibold text-[#4a5f7f] transition-all hover:border-slate-400 hover:bg-blue-150 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {isLoading ? (
+                        <LoaderCircle className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <>
+                          <RefreshCcw className="h-4 w-4" />
+                          <span className="hidden sm:inline">Regenerate</span>
+                          <span className="sm:hidden">Regenerate</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
