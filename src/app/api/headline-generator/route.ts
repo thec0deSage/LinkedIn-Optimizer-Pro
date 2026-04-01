@@ -1,3 +1,6 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
+import { tavily } from "@tavily/core";
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -16,8 +19,10 @@ type ExperienceEntry = {
 
 type ProfileData = {
   fullName: string;
+  currentHeadline: string;
   currentTitle: string;
   currentCompany: string;
+  industry: string;
   previousRoles: ExperienceEntry[];
   skills: string[];
   endorsements: string[];
@@ -40,10 +45,37 @@ type SectionKey =
   | "certifications"
   | "achievements";
 
-const REQUEST_TIMEOUT_MS = 12000;
 const LINKEDIN_HOST = "linkedin.com";
-const USER_AGENT =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36";
+
+const PROFILE_EXTRACTION_PROMPT = `You are a high-fidelity data extraction engine.
+Your goal is to parse raw text and snippets from search results to extract a LinkedIn profile.
+
+JSON STRUCTURE:
+{
+  "fullName": "...",
+  "currentHeadline": "The profile's existing headline",
+  "currentTitle": "...",
+  "currentCompany": "...",
+  "industry": "e.g. Software Development, Financial Services",
+  "previousRoles": [{ "role": "...", "company": "..." }],
+  "skills": ["..."],
+  "endorsements": ["..."],
+  "about": "A concise summary of the profile narrative",
+  "certifications": ["..."],
+  "education": ["..."],
+  "achievements": ["..."]
+}
+
+RULES:
+1. If data is missing for a field, return an empty string or empty array.
+2. If multiple titles are present, pick the one that appears most recent/current.
+3. Ignore noise like "See more", "1 month ago", "view profile", etc.
+4. IDENTITY GROUNDING (CRITICAL): Only extract data specifically for the person identified in the URL slug or the main professional profile.
+5. HALLUCINATION PREVENTION: If you see common namesakes or different people with the same name (e.g. "Lennox Agency", "Lennox Consulting", or "Lennox Real Estate"), YOU MUST DISCARD them unless they are explicitly listed as the target individual's own current or past employment in their own personal profile text.
+6. If a company name sounds like a name namesake (e.g. "The Lennox Agency" for a person named "Lennox"), treat it as a hallucination result and ignore it unless confirmed by multiple sources or the target's own self-description.
+7. Provide the most descriptive and professional versions of everything.
+
+Return ONLY the JSON. No preamble. No markdown fences.`;
 
 const ROLE_KEYWORDS = [
   "engineer",
@@ -102,21 +134,57 @@ const GENERIC_STOPWORDS = new Set([
   "connect",
   "message",
   "follow",
+  "pengalaman",
+  "pendidikan",
+  "lokasi",
+  "au linkedin com",
 ]);
 
 const BANNED_HEADLINE_TERMS = [
+  /\binnovative\b/i,
   /\bpassionate\b/i,
   /\bdynamic\b/i,
   /\bresults[-\s]?driven\b/i,
-  /\bstrategic thinker\b/i,
+  /\bstrategic\b/i,
+  /\bcreative professional\b/i,
+  /\bproblem solver\b/i,
+  /\bthought leader\b/i,
   /\bhardworking\b/i,
+  /\bdedicated\b/i,
+  /\bexperienced\b/i,
+  /\bskilled\b/i,
+  /\bexpert\b/i,
+  /\bseasoned\b/i,
+  /\bmotivated\b/i,
+  /\benthusiastic\b/i,
+  /\bdetail-oriented\b/i,
   /\bguru\b/i,
   /\bninja\b/i,
   /\brockstar\b/i,
   /\bsynergy\b/i,
   /\bleverage\b/i,
+  /\bwhere art meets\b/i,
+  /\bbuilding products\b/i,
+  /\bdesigning solutions\b/i,
 ];
 
+const TECH_NOISE_REMOVAL_PATTERNS = [
+  /\b\d{1,3}\+?\s+connections\b/i,
+  /\bhis\s+linkedin\s+profile\s+has\s+over\s+500\b/i,
+  /\bextrac(?:ted|ting)\s+from\s+url\b/i,
+  /\bsee\s+more\b/i,
+  /\bshow\s+all\b/i,
+  /\bview\s+profile\b/i,
+  /\bconnect\s+to\s+view\b/i,
+  /\bmessage\s+this\s+profile\b/i,
+  /\bcontact\s+info\b/i,
+  /\bau\s+linkedin\s+com\b/i,
+  /\bjoined\s+linkedin\s+in\b/i,
+  /\breach\s+out\s+to\b/i,
+  /\b(?:is|a)\s+professional\s+at\s+funnkar\s+design\s+house\b/i
+];
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const HEADLINE_SYSTEM_PROMPT = `You are an expert LinkedIn personal branding copywriter.
 You have studied thousands of high-performing LinkedIn profiles
 from top creators, executives, and thought leaders.
@@ -161,6 +229,120 @@ Return only a JSON object in this format:
   "bold": "..."
 }`;
 
+const DISALLOWED_STYLE_PATTERNS = [
+  /\bconnections?\b/i,
+  /\bfollowers?\b/i,
+  /\blocation\b/i,
+  /\bworks at\b/i,
+  /\bstudied at\b/i,
+  /\binnovative products\b/i,
+  /\bwhere art meets\b/i,
+  /\bbuilding products\b/i,
+  /\bpassionate\b/i,
+  /\bdynamic\b/i,
+];
+
+const EXPERT_COPYWRITER_SYSTEM_PROMPT = `Act as a LinkedIn branding expert specifically focused on high-performing, outcome-driven headlines.
+
+Your task is to analyze the provided <USER_PROFILE> and generate EXACTLY 3 headlines (Professional, Creative, Bold).
+
+STRICT NEGATIVE CONSTRAINTS:
+1. NO NAMES: Do not include the user's name ("Lennox Galanje", "Lennox", etc.).
+2. NO PRONOUNS: Do not start with "I am", "He is", "She is", or "My goal is".
+3. NO META-LABELS: Do not start with "Role:", "Skills:", or "Achievement:".
+4. NO BUZZWORDS: Avoid "passionate", "guru", "ninja", "expert", "innovative", "results-driven".
+5. NO REPETITION: Do not use the same role or company multiple times in one headline.
+
+FORMAL STRUCTURE:
+- Professional: [Current Role] | [Core Skills] | [Measurable Impact]
+- Creative: [Unique Value Prop / Hook] | [High-Impact Metric] | [Role]
+- Bold: [Punchy Industry POV] | [Top Achievement] | [Mission-Driven Title]
+
+Input Data Format:
+<USER_PROFILE>
+Role: [Current Job Title]
+Company: [Current Employer]
+Skills: [Top 5 Skills]
+Impact: [Top Business Outcomes]
+Goal: [Career Objective]
+</USER_PROFILE>
+
+Output Format (JSON ONLY):
+{
+  "headlines": {
+    "professional": "Direct and high-fidelity...",
+    "creative": "Outcome-focused and unique...",
+    "bold": "Punchy and authoritative..."
+  },
+  "best_choice": "one of: professional, creative, bold"
+}`;
+
+const SERVER_BANNED_WORDS = [
+  "innovative",
+  "passionate",
+  "dynamic",
+  "results-driven",
+  "strategic",
+  "creative professional",
+  "problem solver",
+  "thought leader",
+  "guru",
+  "ninja",
+  "rockstar",
+  "synergy",
+  "leverage",
+  "where art meets",
+  "building products",
+  "designing solutions",
+  "hardworking",
+  "dedicated",
+  "experienced",
+  "skilled",
+  "expert",
+  "seasoned",
+  "motivated",
+  "enthusiastic",
+  "detail-oriented",
+];
+
+const SUMMARY_REJECTION_PHRASES = [
+  "profile shows",
+  "he works at",
+  "she works at",
+  "they work at",
+  "current job title is",
+  "current role is",
+  "current company is",
+  "previously worked as",
+  "skills include",
+  "achievements include",
+  "studied at",
+  "located in",
+  "connections",
+  "followers",
+];
+
+const PROFILE_NOISE_PHRASES = [
+  "current job title is",
+  "current role is",
+  "current company is",
+  "previously worked as",
+  "he previously worked as",
+  "she previously worked as",
+  "they previously worked as",
+  "skills include",
+  "their skills include",
+  "profile data",
+  "here is the profile data",
+  "see more",
+  "show all",
+  "1 month ago",
+  "months ago",
+  "years ago",
+  "ago",
+  "see the complete profile",
+];
+
 export async function POST(request: Request) {
   try {
     const body = (await request.json().catch(() => null)) as
@@ -178,6 +360,7 @@ export async function POST(request: Request) {
 
     const discovered = await discoverProfileText(normalizedUrl);
     if (!discovered) {
+      console.log(`[DEBUG] Discovery failed for ${normalizedUrl}`);
       return NextResponse.json(
         {
           message:
@@ -187,9 +370,25 @@ export async function POST(request: Request) {
       );
     }
 
-    const profile = extractProfileData(discovered.content, normalizedUrl);
-    const enrichedProfile = inferMissingFromAvailable(profile, normalizedUrl);
+    console.log(`[DEBUG] Raw content length: ${discovered.content.length}`);
+    let profile = await extractProfileWithLLM(discovered.content, normalizedUrl);
+
+    if (!profile || (!profile.currentTitle && !profile.about)) {
+      console.log(`[DEBUG] LLM extraction failed or empty, falling back to regex.`);
+      profile = extractProfileData(discovered.content, normalizedUrl);
+    }
+
+    const enrichedProfile = sanitizeProfileData(inferMissingFromAvailable(profile, normalizedUrl));
     const groundingFacts = collectGroundingFacts(enrichedProfile);
+
+    console.log(`[DEBUG] Profile extracted for ${normalizedUrl}:`, {
+      fullName: enrichedProfile.fullName,
+      currentTitle: enrichedProfile.currentTitle,
+      currentCompany: enrichedProfile.currentCompany,
+      factsCount: groundingFacts.length,
+      proofCount: enrichedProfile.previousRoles.length + enrichedProfile.skills.length + enrichedProfile.education.length
+    });
+    console.log(`[DEBUG] Grounding facts:`, groundingFacts);
 
     if (!hasMinimumGrounding(enrichedProfile, groundingFacts)) {
       return NextResponse.json(
@@ -203,7 +402,7 @@ export async function POST(request: Request) {
 
     const aiHeadlines = await generateHeadlinesWithValidation(enrichedProfile);
     const headlines = aiHeadlines
-      ? mapHeadlineJsonToOptions(aiHeadlines, groundingFacts)
+      ? mapHeadlineJsonToOptions(aiHeadlines, enrichedProfile, groundingFacts)
       : generateGroundedHeadlines(enrichedProfile, groundingFacts);
 
     return NextResponse.json({
@@ -249,120 +448,170 @@ function normalizeLinkedInUrl(rawValue: string): string | null {
 }
 
 async function discoverProfileText(profileUrl: string): Promise<SearchDiscovery | null> {
-  const candidates = await searchLinkedInCandidates(profileUrl);
-  const urls = unique([profileUrl, ...candidates]).slice(0, 5);
+  const apiKey = process.env.TAVILY_API_KEY;
+  if (!apiKey) return null;
 
-  let best: { content: string; sourceUrl: string; score: number } | null = null;
-
-  for (const url of urls) {
-    const content = await fetchReadableProfileText(url);
-    if (!content) continue;
-
-    const score = scoreProfileContent(content);
-    if (!best || score > best.score) {
-      best = { content, sourceUrl: url, score };
-    }
-
-    if (score >= 7) break;
-  }
-
-  if (!best || best.score < 3) return null;
-  return { sourceUrl: best.sourceUrl, content: best.content };
-}
-
-async function searchLinkedInCandidates(profileUrl: string): Promise<string[]> {
-  const slug = profileUrl.split("/").filter(Boolean).pop() ?? "";
-  const searchQuery = `site:linkedin.com/in "${slug.replace(/-/g, " ")}"`;
-  const searchUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(
-    searchQuery
-  )}`;
-  const html = await fetchText(searchUrl);
-  if (!html) return [];
-
-  const extracted = extractSearchResultUrls(html);
-  return extracted.filter((url) => url !== profileUrl);
-}
-
-function extractSearchResultUrls(html: string): string[] {
-  const urls = new Set<string>();
-  const hrefRegex = /href="([^"]+)"/gi;
-
-  for (let match = hrefRegex.exec(html); match; match = hrefRegex.exec(html)) {
-    const rawHref = decodeHtmlEntities(match[1] ?? "");
-    const resolved = resolveDuckDuckGoRedirect(rawHref);
-    if (!resolved) continue;
-    const normalized = normalizeLinkedInUrl(resolved);
-    if (normalized) urls.add(normalized);
-  }
-
-  return [...urls];
-}
-
-function resolveDuckDuckGoRedirect(rawHref: string): string | null {
-  if (!rawHref) return null;
-
-  let href = rawHref;
-  if (href.startsWith("//")) href = `https:${href}`;
-  if (href.startsWith("/l/?")) href = `https://duckduckgo.com${href}`;
+  const linkedinUsername = extractLinkedInUsername(profileUrl);
+  if (!linkedinUsername) return null;
 
   try {
-    const parsed = new URL(href);
-    if (!parsed.hostname.includes("duckduckgo.com")) return parsed.href;
-    const redirected = parsed.searchParams.get("uddg");
-    return redirected ? decodeURIComponent(redirected) : null;
-  } catch {
+    const client = tavily({ apiKey });
+    const searchQueries = buildLinkedInSearchQueries(profileUrl, linkedinUsername);
+    const searchResponses: Array<{
+      answer?: string;
+      results: Array<{ url: string; content: string }>;
+    }> = [];
+
+    for (const query of searchQueries) {
+      try {
+        const response = await client.search(query, {
+          searchDepth: "advanced",
+          maxResults: 5,
+          includeAnswer: true,
+        });
+
+        searchResponses.push({
+          answer: response.answer || "",
+          results: response.results.map((result) => ({
+            url: result.url || "",
+            content: result.content || "",
+          })),
+        });
+      } catch {
+        // Try the next query variation.
+      }
+    }
+
+    if (searchResponses.length === 0) {
+      return null;
+    }
+
+    const flattenedResults = uniqueBy(
+      searchResponses.flatMap((response) => response.results),
+      (result) => normalizeLinkedInUrl(result.url || "") || result.url || result.content
+    );
+
+    const slugMatchedResults = flattenedResults.filter((result) =>
+      urlMatchesLinkedInUsername(result.url, linkedinUsername)
+    );
+    const selectedResults = slugMatchedResults.length > 0 ? slugMatchedResults : flattenedResults;
+    const selectedUrls = unique(
+      selectedResults
+        .map((result) => normalizeLinkedInUrl(result.url || ""))
+        .filter((url): url is string => Boolean(url))
+    ).slice(0, 3);
+
+    let extractedText = "";
+    if (selectedUrls.length > 0) {
+      try {
+        const extracted = await client.extract(selectedUrls, {
+          extractDepth: "advanced",
+          format: "markdown",
+        });
+        extractedText = extracted.results
+          .map((result) => normalizeSentence(result.rawContent || ""))
+          .filter(Boolean)
+          .join("\n");
+      } catch (err) {
+        console.log(`[DEBUG] Extraction error for ${selectedUrls.join(", ")}:`, err);
+        extractedText = "";
+      }
+    }
+
+    const surname = (linkedinUsername.split("-").pop() || "").replace(/\d+/g, "").toLowerCase();
+    
+    // Flexible filtering: Prefer surname matches, but don't fail if they are missing
+    let filteredResults = selectedResults;
+    if (surname && surname.length > 3) {
+      const surnameMatches = selectedResults.filter(result => {
+        const urlLower = (result.url || "").toLowerCase();
+        const contentLower = (result.content || "").toLowerCase();
+        return urlLower.includes(surname) || contentLower.includes(surname);
+      });
+      // ONLY filter if we actually found surname matches. (Avoids total failure for unique names)
+      if (surnameMatches.length > 0) { filteredResults = surnameMatches; }
+    }
+
+    const searchContentText = filteredResults
+      .map((result) => cleanProfileField(normalizeSentence(result.content || "")))
+      .filter((line) => !isNoiseProfileLine(line))
+      .filter(Boolean)
+      .join("\n");
+
+    let filteredAnswers = searchResponses.map((response) => response.answer || "").filter(Boolean);
+    if (surname && surname.length > 3) {
+      const surnameAnswers = filteredAnswers.filter(answer => answer.toLowerCase().includes(surname));
+      if (surnameAnswers.length > 0) { filteredAnswers = surnameAnswers; }
+    }
+
+    const answersText = filteredAnswers.join("\n");
+
+    // EXTRACTED text is prioritized, then SEARCH CONTENT (snippets), then ANSWERS (summaries)
+    const combinedText = [
+      extractedText || "",
+      searchContentText || "",
+      answersText || ""
+    ]
+      .filter(Boolean)
+      .join("\n\n---\n\n");
+
+    const score = scoreProfileContent(combinedText);
+    console.log(`[DEBUG] Discovery combined content score: ${score} (Extracted: ${extractedText.length}, Snippets: ${searchContentText.length}, Answers: ${answersText.length})`);
+
+    if (!combinedText || score < 2) {
+      return null;
+    }
+
+    const sourceUrl = selectedUrls[0] || profileUrl;
+
+    return { sourceUrl, content: combinedText };
+  } catch (err) {
+    console.error(`[DEBUG] discoverProfileText encountered a fatal error:`, err);
     return null;
   }
 }
 
-async function fetchReadableProfileText(profileUrl: string): Promise<string | null> {
-  const noProtocol = profileUrl.replace(/^https?:\/\//i, "");
-  const readerUrls = [
-    `https://r.jina.ai/http://${noProtocol}`,
-    `https://r.jina.ai/https://${noProtocol}`,
-  ];
-
-  for (const readerUrl of readerUrls) {
-    const text = await fetchText(readerUrl);
-    if (text && scoreProfileContent(text) >= 3) {
-      return text;
-    }
-  }
-
-  const html = await fetchText(profileUrl);
-  if (!html) return null;
-  const stripped = stripHtml(html);
-  return stripped.length > 200 ? stripped : null;
-}
-
-async function fetchText(url: string): Promise<string | null> {
-  const response = await fetchWithTimeout(url, {
-    headers: {
-      "User-Agent": USER_AGENT,
-      Accept: "text/html, text/plain;q=0.9, */*;q=0.8",
-    },
-    cache: "no-store",
-  });
-
-  if (!response || !response.ok) return null;
-  const text = await response.text();
-  return text?.trim() ? text : null;
-}
-
-async function fetchWithTimeout(
-  url: string,
-  init: RequestInit
-): Promise<Response | null> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-
+function extractLinkedInUsername(profileUrl: string): string {
   try {
-    return await fetch(url, { ...init, signal: controller.signal });
+    const parts = new URL(profileUrl).pathname.split("/").filter(Boolean);
+    if (parts[0] !== "in" || !parts[1]) return "";
+    // Clean common slug noise like trailing slashes or numbers at the very end
+    return decodeURIComponent(parts[1]).replace(/\/+$/, "").trim();
   } catch {
-    return null;
-  } finally {
-    clearTimeout(timeout);
+    return "";
   }
+}
+
+function buildLinkedInSearchQueries(profileUrl: string, linkedinUsername: string): string[] {
+  // Clean username for search (e.g. "firstname-lastname" -> "firstname lastname")
+  const searchName = linkedinUsername
+    .replace(/\d+/g, "") // Remove numbers from name search
+    .replace(/[-_]+/g, " ")
+    .trim();
+
+  return unique([
+    `site:linkedin.com/in "${linkedinUsername}" bio summary experience`,
+    `site:linkedin.com/in "${searchName}" professional history`,
+    `"${profileUrl}" about profile`,
+    `"${searchName}" linkedin work achievements`,
+  ]);
+}
+
+function urlMatchesLinkedInUsername(url: string, linkedinUsername: string): boolean {
+  const normalized = normalizeLinkedInUrl(url || "");
+  if (!normalized) return false;
+
+  const slug = extractLinkedInUsername(normalized);
+  if (!slug) return false;
+
+  const normalizeSlug = (value: string) =>
+    value.toLowerCase().replace(/[^a-z0-9-]/g, "");
+
+  const target = normalizeSlug(linkedinUsername);
+  const candidate = normalizeSlug(slug);
+
+  if (!target || !candidate) return false;
+  return candidate === target || candidate.includes(target) || target.includes(candidate);
 }
 
 function scoreProfileContent(text: string): number {
@@ -370,12 +619,12 @@ function scoreProfileContent(text: string): number {
   let score = 0;
 
   if (lowered.includes("linkedin")) score += 1;
-  if (lowered.includes("experience")) score += 2;
-  if (lowered.includes("skills")) score += 2;
-  if (lowered.includes("about")) score += 1;
-  if (lowered.includes("education")) score += 1;
+  if (lowered.includes("experience") || lowered.includes("employment")) score += 2;
+  if (lowered.includes("skills") || lowered.includes("expertise")) score += 2;
+  if (lowered.includes("about") || lowered.includes("summary")) score += 1;
+  if (lowered.includes("education") || lowered.includes("university")) score += 1;
   if (/\bat\b/i.test(text)) score += 1;
-  if (text.length > 700) score += 1;
+  if (text.length > 500) score += 1; // Loosened from 700
 
   return score;
 }
@@ -385,8 +634,9 @@ function extractProfileData(text: string, profileUrl: string): ProfileData {
   const sections = buildSectionIndex(lines);
 
   const fullName = extractFullName(lines, profileUrl);
-  const topRole = extractTopRole(lines);
-  const experienceEntries = extractExperienceEntries(lines, sections.experience);
+  const currentHeadline = extractCurrentHeadline(lines, fullName);
+  const topRole = extractTopRole(lines, fullName);
+  const experienceEntries = extractExperienceEntries(lines, sections.experience, fullName);
 
   const primaryExperience = experienceEntries[0];
   const currentTitle = topRole.role || primaryExperience?.role || "";
@@ -405,8 +655,10 @@ function extractProfileData(text: string, profileUrl: string): ProfileData {
 
   return {
     fullName,
+    currentHeadline,
     currentTitle,
     currentCompany,
+    industry: "", // Hard to extract via regex fallback reliably
     previousRoles,
     skills: skillData.skills,
     endorsements: skillData.endorsements,
@@ -431,11 +683,11 @@ function toReadableLines(rawText: string): string[] {
   const expanded = sanitized
     .split("\n")
     .flatMap((line) => line.split(/(?<=\.)\s{2,}/))
-    .map((line) => normalizeSentence(line))
+    .map((line) => cleanProfileField(normalizeSentence(line)))
     .filter((line) => line.length > 1 && line.length < 240)
     .filter((line) => !/^#+\s*$/.test(line));
 
-  return unique(expanded);
+  return unique(expanded.filter((line) => !isNoiseProfileLine(line)));
 }
 
 function buildSectionIndex(lines: string[]): Record<SectionKey, string[]> {
@@ -484,18 +736,26 @@ function extractFullName(lines: string[], profileUrl: string): string {
     if (isLikelyName(fromTitle)) return fromTitle;
   }
 
-  for (const line of lines.slice(0, 40)) {
+  const slugName = titleCaseFromSlug(profileUrl);
+
+  for (const line of lines.slice(0, 50)) {
     const candidate = cleanName(line.split("|")[0] ?? "");
-    if (isLikelyName(candidate)) return candidate;
+    if (isLikelyName(candidate)) {
+      if (slugName && !isNameCloseMatch(candidate, slugName)) {
+        continue;
+      }
+      return candidate;
+    }
   }
 
-  return titleCaseFromSlug(profileUrl);
+  return slugName;
 }
 
 function cleanName(value: string): string {
   return value
     .replace(/^#+\s*/, "")
     .replace(/\bLinkedIn\b/gi, "")
+    .replace(/\b(?:current job title|current role|current company)\b[\s\S]*$/i, "")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -508,9 +768,30 @@ function isLikelyName(value: string): boolean {
   return words.every((word) => /^[A-Za-z'.-]+$/.test(word));
 }
 
-function extractTopRole(lines: string[]): ExperienceEntry {
+function extractCurrentHeadline(lines: string[], fullName: string): string {
+  const nameTokens = buildNameTokens(fullName);
+  
+  // Try to find a line after the name that looks like a headline (not a section header)
+  for (const line of lines.slice(0, 10)) {
+    if (ALL_SECTION_ALIASES.has(normalizeKey(line))) continue;
+    if (nameTokens.some(token => line.toLowerCase().includes(token))) continue;
+    if (line.length > 20 && line.length < 200) return line;
+  }
+  
+  return "";
+}
+
+function isNameCloseMatch(candidate: string, slugName: string): boolean {
+  const normalize = (val: string) => val.toLowerCase().replace(/[^a-z]/g, "");
+  const c = normalize(candidate);
+  const s = normalize(slugName);
+  if (!c || !s) return false;
+  return c.includes(s) || s.includes(c);
+}
+
+function extractTopRole(lines: string[], fullName: string): ExperienceEntry {
   for (const line of lines.slice(0, 60)) {
-    const parsed = parseRoleCompany(line);
+    const parsed = parseRoleCompany(line, fullName);
     if (parsed) return parsed;
   }
 
@@ -519,14 +800,15 @@ function extractTopRole(lines: string[]): ExperienceEntry {
 
 function extractExperienceEntries(
   lines: string[],
-  experienceSection: string[]
+  experienceSection: string[],
+  fullName: string
 ): ExperienceEntry[] {
   const source = experienceSection.length > 0 ? experienceSection : lines;
   const entries: ExperienceEntry[] = [];
 
   for (let i = 0; i < source.length; i += 1) {
     const line = source[i];
-    const parsed = parseRoleCompany(line);
+    const parsed = parseRoleCompany(line, fullName);
     if (parsed) {
       entries.push(parsed);
       continue;
@@ -544,30 +826,38 @@ function extractExperienceEntries(
   return uniqueBy(entries, (entry) => `${entry.role}|${entry.company}`).slice(0, 4);
 }
 
-function parseRoleCompany(line: string): ExperienceEntry | null {
-  const cleaned = line.replace(/^[-*•]\s*/, "").trim();
-  if (!cleaned || cleaned.length > 160) return null;
+function parseRoleCompany(line: string, fullName: string = ""): ExperienceEntry | null {
+  let cleaned = line.replace(/^[-*•]\s*/, "").trim();
+  if (!cleaned || cleaned.length > 200) return null;
   if (ALL_SECTION_ALIASES.has(normalizeKey(cleaned))) return null;
 
-  const atMatch = cleaned.match(/^(.+?)\s+at\s+(.+)$/i);
-  if (atMatch) {
-    const role = cleanRole(atMatch[1] ?? "");
-    const company = cleanCompany(atMatch[2] ?? "");
-    if (role && company) return { role, company };
+  // Remove full name prefix if present (e.g. "Lennox Galanje - Software Engineer")
+  if (fullName) {
+    const escapedName = fullName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const nameRegex = new RegExp(`^${escapedName}\\s*[-·•|]+\\s*`, "i");
+    cleaned = cleaned.replace(nameRegex, "").trim();
   }
 
-  const pipeMatch = cleaned.match(/^(.+?)\s+[|]\s+(.+)$/);
-  if (pipeMatch) {
-    const left = cleanRole(pipeMatch[1] ?? "");
-    const right = cleanCompany(pipeMatch[2] ?? "");
-    if (isLikelyRoleLine(left) && right) return { role: left, company: right };
+  const rolePatterns = [
+    /^(.+?)\s+(?:at|@|posisjon\s+hos|working\s+in)\s+(.+)$/i,
+    /^(.+?)\s+[|·•]\s+(.+)$/,
+    /^(.+?)\s+-\s+(.+)$/, // Added dash
+  ];
+
+  for (const pattern of rolePatterns) {
+    const match = cleaned.match(pattern);
+    if (match) {
+      const role = cleanRole(match[1] ?? "");
+      const company = cleanCompany(match[2] ?? "");
+      if (isLikelyRoleLine(role) && company) {
+        return { role, company };
+      }
+    }
   }
 
-  const dotMatch = cleaned.match(/^(.+?)\s+[·•]\s+(.+)$/);
-  if (dotMatch) {
-    const left = cleanRole(dotMatch[1] ?? "");
-    const right = cleanCompany(dotMatch[2] ?? "");
-    if (isLikelyRoleLine(left) && right) return { role: left, company: right };
+  // Fallback: If it's just a role line with high confidence, use it
+  if (isLikelyRoleLine(cleaned) && cleaned.length < 80) {
+    return { role: cleanRole(cleaned), company: "" };
   }
 
   return null;
@@ -707,8 +997,16 @@ function extractAchievements(lines: string[], achievementSection: string[]): str
 function inferMissingFromAvailable(profile: ProfileData, profileUrl: string): ProfileData {
   const inferred = { ...profile };
 
-  if (!inferred.fullName) {
-    inferred.fullName = titleCaseFromSlug(profileUrl);
+  if (!inferred.fullName || inferred.fullName === "N/A") {
+    inferred.fullName = titleCaseFromSlug(profileUrl) || "LinkedIn User";
+  }
+
+  if (!inferred.currentTitle && inferred.about) {
+    inferred.currentTitle = inferTitleFromAbout(inferred.about);
+  }
+
+  if (!inferred.currentCompany && inferred.about) {
+    inferred.currentCompany = inferCompanyFromText(inferred.about);
   }
 
   if ((!inferred.currentTitle || !inferred.currentCompany) && inferred.about) {
@@ -727,6 +1025,14 @@ function inferMissingFromAvailable(profile: ProfileData, profileUrl: string): Pr
     );
   }
 
+  if (!inferred.currentTitle && inferred.previousRoles[0]?.role) {
+    inferred.currentTitle = inferred.previousRoles[0].role;
+  }
+
+  if (!inferred.currentCompany && inferred.previousRoles[0]?.company) {
+    inferred.currentCompany = inferred.previousRoles[0].company;
+  }
+
   if (inferred.achievements.length === 0) {
     inferred.achievements = [
       ...inferred.certifications,
@@ -740,10 +1046,69 @@ function inferMissingFromAvailable(profile: ProfileData, profileUrl: string): Pr
   return inferred;
 }
 
+
+function inferTitleFromAbout(about: string): string {
+  const sentence = cleanProfileField(firstSentence(about, 160));
+  if (!sentence) return "";
+
+  const patterns = [
+    /\b(?:i am|i'm|im)\s+[A-Z][A-Za-z'-]+(?:\s+[A-Z][A-Za-z'-]+){0,2}\s*,\s*(?:an?|the)\s+([^.,|]{3,90})/i,
+    /\b(?:i am|i'm|im)\s+(?:an?|the)\s+([^.,|]{3,90})/i,
+    /\b(?:working|work)\s+as\s+(?:an?|the)\s+([^.,|]{3,90})/i,
+    /\b(?:currently|now)\s+(?:an?|the)\s+([^.,|]{3,90})/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = sentence.match(pattern);
+    const value = normalizeSentence(match?.[1] ?? "");
+    if (!value) continue;
+
+    const cleaned = cleanProfileField(
+      value
+      .replace(/\bwith\b[\s\S]*$/i, "")
+      .replace(/\bat\b[\s\S]*$/i, "")
+      .replace(/\bwho\b[\s\S]*$/i, "")
+      .replace(/[|:]+/g, " ")
+      .trim()
+    );
+
+    if (!cleaned) continue;
+    if (cleaned.length < 3 || cleaned.length > 80) continue;
+    if (!/[A-Za-z]/.test(cleaned)) continue;
+    return cleaned;
+  }
+
+  return "";
+}
+
+function inferCompanyFromText(text: string): string {
+  if (!text) return "";
+
+  const patterns = [
+    /\b(?:experience|pengalaman)\s*[:\-]\s*([A-Z][^|,.\n·]{2,80})/i,
+    /\bat\s+([A-Z][A-Za-z0-9&.' -]{2,80})/i,
+    /\bexperience\s*[:\-]\s*([A-Z][A-Za-z0-9&.' -]{2,80})/i,
+    /\bcompany\s*[:\-]\s*([A-Z][A-Za-z0-9&.' -]{2,80})/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    const candidate = cleanProfileField(normalizeSentence(match?.[1] ?? ""))
+      .split(/[|,;.!?]/)[0]
+      ?.trim();
+
+    if (!candidate) continue;
+    if (candidate.length < 2 || candidate.length > 80) continue;
+    if (/^(the|an|a)\b/i.test(candidate)) continue;
+    return candidate;
+  }
+
+  return "";
+}
+
 function collectGroundingFacts(profile: ProfileData): string[] {
   const facts: string[] = [];
 
-  if (profile.fullName) facts.push(profile.fullName);
   if (profile.currentTitle && profile.currentCompany) {
     facts.push(`${profile.currentTitle} at ${profile.currentCompany}`);
   } else if (profile.currentTitle || profile.currentCompany) {
@@ -788,7 +1153,7 @@ function collectGroundingFacts(profile: ProfileData): string[] {
 
 function hasMinimumGrounding(profile: ProfileData, facts: string[]): boolean {
   if (!profile.fullName) return false;
-  if (!profile.currentTitle && !profile.currentCompany) return false;
+  const hasRoleSignal = Boolean(profile.currentTitle || profile.currentCompany);
 
   const proofCount =
     profile.previousRoles.length +
@@ -798,35 +1163,31 @@ function hasMinimumGrounding(profile: ProfileData, facts: string[]): boolean {
     profile.education.length +
     profile.achievements.length;
 
-  return facts.length >= 4 && proofCount >= 2;
+  const hasNarrative = profile.about.length >= 40;
+  const hasEnoughFacts = facts.length >= 1; 
+  const hasEnoughEvidence = proofCount >= 1 || hasNarrative;
+
+  return hasEnoughFacts && (hasRoleSignal || hasEnoughEvidence);
 }
 
 type HeadlineJson = {
-  professional: string;
-  creative: string;
-  bold: string;
+  headlines: {
+    professional: string;
+    creative: string;
+    bold: string;
+  };
+  best_choice: "professional" | "creative" | "bold";
 };
 
 type HeadlineValidation = {
-  invalidTones: HeadlineTone[];
+  failed: Array<{ key: HeadlineTone; headline: string; reason: string }>;
 };
 
 async function generateHeadlinesWithValidation(
   profile: ProfileData
 ): Promise<HeadlineJson | null> {
   const userPrompt = buildProfilePrompt(profile);
-  const firstAttemptText = await requestHeadlineGeneration(
-    HEADLINE_SYSTEM_PROMPT,
-    `${userPrompt}
-
-Generate 3 LinkedIn headlines using the frameworks above.
-Return only a JSON object in this format:
-{
-  "professional": "...",
-  "creative": "...",
-  "bold": "..."
-}`
-  );
+  const firstAttemptText = await requestHeadlineGeneration(EXPERT_COPYWRITER_SYSTEM_PROMPT, userPrompt);
 
   if (!firstAttemptText) return null;
 
@@ -835,171 +1196,207 @@ Return only a JSON object in this format:
   parsed = sanitizeHeadlineJson(parsed);
 
   let validation = validateHeadlineJson(parsed, profile);
-  if (validation.invalidTones.length === 0) {
+  if (validation.failed.length === 0) {
     return parsed;
   }
 
-  const retryPrompt = `${userPrompt}
+  const feedback = validation.failed
+    .map(
+      (failure) =>
+        `The ${failure.key.toLowerCase()} headline "${failure.headline}" was rejected because: ${failure.reason}.`
+    )
+    .join(" ");
+  const correctionPrompt = `${userPrompt}
 
-Previous output:
-${JSON.stringify(parsed, null, 2)}
+${feedback}
 
-Failed variants: ${validation.invalidTones.join(", ")}
-The previous headline was too generic. Rewrite it using a specific detail from the profile and a concrete outcome or number.
+Rewrite ONLY the rejected headlines. Keep any that passed.
+Apply all the same rules. Be more specific.
+No names. No banned words. Under 220 characters each.
+Return the full JSON with all 3 headlines including
+any that were not rejected.`;
 
-Return only a JSON object in this format:
-{
-  "professional": "...",
-  "creative": "...",
-  "bold": "..."
-}`;
-
-  const retryText = await requestHeadlineGeneration(HEADLINE_SYSTEM_PROMPT, retryPrompt);
+  const retryText = await requestHeadlineGeneration(EXPERT_COPYWRITER_SYSTEM_PROMPT, correctionPrompt);
   if (!retryText) return parsed;
 
   const retryParsed = parseHeadlinePayload(retryText);
   if (!retryParsed) return parsed;
 
   parsed = sanitizeHeadlineJson({
-    professional: retryParsed.professional || parsed.professional,
-    creative: retryParsed.creative || parsed.creative,
-    bold: retryParsed.bold || parsed.bold,
+    headlines: {
+      professional: retryParsed.headlines.professional || parsed.headlines.professional,
+      creative: retryParsed.headlines.creative || parsed.headlines.creative,
+      bold: retryParsed.headlines.bold || parsed.headlines.bold,
+    },
+    best_choice: retryParsed.best_choice || parsed.best_choice,
   });
 
   validation = validateHeadlineJson(parsed, profile);
-  if (validation.invalidTones.length > 0) {
-    return null;
-  }
-
-  return parsed;
+  return validation.failed.length === 0 ? parsed : null;
 }
 
 function buildProfilePrompt(profile: ProfileData): string {
-  const currentRole = [profile.currentTitle, profile.currentCompany]
-    .filter(Boolean)
-    .join(" at ");
-  const previousRoles = profile.previousRoles
-    .slice(0, 3)
-    .map((entry) => `${entry.role} at ${entry.company}`.trim())
-    .filter(Boolean)
-    .join(", ");
-  const skills = profile.skills.slice(0, 8).join(", ");
-  const achievements = unique([
-    ...profile.certifications,
-    ...profile.achievements,
-    ...extractMetricTokens([profile.about, ...profile.achievements]),
-  ]).join(", ");
-
-  return `Here is the user's LinkedIn profile data:
-
-Name: ${profile.fullName || "N/A"}
-Current Role: ${currentRole || "N/A"}
-Previous Roles: ${previousRoles || "N/A"}
-Skills: ${skills || "N/A"}
-Summary: ${profile.about || "N/A"}
-Achievements: ${achievements || "N/A"}`;
+  return `<USER_PROFILE>
+Role: ${profile.currentTitle || "N/A"}
+Company: ${profile.currentCompany || "N/A"}
+Skills: ${profile.skills.slice(0, 5).join(", ") || "N/A"}
+Impact: ${profile.achievements.length > 0 ? profile.achievements[0] : "Driving customer success and business growth."}
+Goal: General career growth and leadership
+</USER_PROFILE>
+`;
 }
 
 async function requestHeadlineGeneration(
   systemPrompt: string,
   userPrompt: string
 ): Promise<string | null> {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) return null;
+  const messages = [
+    { role: "system" as const, content: systemPrompt },
+    { role: "user" as const, content: userPrompt },
+  ];
 
-  const model = process.env.OPENAI_MODEL || "gpt-4.1-mini";
-  const responsesPayload = {
-    model,
-    input: [
-      {
-        role: "system",
-        content: [{ type: "input_text", text: systemPrompt }],
-      },
-      {
-        role: "user",
-        content: [{ type: "input_text", text: userPrompt }],
-      },
-    ],
-    temperature: 0.5,
-    max_output_tokens: 500,
-  };
+  const groqApiKey = process.env.GROQ_API_KEY;
+  if (groqApiKey) {
+    try {
+      const groq = new Groq({ apiKey: groqApiKey });
+      const completion = await groq.chat.completions.create({
+        model: "llama-3.3-70b-versatile",
+        messages,
+        temperature: 0.8,
+        max_tokens: 500,
+      });
 
-  const responsesRequest = await fetchWithTimeout(
-    "https://api.openai.com/v1/responses",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(responsesPayload),
-      cache: "no-store",
-    },
-    30000
-  );
-
-  if (responsesRequest?.ok) {
-    const data = await responsesRequest.json().catch(() => null);
-    const text = extractResponsesText(data);
-    if (text) return text;
-  }
-
-  const chatPayload = {
-    model,
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: userPrompt },
-    ],
-    temperature: 0.5,
-    max_tokens: 500,
-  };
-
-  const chatRequest = await fetchWithTimeout(
-    "https://api.openai.com/v1/chat/completions",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(chatPayload),
-      cache: "no-store",
-    },
-    30000
-  );
-
-  if (!chatRequest?.ok) return null;
-
-  const chatData = (await chatRequest.json().catch(() => null)) as
-    | { choices?: Array<{ message?: { content?: string } }> }
-    | null;
-
-  return chatData?.choices?.[0]?.message?.content?.trim() || null;
-}
-
-function extractResponsesText(data: unknown): string {
-  if (!data || typeof data !== "object") return "";
-
-  const maybeOutputText = (data as { output_text?: unknown }).output_text;
-  if (typeof maybeOutputText === "string" && maybeOutputText.trim()) {
-    return maybeOutputText.trim();
-  }
-
-  const output = (data as { output?: unknown }).output;
-  if (!Array.isArray(output)) return "";
-
-  const chunks: string[] = [];
-
-  for (const item of output) {
-    const content = (item as { content?: unknown })?.content;
-    if (!Array.isArray(content)) continue;
-    for (const entry of content) {
-      const text = (entry as { text?: unknown })?.text;
-      if (typeof text === "string" && text.trim()) chunks.push(text.trim());
+      const raw = readGroqMessageContent(completion.choices[0]?.message?.content);
+      if (raw) return raw;
+    } catch {
+      // Fallback to Gemini below.
     }
   }
 
-  return chunks.join("\n").trim();
+  const geminiApiKey = process.env.GEMINI_API_KEY;
+  if (!geminiApiKey) return null;
+
+  try {
+    const genAI = new GoogleGenerativeAI(geminiApiKey);
+    const prompt = `${systemPrompt}\n\n${userPrompt}`;
+    const candidateModels = [
+      "gemini-1.5-flash",
+      "gemini-2.0-flash",
+      "gemini-2.5-flash",
+    ];
+
+    for (const modelName of candidateModels) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName });
+        const result = await model.generateContent(prompt);
+        const raw = result.response.text();
+        if (raw?.trim()) return raw.trim();
+      } catch {
+        // Try next model candidate.
+      }
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function readGroqMessageContent(content: unknown): string {
+  if (typeof content === "string") {
+    return content.trim();
+  }
+
+  if (!Array.isArray(content)) return "";
+
+  const text = content
+    .map((part) => {
+      if (!part || typeof part !== "object") return "";
+      const candidate = (part as { text?: unknown }).text;
+      return typeof candidate === "string" ? candidate : "";
+    })
+    .filter(Boolean)
+    .join("\n")
+    .trim();
+
+  return text;
+}
+
+async function extractProfileWithLLM(text: string, profileUrl: string): Promise<ProfileData | null> {
+  const result = await requestProfileExtraction(PROFILE_EXTRACTION_PROMPT, text);
+  if (!result) return null;
+
+  try {
+    const raw = result
+      .trim()
+      .replace(/^```(?:json)?/i, "")
+      .replace(/```$/i, "")
+      .trim();
+    const parsed = JSON.parse(raw);
+    
+    // Ensure all arrays and fields exist
+    const profile: ProfileData = {
+      fullName: parsed.fullName || titleCaseFromSlug(profileUrl),
+      currentHeadline: parsed.currentHeadline || "",
+      currentTitle: parsed.currentTitle || "",
+      currentCompany: parsed.currentCompany || "",
+      industry: parsed.industry || "",
+      previousRoles: Array.isArray(parsed.previousRoles) ? parsed.previousRoles : [],
+      skills: Array.isArray(parsed.skills) ? parsed.skills : [],
+      endorsements: Array.isArray(parsed.endorsements) ? parsed.endorsements : [],
+      about: parsed.about || "",
+      certifications: Array.isArray(parsed.certifications) ? parsed.certifications : [],
+      education: Array.isArray(parsed.education) ? parsed.education : [],
+      achievements: Array.isArray(parsed.achievements) ? parsed.achievements : [],
+    };
+    
+    return profile;
+  } catch (err) {
+    console.error("[DEBUG] Failed to parse LLM extraction JSON:", err);
+    return null;
+  }
+}
+
+async function requestProfileExtraction(
+  systemPrompt: string,
+  userPrompt: string
+): Promise<string | null> {
+  const messages = [
+    { role: "system" as const, content: systemPrompt },
+    { role: "user" as const, content: `Extract data from this profile text:\n\n${userPrompt.slice(0, 8000)}` },
+  ];
+
+  const groqApiKey = process.env.GROQ_API_KEY;
+  if (groqApiKey) {
+    try {
+      const groq = new Groq({ apiKey: groqApiKey });
+      const completion = await groq.chat.completions.create({
+        model: "llama-3.3-70b-versatile",
+        messages,
+        temperature: 0.1,
+        max_tokens: 1000,
+        response_format: { type: "json_object" },
+      });
+
+      return completion.choices[0]?.message?.content || null;
+    } catch {
+      // Fallback
+    }
+  }
+
+  const geminiApiKey = process.env.GEMINI_API_KEY;
+  if (geminiApiKey) {
+    try {
+      const genAI = new GoogleGenerativeAI(geminiApiKey);
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const result = await model.generateContent(`${systemPrompt}\n\n${userPrompt.slice(0, 8000)}`);
+      return result.response.text();
+    } catch {
+      // Fallback
+    }
+  }
+
+  return null;
 }
 
 function parseHeadlinePayload(raw: string): HeadlineJson | null {
@@ -1026,13 +1423,20 @@ function parseHeadlinePayload(raw: string): HeadlineJson | null {
 function tryParseHeadlineJson(value: string): HeadlineJson | null {
   try {
     const parsed = JSON.parse(value) as Partial<HeadlineJson>;
-    if (!parsed || typeof parsed !== "object") return null;
-    const professional = normalizeSentence(parsed.professional ?? "");
-    const creative = normalizeSentence(parsed.creative ?? "");
-    const bold = normalizeSentence(parsed.bold ?? "");
+    if (!parsed || typeof parsed !== "object" || !parsed.headlines) return null;
+    
+    const h = parsed.headlines;
+    const professional = normalizeSentence(h.professional ?? "");
+    const creative = normalizeSentence(h.creative ?? "");
+    const bold = normalizeSentence(h.bold ?? "");
+    const bestChoice = (parsed.best_choice || "professional").toLowerCase() as "professional" | "creative" | "bold";
 
     if (!professional || !creative || !bold) return null;
-    return { professional, creative, bold };
+    
+    return { 
+      headlines: { professional, creative, bold },
+      best_choice: ["professional", "creative", "bold"].includes(bestChoice) ? bestChoice : "professional"
+    };
   } catch {
     return null;
   }
@@ -1044,11 +1448,9 @@ function extractHeadlinesFromRawLines(raw: string): HeadlineJson | null {
     .map((line) => line.trim())
     .filter(Boolean);
 
-  const byLabel: Partial<HeadlineJson> = {};
+  const byLabel: Record<string, string> = {};
   for (const line of lines) {
-    const professionalMatch = line.match(
-      /(?:^|\b)professional\s*[:\-]\s*(.+)$/i
-    );
+    const professionalMatch = line.match(/(?:^|\b)professional\s*[:\-]\s*(.+)$/i);
     if (professionalMatch?.[1]) byLabel.professional = professionalMatch[1].trim();
 
     const creativeMatch = line.match(/(?:^|\b)creative\s*[:\-]\s*(.+)$/i);
@@ -1060,9 +1462,12 @@ function extractHeadlinesFromRawLines(raw: string): HeadlineJson | null {
 
   if (byLabel.professional && byLabel.creative && byLabel.bold) {
     return {
-      professional: normalizeSentence(byLabel.professional),
-      creative: normalizeSentence(byLabel.creative),
-      bold: normalizeSentence(byLabel.bold),
+      headlines: {
+        professional: normalizeSentence(byLabel.professional),
+        creative: normalizeSentence(byLabel.creative),
+        bold: normalizeSentence(byLabel.bold),
+      },
+      best_choice: "professional",
     };
   }
 
@@ -1078,46 +1483,103 @@ function extractHeadlinesFromRawLines(raw: string): HeadlineJson | null {
   if (candidateLines.length < 3) return null;
 
   return {
-    professional: normalizeSentence(candidateLines[0]),
-    creative: normalizeSentence(candidateLines[1]),
-    bold: normalizeSentence(candidateLines[2]),
+    headlines: {
+      professional: normalizeSentence(candidateLines[0]),
+      creative: normalizeSentence(candidateLines[1]),
+      bold: normalizeSentence(candidateLines[2]),
+    },
+    best_choice: "professional",
   };
 }
 
-function sanitizeHeadlineJson(headlines: HeadlineJson): HeadlineJson {
+function sanitizeHeadlineJson(json: HeadlineJson): HeadlineJson {
   return {
-    professional: sanitizeHeadline(limitHeadline(headlines.professional)),
-    creative: sanitizeHeadline(limitHeadline(headlines.creative)),
-    bold: sanitizeHeadline(limitHeadline(headlines.bold)),
+    headlines: {
+      professional: sanitizeHeadline(limitHeadline(json.headlines.professional)),
+      creative: sanitizeHeadline(limitHeadline(json.headlines.creative)),
+      bold: sanitizeHeadline(limitHeadline(json.headlines.bold)),
+    },
+    best_choice: json.best_choice,
   };
 }
 
 function validateHeadlineJson(
-  headlines: HeadlineJson,
+  json: HeadlineJson,
   profile: ProfileData
 ): HeadlineValidation {
   const anchors = buildProfileSpecificAnchors(profile);
-  const invalidTones: HeadlineTone[] = [];
+  const nameTokens = buildNameTokens(profile.fullName);
+  const failed: Array<{ key: HeadlineTone; headline: string; reason: string }> = [];
 
   const checks: Array<[HeadlineTone, string]> = [
-    ["Professional", headlines.professional],
-    ["Creative", headlines.creative],
-    ["Bold", headlines.bold],
+    ["Professional", json.headlines.professional],
+    ["Creative", json.headlines.creative],
+    ["Bold", json.headlines.bold],
   ];
 
-  for (const [tone, headline] of checks) {
-    const lower = headline.toLowerCase();
-    const hasBannedWord = BANNED_HEADLINE_TERMS.some((pattern) => pattern.test(lower));
-    const tooLong = headline.length >= 220;
-    const noSpecificDetail = !anchors.some((anchor) =>
-      lower.includes(anchor.toLowerCase())
-    );
-    if (hasBannedWord || tooLong || noSpecificDetail) {
-      invalidTones.push(tone);
+  for (const [key, headline] of checks) {
+    const check = validateHeadline(headline, nameTokens, SERVER_BANNED_WORDS, anchors);
+    if (!check.valid) {
+      failed.push({
+        key,
+        headline,
+        reason: check.reason,
+      });
     }
   }
 
-  return { invalidTones };
+  return { failed };
+}
+
+function validateHeadline(
+  headline: string,
+  nameTokens: string[],
+  bannedWords: string[],
+  anchors: string[]
+): { valid: boolean; reason: string } {
+  const lower = normalizeSentence(headline).toLowerCase();
+
+  if (nameTokens.some((token) => token && lower.includes(token))) {
+    return { valid: false, reason: "Contains person's name" };
+  }
+
+  if (bannedWords.some((word) => lower.includes(word))) {
+    return { valid: false, reason: "Contains banned word" };
+  }
+
+  if (headline.length > 220) {
+    return { valid: false, reason: "Exceeds 220 characters" };
+  }
+
+  if (headline.length < 30) {
+    return { valid: false, reason: "Too short to be meaningful" };
+  }
+
+  if (SUMMARY_REJECTION_PHRASES.some((phrase) => lower.includes(phrase))) {
+    return { valid: false, reason: "Reads like a profile summary" };
+  }
+
+  if (!anchors.some((anchor) => lower.includes(anchor.toLowerCase()))) {
+    return {
+      valid: false,
+      reason: "Does not contain a specific reference to the profile",
+    };
+  }
+
+  return { valid: true, reason: "" };
+}
+
+function buildNameTokens(fullName: string): string[] {
+  const compact = normalizeSentence(fullName || "").toLowerCase();
+  if (!compact) return [];
+
+  const tokens = compact
+    .split(/[^a-z0-9]+/)
+    .map((token) => token.trim())
+    .filter((token) => token.length >= 3);
+
+  if (compact.length >= 3) tokens.push(compact.replace(/\s+/g, ""));
+  return unique(tokens);
 }
 
 function buildProfileSpecificAnchors(profile: ProfileData): string[] {
@@ -1166,18 +1628,39 @@ function extractMetricTokens(fields: string[]): string[] {
 }
 
 function mapHeadlineJsonToOptions(
-  headlines: HeadlineJson,
+  json: HeadlineJson,
+  profile: ProfileData,
   facts: string[]
 ): HeadlineOption[] {
+  const options: Array<HeadlineOption & { isBest: boolean }> = [
+    { 
+      tone: "Professional", 
+      headline: json.headlines.professional,
+      isBest: json.best_choice === "professional"
+    },
+    { 
+      tone: "Creative", 
+      headline: json.headlines.creative,
+      isBest: json.best_choice === "creative"
+    },
+    { 
+      tone: "Bold", 
+      headline: json.headlines.bold,
+      isBest: json.best_choice === "bold"
+    },
+  ];
+
   return ensureDistinctHeadlines(
-    [
-      { tone: "Professional", headline: headlines.professional },
-      { tone: "Creative", headline: headlines.creative },
-      { tone: "Bold", headline: headlines.bold },
-    ].map((option) => ({
+    options.map((option) => ({
       ...option,
-      headline: ensureGroundedHeadline(option.headline, facts),
+      headline: enforceHeadlineStyle(
+        ensureGroundedHeadline(option.headline, facts),
+        option.tone,
+        profile,
+        facts
+      ),
     })),
+    profile,
     facts
   );
 }
@@ -1209,28 +1692,21 @@ function generateGroundedHeadlines(
 
   const grounded = candidates.map((candidate) => ({
     ...candidate,
-    headline: ensureGroundedHeadline(
-      sanitizeHeadline(limitHeadline(candidate.headline)),
+    headline: enforceHeadlineStyle(
+      ensureGroundedHeadline(sanitizeHeadline(limitHeadline(candidate.headline)), facts),
+      candidate.tone,
+      profile,
       facts
     ),
   }));
 
-  return ensureDistinctHeadlines(grounded, facts);
+  return ensureDistinctHeadlines(grounded, profile, facts);
 }
 
 function ensureGroundedHeadline(headline: string, facts: string[]): string {
-  const compact = normalizeSentence(headline);
-  const hasGroundedToken = facts.some((fact) => {
-    const pivot = fact.split(" ").slice(0, 3).join(" ").toLowerCase();
-    return pivot && compact.toLowerCase().includes(pivot);
-  });
-
-  if (hasGroundedToken) return compact;
-
-  const fallbackFact = facts[0] ?? "";
-  if (!fallbackFact) return compact;
-
-  return limitHeadline(`${compact} | ${fallbackFact}`);
+  // We no longer append facts, as it causes repetition. 
+  // We return the headline AS IS, after normalization.
+  return normalizeSentence(headline);
 }
 
 type HeadlineSignals = {
@@ -1248,7 +1724,7 @@ function deriveHeadlineSignals(
   profile: ProfileData,
   facts: string[]
 ): HeadlineSignals {
-  const identity = buildIdentity(profile) || facts[0] || profile.fullName;
+  const identity = buildIdentity(profile) || facts[0] || profile.currentTitle || "Professional";
   const whoYouAre = buildWhoYouAre(profile, identity);
   const targetAudience = extractTargetAudience(profile) || inferAudience(profile, facts);
   const quantifiedAchievement = extractQuantifiedAchievement(profile);
@@ -1306,7 +1782,15 @@ function buildIdentity(profile: ProfileData): string {
   if (profile.currentTitle && profile.currentCompany) {
     return `${profile.currentTitle} at ${profile.currentCompany}`;
   }
-  return profile.currentTitle || profile.currentCompany || profile.fullName;
+  if (profile.currentTitle || profile.currentCompany) {
+    return profile.currentTitle || profile.currentCompany;
+  }
+  if (profile.previousRoles[0]?.role || profile.previousRoles[0]?.company) {
+    return [profile.previousRoles[0].role, profile.previousRoles[0].company]
+      .filter(Boolean)
+      .join(" at ");
+  }
+  return profile.skills[0] || "Professional";
 }
 
 function buildWhoYouAre(profile: ProfileData, identity: string): string {
@@ -1451,30 +1935,196 @@ function sanitizeHeadline(value: string): string {
   }
 
   cleaned = cleaned
-    .replace(/\s+\|\s+\|/g, " | ")
+    .replace(/\s*[|│·]\s*[|│·]/g, " | ")
     .replace(/\s{2,}/g, " ")
-    .replace(/\s+([|,.])/g, "$1")
-    .replace(/([|,.]){2,}/g, "$1")
+    .replace(/\s+([|│·,.])/g, "$1")
+    .replace(/([|│·,.]){2,}/g, "$1")
     .trim();
 
   return cleaned;
 }
 
+function enforceHeadlineStyle(
+  headline: string,
+  tone: HeadlineTone,
+  profile: ProfileData,
+  facts: string[]
+): string {
+  let cleaned = sanitizeHeadline(limitHeadline(headline));
+  const nameTokens = buildNameTokens(profile.fullName);
+
+  // Aggressive name token removal (Full Name -> Last Name -> First Name)
+  for (const token of nameTokens.sort((a, b) => b.length - a.length)) {
+    const escapedToken = token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    cleaned = cleaned.replace(new RegExp(`\\b${escapedToken}\\b`, "gi"), "");
+  }
+
+  for (const pattern of DISALLOWED_STYLE_PATTERNS) {
+    cleaned = cleaned.replace(pattern, "");
+  }
+
+  // High-fidelity name prefix removal
+  cleaned = cleaned
+    .replace(/^[A-Z][a-z]+\s+is\s+(?:an?|the)\s+([^.,|]{3,})/gi, "$1") // "Lennox is a Developer" -> "Developer"
+    .replace(/^[A-Z][a-z]+\s+(?:is|works at)\s+/gi, "") 
+    .replace(/\b(?:he|she|they)\s+(?:is|has|works)\b/gi, "")
+    .replace(/\b(?:i am|i'm)\b/gi, "")
+    .replace(/\b(?:passionate about|at|based in|previously|role)\b$/gi, "")
+    .replace(/[.!?]+/g, " ")
+    .replace(/\s*[|│·]\s*[|│·]/g, " | ")
+    .replace(/\s{2,}/g, " ")
+    .replace(/^[|│·,.\-:\s]+/, "")
+    .replace(/[|│·,.\-:\s]+$/, "")
+    .trim();
+
+  // Handle common trailing junk post-removal
+  if (cleaned.toLowerCase().startsWith("is ")) cleaned = cleaned.slice(3).trim();
+  if (cleaned.toLowerCase().startsWith("a ")) cleaned = cleaned.slice(2).trim();
+
+  if (isInvalidHeadlineStyle(cleaned, profile, facts)) {
+    cleaned = buildFallbackHeadlineForTone(tone, profile, facts);
+  }
+
+  return limitHeadline(sanitizeHeadline(cleaned));
+}
+
+function isInvalidHeadlineStyle(
+  headline: string,
+  profile: ProfileData,
+  facts: string[]
+): boolean {
+  const lower = normalizeSentence(headline).toLowerCase();
+  if (!lower) return true;
+  if (/[.!?]/.test(headline)) return true;
+  if (DISALLOWED_STYLE_PATTERNS.some((pattern) => pattern.test(lower))) return true;
+  if (BANNED_HEADLINE_TERMS.some((pattern) => pattern.test(lower))) return true;
+  if (buildNameTokens(profile.fullName).some((token) => lower.includes(token))) return true;
+
+  const hasSpecificDetail = buildProfileSpecificAnchors(profile).some((anchor) =>
+    lower.includes(anchor.toLowerCase())
+  );
+
+  return !hasSpecificDetail || facts.length === 0;
+}
+
+function buildFallbackHeadlineForTone(
+  tone: HeadlineTone,
+  profile: ProfileData,
+  facts: string[]
+): string {
+  const title = compactPhrase(profile.currentTitle) || "Creative professional";
+  const company = compactPhrase(profile.currentCompany);
+  const skillA = compactPhrase(profile.skills[0]);
+  const skillB = compactPhrase(profile.skills[1]);
+  const education = compactPhrase(profile.education[0]);
+  const achievement = compactPhrase(profile.achievements[0]);
+
+  if (tone === "Professional") {
+    return [title, company ? `at ${company}` : "", skillA, skillB]
+      .filter(Boolean)
+      .join(" · ")
+      .replace(/\s·\sat\s/i, " at ");
+  }
+
+  if (tone === "Creative") {
+    if (title.toLowerCase().includes("designer") && skillA) {
+      return `${skillA} designer turning ideas into polished brand work`;
+    }
+    if (skillA && company) {
+      return `${title} focused on ${skillA} for ${company}`;
+    }
+    return [title, skillA || education || achievement || facts[0] || ""]
+      .filter(Boolean)
+      .join(" · ");
+  }
+
+  if (tone === "Bold") {
+    // [Strong POV or surprising claim] │ [Proof point] │ [Role + keyword]
+    const segment1 = achievement || `${title} at ${company || "Enterprise"}`;
+    const segment2 = skillA || skillB || title;
+    return [segment1, segment2].filter(Boolean).join(" │ ");
+  }
+
+  return [title, skillA || education || facts[0] || ""].filter(Boolean).join(" · ");
+}
+
+function compactPhrase(value: string): string {
+  return cleanProfileField(normalizeSentence(value || ""))
+    .replace(/\b(?:she|he)\b[\s\S]*$/i, "")
+    .replace(/[.!?]+/g, " ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
+function cleanProfileField(value: string): string {
+  if (!value) return "";
+  let cleaned = normalizeSentence(value)
+    .replace(/\b(?:pengalaman|pendidikan|lokasi)\s*:\s*/gi, "")
+    .replace(/\bau\.?linkedin\.?com\b/gi, "")
+    .replace(/\blinkedin\.?com\b/gi, "")
+    .replace(/\b(?:current job title|current role|current company)\s+is\b/gi, "")
+    .replace(/\b(?:he|she|they)\s+previously worked as\b/gi, "")
+    .replace(/\bpreviously worked as\b/gi, "")
+    .replace(/\b(?:their\s+)?skills include\b/gi, "")
+    .replace(/\b(?:their\s+)?achievements include\b/gi, "")
+    .replace(/\bI'?m\s+[A-Z][A-Za-z'-]+(?:\s+[A-Z][A-Za-z'-]+){0,2}\b[,]?/g, "")
+    .replace(/\s+[·|]\s+.*$/g, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
+  for (const pattern of TECH_NOISE_REMOVAL_PATTERNS) {
+    cleaned = cleaned.replace(pattern, "");
+  }
+
+  return cleaned.replace(/\s{2,}/g, " ").trim();
+}
+
+function sanitizeProfileData(profile: ProfileData): ProfileData {
+  return {
+    ...profile,
+    fullName: cleanProfileField(profile.fullName),
+    currentTitle: cleanProfileField(profile.currentTitle),
+    currentCompany: cleanProfileField(profile.currentCompany),
+    about: cleanProfileField(profile.about),
+    skills: (profile.skills || []).map(cleanProfileField).filter(Boolean),
+    achievements: (profile.achievements || []).map(cleanProfileField).filter(Boolean),
+    endorsements: (profile.endorsements || []).map(cleanProfileField).filter(Boolean),
+    education: (profile.education || []).map(cleanProfileField).filter(Boolean),
+    certifications: (profile.certifications || []).map(cleanProfileField).filter(Boolean),
+    previousRoles: (profile.previousRoles || []).map((role) => ({
+      ...role,
+      role: cleanProfileField(role.role),
+      company: cleanProfileField(role.company),
+    })),
+  };
+}
+
+function isNoiseProfileLine(value: string): boolean {
+  const lower = normalizeSentence(value || "").toLowerCase();
+  if (!lower) return false;
+  return PROFILE_NOISE_PHRASES.some((phrase) => lower.includes(phrase));
+}
+
 function ensureDistinctHeadlines(
   headlines: HeadlineOption[],
+  profile: ProfileData,
   facts: string[]
 ): HeadlineOption[] {
   const seen = new Set<string>();
+  const safeFacts = facts.filter((fact) => {
+    const lower = fact.toLowerCase();
+    return !buildNameTokens(profile.fullName).some((token) => lower.includes(token));
+  });
 
   return headlines.map((headline, index) => {
     let updated = headline.headline;
     let key = updated.toLowerCase();
 
     if (seen.has(key)) {
-      const extraFact = facts[index + 1] || facts[0] || "";
+      const extraFact = safeFacts[index + 1] || safeFacts[0] || "";
       if (extraFact) {
         updated = limitHeadline(`${updated} | ${extraFact}`);
-        updated = sanitizeHeadline(updated);
+        updated = enforceHeadlineStyle(updated, headline.tone, profile, facts);
         key = updated.toLowerCase();
       }
     }
@@ -1552,27 +2202,6 @@ function limitHeadline(value: string): string {
   return `${compact.slice(0, 217).trim()}...`;
 }
 
-function stripHtml(html: string): string {
-  return html
-    .replace(/<script[\s\S]*?<\/script>/gi, " ")
-    .replace(/<style[\s\S]*?<\/style>/gi, " ")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&#39;/g, "'")
-    .replace(/&quot;/g, '"')
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function decodeHtmlEntities(value: string): string {
-  return value
-    .replace(/&amp;/g, "&")
-    .replace(/&#x2F;/g, "/")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'");
-}
-
 function unique<T>(items: T[]): T[] {
   return [...new Set(items)];
 }
@@ -1590,3 +2219,4 @@ function uniqueBy<T>(items: T[], keySelector: (item: T) => string): T[] {
 
   return result;
 }
+

@@ -10,6 +10,7 @@ type HeadlineTone = "Professional" | "Creative" | "Bold";
 type HeadlineOption = {
   tone: HeadlineTone;
   headline: string;
+  isBest?: boolean;
 };
 
 type GenerateResponse = {
@@ -360,48 +361,89 @@ export default function HeadlineGeneratorPage() {
                 ) : null}
 
                 {!isLoading && hasResults ? (
-                  <div className="mt-8 space-y-4">
-                    {headlines.map((option) => {
-                      const isCopied = copiedTone === option.tone;
+                  <div className="mt-8 space-y-6">
+                    {/* Primary Hero Choice */}
+                    {(() => {
+                      const best = headlines.find((h) => h.isBest) || headlines[0];
+                      const alternates = headlines.filter((h) => h.tone !== best.tone);
+                      const isCopied = copiedTone === best.tone;
 
                       return (
-                        <article
-                          key={option.tone}
-                          className="relative rounded-2xl border border-slate-200 bg-white p-5 md:p-6 shadow-sm hover:shadow-md transition-shadow"
-                        >
-                          <div className="flex items-center justify-between gap-3 mb-4">
-                            <span
-                              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wide ${BADGE_CLASSES[option.tone]}`}
-                            >
-                              {option.tone}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => handleCopy(option)}
-                              className="cursor-pointer inline-flex items-center justify-center w-9 h-9 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-[#213856] hover:border-slate-300 transition-all active:scale-95"
-                              aria-label={`Copy ${option.tone} headline`}
-                            >
-                              {isCopied ? (
-                                <Check className="w-4.5 h-4.5 text-emerald-600" />
-                              ) : (
-                                <Copy className="w-4.5 h-4.5" />
-                              )}
-                            </button>
-                          </div>
-                          <p className="text-xl md:text-2xl font-semibold text-[#213856] leading-snug tracking-tight">
-                            {option.headline}
-                          </p>
-                        </article>
-                      );
-                    })}
+                        <div className="space-y-6">
+                          <article className="relative rounded-[32px] border-2 border-[#3b82f6]/30 bg-gradient-to-br from-white to-blue-50/30 p-8 shadow-xl shadow-blue-900/5 overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100/20 blur-3xl -z-0"></div>
+                            <div className="flex items-center justify-between gap-3 mb-6 relative z-10">
+                              <div className="flex items-center gap-3">
+                                <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-bold tracking-widest uppercase ${BADGE_CLASSES[best.tone]}`}>
+                                  {best.tone}
+                                </span>
+                                <span className="flex items-center gap-1.5 text-blue-600 font-bold text-xs">
+                                  <Sparkles className="w-3.5 h-3.5" />
+                                  EXPERT BEST CHOICE
+                                </span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleCopy(best)}
+                                className="cursor-pointer inline-flex items-center justify-center w-11 h-11 rounded-xl border border-slate-200 bg-white text-slate-500 hover:text-[#3b82f6] hover:border-[#3b82f6]/40 transition-all active:scale-95 shadow-sm"
+                                aria-label={`Copy ${best.tone} headline`}
+                              >
+                                {isCopied ? (
+                                  <Check className="w-5 h-5 text-emerald-600" />
+                                ) : (
+                                  <Copy className="w-5 h-5" />
+                                )}
+                              </button>
+                            </div>
+                            <p className="text-2xl md:text-3xl font-bold text-[#0d2137] leading-[1.2] tracking-tight relative z-10">
+                              {best.headline}
+                            </p>
+                          </article>
 
-                    <div className="pt-2">
+                          {/* Secondary Variations */}
+                          <div className="grid sm:grid-cols-2 gap-4">
+                            {alternates.map((option) => {
+                              const isAltCopied = copiedTone === option.tone;
+                              return (
+                                <article
+                                  key={option.tone}
+                                  className="relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all group"
+                                >
+                                  <div className="flex items-center justify-between gap-3 mb-4">
+                                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase ${BADGE_CLASSES[option.tone]}`}>
+                                      {option.tone}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleCopy(option)}
+                                      className="cursor-pointer inline-flex items-center justify-center w-9 h-9 rounded-lg border border-slate-100 bg-slate-50/50 text-slate-400 hover:text-[#0d2137] hover:border-slate-200 transition-all active:scale-95"
+                                      aria-label={`Copy ${option.tone} headline`}
+                                    >
+                                      {isAltCopied ? (
+                                        <Check className="w-4 h-4 text-emerald-600" />
+                                      ) : (
+                                        <Copy className="w-4 h-4" />
+                                      )}
+                                    </button>
+                                  </div>
+                                  <p className="text-lg font-semibold text-[#213856] leading-snug tracking-tight">
+                                    {option.headline}
+                                  </p>
+                                </article>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })()}
+
+                    <div className="pt-4 flex justify-center">
                       <button
                         type="button"
                         onClick={resetGenerator}
-                        className="cursor-pointer bg-transparent text-[#0d2137] hover:bg-slate-100 px-5 py-2.5 rounded-md font-semibold text-sm transition-all border border-slate-200"
+                        className="cursor-pointer bg-slate-100 hover:bg-slate-200 text-[#0d2137] px-8 py-3 rounded-xl font-bold text-sm transition-all"
                       >
-                        Try Again
+                        Try Another Profile
                       </button>
                     </div>
                   </div>
@@ -414,18 +456,20 @@ export default function HeadlineGeneratorPage() {
 
       <footer className="bg-[#0d2137] pt-16 pb-8">
         <div className="max-w-7xl mx-auto px-6">
+          {/* Main Footer Container */}
           <div className="bg-white/[0.03] backdrop-blur-3xl rounded-[32px] border border-white/[0.08] p-10 md:p-14 relative overflow-hidden">
-            <div className="absolute -top-24 -left-24 w-48 h-48 bg-blue-500/10 blur-[80px] rounded-full pointer-events-none" />
+            {/* Subtle light leak for glass effect */}
+            <div className="absolute -top-24 -left-24 w-48 h-48 bg-blue-500/10 blur-[80px] rounded-full pointer-events-none"></div>
 
             <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 relative z-10">
+              {/* Left Column — Brand */}
               <div className="lg:max-w-sm space-y-5">
                 <div className="flex items-center whitespace-nowrap min-w-0">
                   <Image
                     src="/images/logo-white.svg"
-                    alt="LinkedIn Optimizer Pro logo"
+                    alt="logo-white"
                     width={176}
                     height={44}
-                    sizes="176px"
                     className="h-11 w-auto object-contain"
                   />
                   <span className="font-bold text-base sm:text-lg md:text-xl text-white tracking-tight">
@@ -436,11 +480,12 @@ export default function HeadlineGeneratorPage() {
                   </span>
                 </div>
                 <p className="text-slate-400 text-[15px] leading-relaxed">
-                  Create high-performing LinkedIn content without overthinking it.
+                  Create high-performing LinkedIn content—without overthinking it.
                   Show up consistently with clarity and confidence.
                 </p>
               </div>
 
+              {/* Right Columns — Links */}
               <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 gap-8 lg:gap-12 lg:justify-items-end">
                 <div>
                   <h4 className="font-semibold text-white mb-5 text-[15px]">Product</h4>
@@ -463,10 +508,10 @@ export default function HeadlineGeneratorPage() {
                     </li>
                     <li>
                       <Link
-                        href="/#pricing"
+                        href="/#qrgenerator"
                         className="text-slate-400 hover:text-white transition-colors text-[15px]"
                       >
-                        Pricing
+                        QR Generator
                       </Link>
                     </li>
                   </ul>
@@ -476,18 +521,18 @@ export default function HeadlineGeneratorPage() {
                   <ul className="space-y-3">
                     <li>
                       <Link
-                        href="/#features"
+                        href="/#pricing"
                         className="text-slate-400 hover:text-white transition-colors text-[15px]"
                       >
-                        Features
+                        Pricing
                       </Link>
                     </li>
                     <li>
                       <Link
-                        href="/#how-it-works"
+                        href="/#blog"
                         className="text-slate-400 hover:text-white transition-colors text-[15px]"
                       >
-                        How it Works
+                        Blog
                       </Link>
                     </li>
                     <li>
@@ -502,18 +547,34 @@ export default function HeadlineGeneratorPage() {
                 </div>
                 <div className="flex flex-col items-start sm:items-end col-span-2 sm:col-span-1 mt-6 sm:mt-0">
                   <div className="flex flex-row sm:flex-col items-center sm:items-end gap-3">
+                    {/* LinkedIn */}
                     <a
                       href="#"
-                      className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+                      className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-300 group"
                       aria-label="LinkedIn"
                     >
                       <span className="font-bold text-[19px] tracking-tighter pb-1 pr-0.5">
                         in
                       </span>
                     </a>
+                    {/* X (Twitter) */}
+                    <a
+                      href="#"
+                      className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-300 group"
+                      aria-label="X"
+                    >
+                      <svg
+                        className="w-[17px] h-[17px]"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                      </svg>
+                    </a>
+                    {/* Email */}
                     <a
                       href="mailto:contact@optimizerpro.com"
-                      className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+                      className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-300 group"
                       aria-label="Email"
                     >
                       <svg
@@ -530,6 +591,7 @@ export default function HeadlineGeneratorPage() {
             </div>
           </div>
 
+          {/* Bottom Bar */}
           <div className="py-6 mt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
             <span className="text-white/40 text-sm font-normal font-sans">
               © 2026 LinkedIn Optimizer Pro. All rights reserved.
