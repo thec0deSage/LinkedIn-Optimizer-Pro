@@ -66,6 +66,14 @@ export function SiteFooter({ anchorPrefix = "" }: SiteFooterProps) {
                 <ul className="space-y-3">
                   <li>
                     <Link
+                      href="/login"
+                      className="text-slate-400 hover:text-white transition-colors text-[15px]"
+                    >
+                      Get Started
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       href={`${anchorPrefix}#pricing`}
                       className="text-slate-400 hover:text-white transition-colors text-[15px]"
                     >
@@ -78,14 +86,6 @@ export function SiteFooter({ anchorPrefix = "" }: SiteFooterProps) {
                       className="text-slate-400 hover:text-white transition-colors text-[15px]"
                     >
                       Blog
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/login"
-                      className="text-slate-400 hover:text-white transition-colors text-[15px]"
-                    >
-                      Get Started
                     </Link>
                   </li>
                 </ul>
