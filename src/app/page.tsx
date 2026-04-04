@@ -626,7 +626,7 @@ export default function Home() {
 
               <div className="relative z-10 shrink-0">
                 <Link
-                  href="/login"
+                  href="/post-generator"
                   className="cursor-pointer inline-flex items-center justify-center bg-[#3b82f6] hover:bg-[#2563eb] text-white px-10 py-3 rounded-full font-semibold text-base transition-all active:scale-95 shadow-[0_8px_20px_-4px_rgba(59,130,246,0.3)]"
                 >
                   Try Optimizer Pro
