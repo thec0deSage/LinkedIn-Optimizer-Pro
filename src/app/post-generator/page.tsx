@@ -13,8 +13,6 @@ import {
   Calendar,
   Save,
 } from "lucide-react";
-import { MarketingNav } from "@/components/marketing-nav";
-import { SiteFooter } from "@/components/site-footer";
 import {
   type PostDraft,
   type PostTone,
@@ -22,12 +20,6 @@ import {
   type CTAType,
   getInitials,
 } from "@/lib/post-generator";
-
-const TOOL_PAGE_LINKS = [
-  { label: "Features", href: "/#features" },
-  { label: "How it Works", href: "/#how-it-works" },
-  { label: "Pricing", href: "/#pricing" },
-];
 
 const TONE_OPTIONS: PostTone[] = [
   "Professional",
@@ -151,8 +143,6 @@ export default function PostGeneratorPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-      <MarketingNav desktopLinks={TOOL_PAGE_LINKS} />
-
       <main className="flex-1 pt-20">
         <section className="relative overflow-hidden py-14 md:py-20 bg-dot-grid">
           <div className="absolute top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-200/20 blur-[100px] pointer-events-none" />
@@ -490,8 +480,6 @@ export default function PostGeneratorPage() {
           </div>
         </section>
       </main>
-
-      <SiteFooter />
     </div>
   );
 }
