@@ -1,485 +1,352 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  Check,
-  Copy,
-  LoaderCircle,
-  RefreshCcw,
-  Sparkles,
-  TrendingUp,
-  MessageCircle,
-  Share2,
+  LayoutGrid,
+  PenSquare,
   Calendar,
-  Save,
+  FolderOpen,
+  Settings,
+  Search,
+  Bell,
+  Sparkles,
+  Eye,
+  Copy,
+  RefreshCw,
+  Rocket,
+  GraduationCap,
+  HeartHandshake,
+  ChevronDown,
+  User,
+  Zap,
+  Mic,
 } from "lucide-react";
-import {
-  type PostDraft,
-  type PostTone,
-  type PostLength,
-  type CTAType,
-  getInitials,
-} from "@/lib/post-generator";
 
-const TONE_OPTIONS: PostTone[] = [
-  "Professional",
-  "Thought Leader",
-  "Educational",
-  "Empathetic",
+// --- Types ---
+type ToneProfile = {
+  id: string;
+  label: string;
+  subtitle: string;
+  icon: React.ReactNode;
+};
+
+type PostLength = "short" | "medium" | "long";
+
+type CTAType =
+  | "Engagement Question"
+  | "Call to Action"
+  | "Soft Sell"
+  | "Story Hook";
+
+type GeneratorState = {
+  topic: string;
+  selectedTone: string;
+  length: PostLength;
+  ctaType: CTAType;
+  isGenerating: boolean;
+  previewContent: string;
+};
+
+// --- Constants ---
+const PRESET_POSTS: string[] = [];
+
+const TONES: ToneProfile[] = [
+  {
+    id: "your-tone",
+    label: "Your Tone",
+    subtitle: "Authoritative & Conversational",
+    icon: <User className="w-5 h-5 text-blue-600" />,
+  },
+  {
+    id: "thought-leader",
+    label: "Thought Leader",
+    subtitle: "Insightful & Provocative",
+    icon: <Rocket className="w-5 h-5 text-slate-500" />,
+  },
+  {
+    id: "educational",
+    label: "Educational",
+    subtitle: "Step-by-step & Value-packed",
+    icon: <GraduationCap className="w-5 h-5 text-slate-500" />,
+  },
+  {
+    id: "empathetic",
+    label: "Empathetic",
+    subtitle: "Vulnerable & Relatable",
+    icon: <HeartHandshake className="w-5 h-5 text-slate-500" />,
+  },
 ];
 
-const LENGTH_OPTIONS: PostLength[] = ["Short", "Medium", "Long"];
-
-const CTA_TYPE_OPTIONS: CTAType[] = [
+const LENGTH_OPTIONS: PostLength[] = ["short", "medium", "long"];
+const CTA_OPTIONS: CTAType[] = [
   "Engagement Question",
-  "Call-to-Action",
-  "Social Proof",
-  "Educational Focus",
-  "No CTA",
+  "Call to Action",
+  "Soft Sell",
+  "Story Hook",
 ];
 
-export default function PostGeneratorPage() {
-  const [topic, setTopic] = useState("");
-  const [tone, setTone] = useState<PostTone>("Professional");
-  const [length, setLength] = useState<PostLength>("Medium");
-  const [ctaType, setCTAType] = useState<CTAType>("Engagement Question");
-  const [fieldError, setFieldError] = useState("");
-  const [apiError, setApiError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [draft, setDraft] = useState<PostDraft | null>(null);
-  const [variation, setVariation] = useState(0);
-  const [copied, setCopied] = useState(false);
+// --- Components ---
 
-  useEffect(() => {
-    if (!copied) return;
+function Sidebar({ plan = "Free Plan" }: { plan?: string }) {
+  return (
+    <aside className="w-[260px] shrink-0 bg-[#0d1526] flex flex-col h-screen overflow-y-auto">
+      <div className="px-4 py-6 flex items-center gap-1">
+        <img src="/images/logo-white.svg" alt="Logo" className="w-8 h-8 object-contain shrink-0" />
+        <span className="text-[17px] text-white font-dm-sans tracking-tight whitespace-nowrap">
+          <span className="font-bold">LinkedIn</span> <span className="text-slate-300">Optimizer Pro</span>
+        </span>
+      </div>
 
-    const timer = window.setTimeout(() => setCopied(false), 1800);
-    return () => window.clearTimeout(timer);
-  }, [copied]);
+      <div className="px-4 mb-6">
+        <button className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-100 transition-colors text-[#0d1526] py-2.5 rounded-lg text-sm font-bold shadow-sm">
+          <PenSquare className="w-4 h-4" />
+          New Post
+        </button>
+      </div>
+      <nav className="flex-1 px-3 space-y-1">
+        <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-white/10 hover:text-white transition-colors text-sm font-medium">
+          <LayoutGrid className="w-5 h-5" />
+          Dashboard
+        </a>
+        <a href="#" className="flex items-center gap-3 px-3 py-2.5 bg-white/10 text-white border-l-2 border-white rounded-lg text-sm font-semibold shadow-sm">
+          <PenSquare className="w-5 h-5" />
+          Create
+        </a>
+        <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-white/10 hover:text-white transition-colors text-sm font-medium">
+          <Calendar className="w-5 h-5" />
+          Calendar
+        </a>
+        <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-white/10 hover:text-white transition-colors text-sm font-medium">
+          <FolderOpen className="w-5 h-5" />
+          Assets
+        </a>
+      </nav>
+      <div className="p-4 border-t border-white/10 space-y-4">
+        <a href="#" className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-white/10 hover:text-white transition-colors text-sm font-medium">
+          <Settings className="w-5 h-5" />
+          Settings
+        </a>
+        <div className="flex items-center gap-3 px-3">
+          <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-white/20 shrink-0">
+            <User className="w-4 h-4 text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold text-white truncate">User</p>
+            <p className="text-[10px] text-slate-400 truncate tracking-wider font-semibold">{plan}</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+}
 
-  async function requestDraft(nextVariation: number) {
-    setIsLoading(true);
-    setApiError("");
+function TopBar() {
+  return (
+    <header className="h-[72px] border-b border-slate-200 bg-white flex items-center justify-end px-6 shrink-0 z-10">
+      <div className="flex items-center gap-6">
+        <div className="flex flex-col gap-1 w-32">
+          <div className="flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase">
+            <span>Credits</span>
+            <span className="text-blue-600">5/5</span>
+          </div>
+          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+            <div className="h-full bg-blue-500 rounded-full" style={{ width: "100%" }}></div>
+          </div>
+        </div>
 
-    try {
-      const response = await fetch("/api/post-generator", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          topic,
-          tone,
-          length,
-          ctaType,
-          variation: nextVariation,
-        }),
-      });
+        <button className="text-slate-400 hover:text-slate-600 relative">
+          <Bell className="w-5 h-5" />
+        </button>
+      </div>
+    </header>
+  );
+}
 
-      const payload = (await response.json().catch(() => null)) as
-        | { draft?: PostDraft; message?: string }
-        | null;
+export default function AppShell() {
+  const [state, setState] = useState<GeneratorState>({
+    topic: "",
+    selectedTone: "your-tone",
+    length: "medium",
+    ctaType: "Engagement Question",
+    isGenerating: false,
+    previewContent: PRESET_POSTS[0] || "",
+  });
 
-      if (!response.ok || !payload?.draft) {
-        setApiError(
-          payload?.message ??
-            "We could not generate a post right now. Please try again."
-        );
-        return;
-      }
+  const handleGenerate = () => {
+    setState((s) => ({ ...s, isGenerating: true }));
+    setTimeout(() => {
+      const next =
+        PRESET_POSTS.length > 0 ? PRESET_POSTS[Math.floor(Math.random() * PRESET_POSTS.length)] : "";
+      setState((s) => ({ ...s, isGenerating: false, previewContent: next }));
+    }, 1800);
+  };
 
-      setVariation(nextVariation);
-      setDraft(payload.draft);
-      setCopied(false);
-    } catch {
-      setApiError(
-        "We hit a network issue while generating your post. Please try again."
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  async function handleGenerate(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const trimmedTopic = topic.trim();
-
-    if (!trimmedTopic) {
-      setFieldError("Add a topic to generate a post.");
-      setApiError("");
-      return;
-    }
-
-    setFieldError("");
-    await requestDraft(variation + 1);
-  }
-
-  async function handleRegenerate() {
-    if (!topic.trim()) {
-      setFieldError("Add a topic to regenerate a post.");
-      return;
-    }
-
-    setFieldError("");
-    await requestDraft(variation + 1);
-  }
-
-  async function handleCopy() {
-    if (!draft) return;
-
-    try {
-      const postContent = `${draft.title}\n\n${draft.content}${
-        draft.callToAction ? `\n\n${draft.callToAction}` : ""
-      }`;
-      await navigator.clipboard.writeText(postContent);
-      setCopied(true);
-    } catch {
-      setApiError("We could not copy the post right now. Please copy it manually.");
-    }
-  }
-
-  const displayName = "Your Name";
+  const updateState = (patch: Partial<GeneratorState>) => {
+    setState((prev) => ({ ...prev, ...patch }));
+  };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-      <main className="flex-1 pt-20">
-        <section className="relative overflow-hidden py-14 md:py-20 bg-dot-grid">
-          <div className="absolute top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-200/20 blur-[100px] pointer-events-none" />
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex flex-col items-center justify-center gap-4 md:gap-6 mb-8 md:mb-10">
-              <div className="relative inline-flex items-center gap-3 px-6 py-3 bg-[#eef4ff] border border-[#dce6f2] rounded-[22px] shadow-sm">
-                {/* LinkedIn Icon */}
-                <div className="bg-[#0A66C2] p-1.5 rounded-lg shadow-sm">
-                  <svg className="w-7 h-7 text-white fill-current" viewBox="0 0 24 24">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                  </svg>
+    <div className="flex h-screen bg-white font-dm-sans overflow-hidden">
+      <Sidebar />
+      <div className="flex flex-col flex-1 min-w-0">
+        <TopBar />
+        <main className="flex-1 flex overflow-hidden">
+          {/* GeneratorPanel */}
+          <div className="w-[60%] flex flex-col p-8 overflow-y-auto border-r border-slate-100">
+            <div className="max-w-2xl mx-auto w-full space-y-8 pb-12">
+
+
+              {/* Form Areas */}
+              <div className="space-y-8">
+                <div className="relative bg-slate-50 rounded-2xl p-6 border border-slate-100 transition-colors focus-within:border-blue-200 focus-within:bg-white">
+
+                  <textarea
+                    value={state.topic}
+                    onChange={(e) => updateState({ topic: e.target.value })}
+                    placeholder="Enter your topic or idea here…"
+                    className="w-full h-28 bg-transparent text-slate-800 placeholder:text-slate-400 text-base font-normal outline-none resize-none focus:ring-0 border-none p-0 bg-transparent pb-6"
+                  />
+                  
+                  <button 
+                    className="absolute bottom-4 right-4 w-8 h-8 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-full flex items-center justify-center transition-transform active:scale-95"
+                    title="Dictate idea"
+                  >
+                    <Mic className="w-4 h-4" />
+                  </button>
                 </div>
-
-                {/* LinkedIn Brand Text */}
-                <span className="text-4xl md:text-5xl font-bold text-[#0A66C2] tracking-tighter sm:mr-2">
-                  LinkedIn
-                </span>
-              </div>
-
-              <h1 className="text-3xl md:text-4xl font-extrabold text-[#213856] tracking-tight leading-tight text-center">
-                Post Generator
-              </h1>
-            </div>
-
-            <p className="text-slate-600 text-base md:text-lg leading-relaxed max-w-3xl mx-auto mt-4 mb-10 text-center">
-              Generate high-performing LinkedIn posts in your authentic voice.
-              Choose your tone, set the length, and create content that resonates
-              with your audience.
-            </p>
-
-            <div className="grid gap-6 items-start lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-              {/* Left Panel: Input Configuration */}
-              <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/40 sm:p-8">
-                <form onSubmit={handleGenerate} className="space-y-6">
-                  {/* Topic Input */}
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="topic"
-                      className="block text-sm font-semibold text-slate-700"
-                    >
-                      What's the Topic?
-                    </label>
-                    <textarea
-                      id="topic"
-                      value={topic}
-                      onChange={(event) => {
-                        setTopic(event.target.value);
-                        if (fieldError) setFieldError("");
-                      }}
-                      placeholder="e.g. The impact of AI on creative workflows, Tips for writing compelling content..."
-                      rows={4}
-                      className={`w-full resize-none rounded-xl border bg-slate-50/70 px-4 py-3.5 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 ${
-                        fieldError
-                          ? "border-red-300 focus:border-red-500"
-                          : "border-slate-200 focus:border-[#006edc]"
-                      }`}
-                    />
-                  </div>
-
-                  {/* Tone Selector */}
-                  <div className="space-y-3">
-                    <p className="text-sm font-semibold text-slate-700">
-                      Tone Profile
-                    </p>
-                    <div className="grid gap-2 sm:grid-cols-2">
-                      {TONE_OPTIONS.map((option) => {
-                        const isSelected = option === tone;
-                        return (
-                          <button
-                            key={option}
-                            type="button"
-                            onClick={() => setTone(option)}
-                            className={`cursor-pointer rounded-xl border px-4 py-3 text-left text-sm font-semibold transition-all active:scale-[0.99] ${
-                              isSelected
-                                ? "border-[#0A66C2] bg-slate-50/70 text-[#0A66C2] hover:border-[#005bb8] hover:text-[#005bb8]"
-                                : "border-slate-200 bg-slate-50/70 text-slate-600 hover:border-slate-300 hover:bg-white"
-                            }`}
-                          >
-                            {option}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Length Selector */}
-                  <div className="space-y-3">
-                    <p className="text-sm font-semibold text-slate-700">
+                <div className="flex items-end justify-between">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
                       Length
-                    </p>
-                    <div className="grid gap-2 sm:grid-cols-3">
-                      {LENGTH_OPTIONS.map((option) => {
-                        const isSelected = option === length;
-                        return (
-                          <button
-                            key={option}
-                            type="button"
-                            onClick={() => setLength(option)}
-                            className={`cursor-pointer rounded-xl border px-4 py-3 text-center text-sm font-semibold transition-all active:scale-[0.99] ${
-                              isSelected
-                                ? "border-[#0A66C2] bg-slate-50/70 text-[#0A66C2] hover:border-[#005bb8] hover:text-[#005bb8]"
-                                : "border-slate-200 bg-slate-50/70 text-slate-600 hover:border-slate-300 hover:bg-white"
-                            }`}
-                          >
-                            {option}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* CTA Type Selector */}
-                  <div className="space-y-3">
-                    <label
-                      htmlFor="cta-type"
-                      className="text-sm font-semibold text-slate-700"
-                    >
-                      CTA Type
                     </label>
-                    <select
-                      id="cta-type"
-                      value={ctaType}
-                      onChange={(event) =>
-                        setCTAType(event.target.value as CTAType)
-                      }
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-3.5 text-sm text-slate-900 outline-none transition-colors focus:border-[#006edc] cursor-pointer"
-                    >
-                      {CTA_TYPE_OPTIONS.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
+                    <div className="inline-flex bg-slate-100 p-1 rounded-full border border-slate-200/50">
+                      {LENGTH_OPTIONS.map((l) => (
+                        <button
+                          key={l}
+                          onClick={() => updateState({ length: l })}
+                          className={`px-4 py-1.5 rounded-full text-xs font-bold capitalize transition-all ${state.length === l
+                            ? "bg-white text-blue-600 shadow-sm"
+                            : "text-slate-500 hover:text-slate-700"
+                            }`}
+                        >
+                          {l}
+                        </button>
                       ))}
-                    </select>
+                    </div>
                   </div>
 
-                  {fieldError ? (
-                    <div className="rounded-2xl border border-red-200 bg-red-50 p-4">
-                      <p className="text-sm font-semibold text-red-700">
-                        Missing information
-                      </p>
-                      <p className="text-sm text-red-600 mt-1">{fieldError}</p>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+                      Tone
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={state.selectedTone}
+                        onChange={(e) => updateState({ selectedTone: e.target.value })}
+                        className="w-44 appearance-none bg-slate-100 border border-slate-200/50 rounded-full py-1.5 pl-4 pr-8 text-xs font-bold text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all cursor-pointer hover:bg-slate-200/80"
+                      >
+                        <option value="your-tone">My tone (Default)</option>
+                        <option value="professional">Professional</option>
+                        <option value="casual">Casual</option>
+                        <option value="witty">Witty</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 pointer-events-none" />
                     </div>
-                  ) : (
-                    <p className="text-sm text-slate-500">
-                      Be as specific as possible. The more context you provide, the
-                      better your post will resonate with your audience.
-                    </p>
-                  )}
+                  </div>
 
                   <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="cursor-pointer inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0A66C2] px-6 py-4 text-base font-semibold text-white shadow-lg shadow-blue-900/10 transition-all hover:bg-[#005bb8] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
+                    onClick={handleGenerate}
+                    disabled={state.isGenerating}
+                    className="relative flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-wait text-white py-2.5 px-6 rounded-full font-bold text-sm shadow-md shadow-blue-500/30 transition-all active:scale-[0.99]"
                   >
-                    {isLoading ? (
-                      <>
-                        <LoaderCircle className="h-5 w-5 animate-spin" />
-                        Generating Post...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="h-5 w-5" />
-                        Generate Post
-                      </>
-                    )}
+                    {state.isGenerating ? (
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                    ) : null}
+                    {state.isGenerating ? "Writing..." : "Write My Post"}
                   </button>
-
-                  {apiError ? (
-                    <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
-                      <p className="text-sm font-semibold text-amber-800">
-                        Something needs attention
-                      </p>
-                      <p className="text-sm text-amber-700 mt-1 leading-relaxed">
-                        {apiError}
-                      </p>
-                    </div>
-                  ) : null}
-                </form>
-              </div>
-
-              {/* Right Panel: Preview */}
-              <div className="flex flex-col h-full">
-                <div className="rounded-[28px] border border-slate-200 bg-white shadow-xl shadow-slate-200/40 overflow-hidden flex flex-col h-full">
-                  {/* Header Bar */}
-                  <div className="bg-gradient-to-r from-slate-800 to-slate-900 px-6 py-4 flex items-center justify-between">
-                    <span className="text-xs font-semibold tracking-widest text-slate-300">
-                      POST PREVIEW
-                    </span>
-                    <div className="flex gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
-                    </div>
-                  </div>
-
-                  {/* Preview Content */}
-                  <div className="flex-1 overflow-auto p-6 sm:p-8 flex flex-col">
-                    {draft ? (
-                      <div className="space-y-6">
-                        {/* LinkedIn Post Card */}
-                        <div className="space-y-4 pb-6 border-b border-slate-200">
-                          {/* Author Info */}
-                          <div className="flex items-center gap-3">
-                            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-[#0A66C2] to-[#005bb8] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
-                              {getInitials(displayName)}
-                            </div>
-                            <div className="flex-1">
-                              <p className="text-sm font-semibold text-slate-900">
-                                {displayName}
-                              </p>
-                              <p className="text-xs text-slate-500">
-                                Just now
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Post Content */}
-                          <div className="space-y-3">
-                            <h3 className="text-base font-bold text-slate-900 leading-snug">
-                              {draft.title}
-                            </h3>
-                            <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
-                              {draft.content}
-                            </p>
-                            {draft.callToAction && (
-                              <p className="text-sm text-slate-600 italic leading-relaxed">
-                                {draft.callToAction}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Engagement Prediction */}
-                        {draft.engagementPrediction && (
-                          <div className="space-y-3">
-                            <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide">
-                              Predicted Engagement
-                            </p>
-                            <div className="grid gap-3 grid-cols-3">
-                              <div className="rounded-lg bg-slate-50 p-3 text-center">
-                                <div className="flex items-center justify-center gap-1 mb-1">
-                                  <TrendingUp className="h-4 w-4 text-blue-600" />
-                                  <span className="text-lg font-bold text-slate-900">
-                                    {draft.engagementPrediction.likes}
-                                  </span>
-                                </div>
-                                <p className="text-xs text-slate-600">Likes</p>
-                              </div>
-                              <div className="rounded-lg bg-slate-50 p-3 text-center">
-                                <div className="flex items-center justify-center gap-1 mb-1">
-                                  <MessageCircle className="h-4 w-4 text-green-600" />
-                                  <span className="text-lg font-bold text-slate-900">
-                                    {draft.engagementPrediction.comments}
-                                  </span>
-                                </div>
-                                <p className="text-xs text-slate-600">Comments</p>
-                              </div>
-                              <div className="rounded-lg bg-slate-50 p-3 text-center">
-                                <div className="flex items-center justify-center gap-1 mb-1">
-                                  <Share2 className="h-4 w-4 text-purple-600" />
-                                  <span className="text-lg font-bold text-slate-900">
-                                    {draft.engagementPrediction.shares}
-                                  </span>
-                                </div>
-                                <p className="text-xs text-slate-600">Shares</p>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Action Buttons */}
-                        <div className="flex gap-3 pt-6 border-t border-slate-200">
-                          <button
-                            onClick={() => setDraft(null)}
-                            disabled={isLoading}
-                            className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:bg-slate-50 active:scale-[0.99] disabled:opacity-50"
-                          >
-                            <RefreshCcw className="h-4 w-4" />
-                            <span className="hidden sm:inline">Regenerate</span>
-                            <span className="sm:hidden">New</span>
-                          </button>
-                          <button
-                            onClick={handleCopy}
-                            className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-[#0A66C2] px-4 py-3 text-sm font-semibold text-white shadow-md transition-all hover:bg-[#005bb8] active:scale-[0.99]"
-                          >
-                            {copied ? (
-                              <>
-                                <Check className="h-4 w-4" />
-                                <span className="hidden sm:inline">Copied!</span>
-                                <span className="sm:hidden">Copied</span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="h-4 w-4" />
-                                <span className="hidden sm:inline">Copy Post</span>
-                                <span className="sm:hidden">Copy</span>
-                              </>
-                            )}
-                          </button>
-                        </div>
-
-                        {/* Bottom Action Row */}
-                        <div className="flex gap-3">
-                          <button className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:bg-slate-50 active:scale-[0.99]">
-                            <Save className="h-4 w-4" />
-                            <span className="hidden sm:inline">Save Draft</span>
-                            <span className="sm:hidden">Save</span>
-                          </button>
-                          <button className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:bg-slate-50 active:scale-[0.99]">
-                            <Calendar className="h-4 w-4" />
-                            <span className="hidden sm:inline">Schedule</span>
-                            <span className="sm:hidden">Plan</span>
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
-                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center">
-                          <Sparkles className="h-8 w-8 text-blue-600" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-slate-900">
-                            Your post preview will appear here
-                          </p>
-                          <p className="text-xs text-slate-500 mt-1">
-                            Fill in the form and hit Generate to see your post
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </section>
-      </main>
+
+          {/* PreviewPanel */}
+          <div className="w-[40%] bg-slate-50 p-6 overflow-hidden flex">
+            <div className="flex-1 bg-[#0d1526] rounded-[24px] shadow-2xl overflow-hidden flex flex-col pt-6 pb-2 px-4 relative max-h-full">
+              <div className="flex items-start justify-between px-2 mb-6">
+                <div>
+                  <h3 className="flex items-center gap-2 text-white font-sora font-semibold text-lg">
+
+                    Post Preview
+
+                  </h3>
+                </div>
+                <div className="flex gap-2">
+                  <button className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:bg-white/10 hover:text-white transition-colors">
+                    <Copy className="w-4 h-4" />
+                  </button>
+                  <button className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:bg-white/10 hover:text-white transition-colors">
+                    <RefreshCw className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Card Container - creates the scrollable area for content */}
+              <div className="w-full max-w-lg mx-auto flex-1 overflow-y-auto pb-[100px] custom-scrollbar px-2 flex flex-col">
+
+                {/* LinkedIn Card */}
+                <div className="bg-white flex-1 rounded-2xl shadow-xl overflow-hidden px-5 py-6 flex flex-col">
+
+                  {/* Post Content */}
+                  <div className={`text-[15px] leading-relaxed text-slate-800 space-y-4 ${!state.previewContent ? 'flex-1 flex items-center justify-center' : ''}`}>
+                    {!state.previewContent ? (
+                      <p className="text-slate-400 font-normal text-center">
+                        Your post will show up here
+                      </p>
+                    ) : state.previewContent.split('\n\n').map((paragraph, i) => {
+                      if (paragraph.includes('boring tasks.')) {
+                        const parts = paragraph.split('boring tasks.');
+                        return (
+                          <p key={i}>
+                            {parts[0]}
+                            <span className="font-semibold text-blue-600">boring tasks.</span>
+                            {parts[1]}
+                          </p>
+                        )
+                      }
+                      if (paragraph.startsWith('•')) {
+                        const bullets = paragraph.split('\n');
+                        return (
+                          <div key={i} className="pl-1">
+                            {bullets.map((bullet, bi) => (
+                              <p key={bi} className="mb-1">{bullet}</p>
+                            ))}
+                          </div>
+                        )
+                      }
+
+                      return <p key={i}>{paragraph}</p>;
+                    })}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Footer Bar (Absolute at bottom) */}
+              <div className="absolute bottom-6 left-6 right-6 pt-4 flex items-center justify-end">
+                <div className="flex items-center gap-3">
+                  <button className="px-5 py-3 rounded-xl text-sm font-semibold text-white bg-white/5 hover:bg-white/10 transition-colors">
+                    Save Draft
+                  </button>
+                  <button className="px-5 py-3 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/20 transition-all flex items-center gap-2">
+                    Schedule Post
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

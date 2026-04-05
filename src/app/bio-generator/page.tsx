@@ -71,7 +71,7 @@ export default function BioGeneratorPage() {
       if (!response.ok || !payload?.draft) {
         setApiError(
           payload?.message ??
-            "We could not generate a bio right now. Please try again."
+          "We could not generate a bio right now. Please try again."
         );
         return;
       }
@@ -138,14 +138,11 @@ export default function BioGeneratorPage() {
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex flex-col items-center justify-center gap-4 md:gap-6 mb-8 md:mb-10">
               <div className="relative inline-flex items-center gap-3 px-6 py-3 bg-[#eef4ff] border border-[#dce6f2] rounded-[22px] shadow-sm">
-                {/* LinkedIn Icon */}
                 <div className="bg-[#0A66C2] p-1.5 rounded-lg shadow-sm">
                   <svg className="w-7 h-7 text-white fill-current" viewBox="0 0 24 24">
                     <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
                   </svg>
                 </div>
-
-                {/* LinkedIn Brand Text */}
                 <span className="text-4xl md:text-5xl font-bold text-[#0A66C2] tracking-tighter sm:mr-2">
                   LinkedIn
                 </span>
@@ -155,7 +152,7 @@ export default function BioGeneratorPage() {
                 Professional Bio Generator
               </h1>
             </div>
-            
+
             <p className="text-slate-600 text-base md:text-lg leading-relaxed max-w-3xl mx-auto mt-4 mb-10 text-center">
               Generate a high-impact, recruiter-ready bio in seconds. Stand
               out with a polished About section shaped around your role,
@@ -181,11 +178,10 @@ export default function BioGeneratorPage() {
                         if (fieldError) setFieldError("");
                       }}
                       placeholder="e.g. Product Designer, AI Engineer"
-                      className={`w-full rounded-xl border bg-slate-50/70 px-4 py-3.5 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 ${
-                        fieldError
+                      className={`w-full rounded-xl border bg-slate-50/70 px-4 py-3.5 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 ${fieldError
                           ? "border-red-300 focus:border-red-500"
                           : "border-slate-200 focus:border-[#006edc]"
-                      }`}
+                        }`}
                     />
                   </div>
 
@@ -205,11 +201,10 @@ export default function BioGeneratorPage() {
                       }}
                       placeholder="e.g. UX Research, Machine Learning, Growth Strategy"
                       rows={4}
-                      className={`w-full resize-none rounded-xl border bg-slate-50/70 px-4 py-3.5 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 ${
-                        fieldError
+                      className={`w-full resize-none rounded-xl border bg-slate-50/70 px-4 py-3.5 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 ${fieldError
                           ? "border-red-300 focus:border-red-500"
                           : "border-slate-200 focus:border-[#006edc]"
-                      }`}
+                        }`}
                     />
                   </div>
 
@@ -225,11 +220,10 @@ export default function BioGeneratorPage() {
                             key={option}
                             type="button"
                             onClick={() => setTone(option)}
-                            className={`cursor-pointer rounded-xl border px-4 py-3 text-left text-sm font-semibold transition-all active:scale-[0.99] ${
-                              isSelected
+                            className={`cursor-pointer rounded-xl border px-4 py-3 text-left text-sm font-semibold transition-all active:scale-[0.99] ${isSelected
                                 ? "border-[#0A66C2] bg-slate-50/70 text-[#0A66C2] hover:border-[#005bb8] hover:text-[#005bb8]"
                                 : "border-slate-200 bg-slate-50/70 text-slate-600 hover:border-slate-300 hover:bg-white"
-                            }`}
+                              }`}
                           >
                             {option}
                           </button>
@@ -260,12 +254,12 @@ export default function BioGeneratorPage() {
                     {isLoading ? (
                       <>
                         <LoaderCircle className="h-5 w-5 animate-spin" />
-                        Generating Bio...
+                        Writing Bio...
                       </>
                     ) : (
                       <>
                         <Sparkles className="h-5 w-5" />
-                        Generate Bio
+                        Write Bio
                       </>
                     )}
                   </button>
@@ -285,7 +279,6 @@ export default function BioGeneratorPage() {
 
               <div className="flex flex-col h-full">
                 <div className="rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-200/30 overflow-hidden flex flex-col h-full">
-                  {/* Header Bar */}
                   <div className="bg-[#2c3e50] px-6 py-4 flex items-center justify-between">
                     <span className="text-xs font-semibold tracking-widest text-slate-300">
                       LIVE PREVIEW
@@ -296,10 +289,7 @@ export default function BioGeneratorPage() {
                       <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
                     </div>
                   </div>
-
-                  {/* Inner Container - LinkedIn Profile Style */}
                   <div className="flex-1 flex flex-col overflow-hidden bg-white mx-6 my-4 rounded-xl border border-slate-100">
-                    {/* Header Graphics */}
                     <div className="bg-gradient-to-r from-blue-500 to-blue-600 h-20 relative">
                       <div className="absolute -bottom-8 left-6">
                         <div className="h-20 w-20 rounded-full border-4 border-white bg-slate-400 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
@@ -310,15 +300,14 @@ export default function BioGeneratorPage() {
 
                     <div className="flex-1 flex flex-col overflow-y-auto">
                       <div className="px-6 pt-12 pb-6 space-y-4">
-                        {/* Profile Info */}
                         <div>
                           <div className="flex items-center gap-2">
                             <h3 className="text-xl font-bold text-[#213856]">
                               Your Name
                             </h3>
                             <svg className="h-5 w-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M12 1L3 5V11C3 17 12 23 12 23S21 17 21 11V5L12 1Z" stroke="#9CA3AF" strokeWidth="2" strokeLinejoin="round"/>
-                              <path d="M8 12L11 15L16 9" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M12 1L3 5V11C3 17 12 23 12 23S21 17 21 11V5L12 1Z" stroke="#9CA3AF" strokeWidth="2" strokeLinejoin="round" />
+                              <path d="M8 12L11 15L16 9" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                           </div>
                           <p className="text-sm text-slate-700 mt-1">
@@ -328,8 +317,6 @@ export default function BioGeneratorPage() {
                             Harare, Zimbabwe • 500+ connections
                           </p>
                         </div>
-
-                        {/* About Section */}
                         <div>
                           <h4 className="text-sm font-bold text-[#213856] mb-2">
                             About
@@ -353,8 +340,6 @@ export default function BioGeneratorPage() {
                       </div>
                     </div>
                   </div>
-
-                  {/* Action Buttons Footer */}
                   <div className="border-t border-slate-100 bg-slate-50/50 px-6 py-4 grid gap-3 grid-cols-2 sm:grid-cols-[minmax(0,1fr)_auto]">
                     <button
                       type="button"
@@ -386,8 +371,8 @@ export default function BioGeneratorPage() {
                       ) : (
                         <>
                           <RefreshCcw className="h-4 w-4" />
-                          <span className="hidden sm:inline">Regenerate</span>
-                          <span className="sm:hidden">Regenerate</span>
+                          <span className="hidden sm:inline">Rewrite</span>
+                          <span className="sm:hidden">Rewrite</span>
                         </>
                       )}
                     </button>
